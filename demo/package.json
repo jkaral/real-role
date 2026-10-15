@@ -13,7 +13,8 @@
     "test": "vitest run",
     "demo:video": "tsx src/pipeline.ts video",
     "demo:prepare": "tsx src/pipeline.ts prepare",
-    "demo:serve": "tsx src/pipeline.ts serve"
+    "demo:serve": "tsx src/pipeline.ts serve",
+    "demo:assemble": "tsx src/pipeline.ts assemble"
   },
   "dependencies": {
     "@real-role/shared": "workspace:*",

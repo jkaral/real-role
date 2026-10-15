@@ -31,12 +31,12 @@ describe("demo inputs", () => {
     }
   });
   it("serves only the local fixtures and rejects other paths", async () => {
-    const server = await startFixtureServer(now);
+    const server = await startFixtureServer(now, 0);
     try {
-      const response = await fetch("http://127.0.0.1:4173/jobs/fresh");
+      const response = await fetch(`${server.origin}/jobs/fresh`);
       expect(response.status).toBe(200);
       expect(await response.text()).toContain("Bramblecrest Analytics");
-      expect((await fetch("http://127.0.0.1:4173/../secret")).status).toBe(404);
+      expect((await fetch(`${server.origin}/../secret`)).status).toBe(404);
     } finally {
       await server.close();
     }
