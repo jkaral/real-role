@@ -216,3 +216,13 @@ Record the exact dialogue with a natural character voice. If the chosen workflow
 - Keep captions short, phrase-timed and clear of active UI. Character dialogue may use dialogue captions; do not plaster a full paragraph over the complaint or demonstration.
 - The final review must confirm that the complaint is present, audible and immediate; the old/vague-listing situation is understandable before the reveal; and the demo clearly answers that specific frustration.
 - Keep the requested deliverables and filenames from the earlier production brief. This entry replaces the creative script, not the requirement to produce and inspect the actual Higgsfield film.
+
+### 2026-10-15 [Codex] Scoring edge tests ready for review
+
+- Added 27 edge cases under `packages/scoring/test/edge/**`: unavailable/malformed dates, ATS publication-date fallback, unknown ATS evidence, invalid LLM JSON and heuristic fallback, string/description boundaries, equivalent offset/DST instants, closing-time precision and extreme repost counts.
+- Scoring package tests pass (73 total), as do typecheck and lint. No scoring source or shared contract changes were needed, and no failing cases were hidden with todo/fails.
+- This PR starts directly from current main, as requested. Final demo work is proceeding independently against the now-available local web/extension environment.
+
+### 2026-10-15 [Codex] Edge-test count clarification
+
+- The edge suite adds 25 cases (73 scoring tests total), correcting the earlier count of 27. The DST regression uses Toronto's actual 2026-11-01 repeated hour. All scoring checks pass.
