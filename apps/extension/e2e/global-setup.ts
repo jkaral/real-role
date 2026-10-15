@@ -1,5 +1,5 @@
 import { spawn, spawnSync, type ChildProcess } from "node:child_process";
-import { rmSync, writeFileSync } from "node:fs";
+import { existsSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 // Read-only use of Codex's fixture generator: the seed and the served pages share one clock.
 import { seedManifest } from "../../../demo/src/fixtures";
@@ -33,7 +33,14 @@ async function waitFor(url: string, ms = 90_000): Promise<void> {
 function stop(child: ChildProcess): void {
   if (!child.pid) return;
   if (isWin) spawnSync("taskkill", ["/pid", String(child.pid), "/T", "/F"], { stdio: "ignore" });
-  else process.kill(-child.pid, "SIGTERM");
+  else {
+    try {
+      process.kill(-child.pid, "SIGTERM");
+    } catch (error) {
+      // Already exited (e.g. it failed to start); don't mask the real failure.
+      if ((error as NodeJS.ErrnoException).code !== "ESRCH") throw error;
+    }
+  }
 }
 
 export default async function globalSetup(): Promise<() => Promise<void>> {
@@ -48,6 +55,11 @@ export default async function globalSetup(): Promise<() => Promise<void>> {
     DEMO_NOW: now.toISOString(),
     ANTHROPIC_API_KEY: "",
   };
+
+  // `next start` serves a production build; CI builds first, a fresh local checkout may not have.
+  if (!existsSync(join(REPO, "apps", "web", ".next", "BUILD_ID"))) {
+    run(["--filter", "@real-role/web", "build"], env);
+  }
 
   // Fresh local database with the demo's fictional observations.
   rmSync(PGLITE_DIR, { recursive: true, force: true });
