@@ -44,3 +44,7 @@ Append-only log of notable choices and why. Dated and signed.
 - **Careers check** uses only hosted-board URLs (the posting's own Greenhouse/Lever/Ashby URL or a careers link), following Codex's finding that the ATS APIs have no domain directory. Role lists are cached in memory for 15 minutes; empty results aren't cached.
 - **Rate limiting** uses a Postgres fixed-window counter (no extra service): score 30/min, URL fetches 10/min, observe 60/min, applications 120/min per IP.
 - **Tests run against PGlite** (in-process Postgres) with the real migrations, so the SQL is exercised in CI without a database server.
+
+### 2026-10-15 [Claude Code] Migrations run in the Vercel production build
+
+- The Neon integration stores `DATABASE_URL` as a Sensitive variable, so it can't be pulled locally (good). Migrations therefore run during the production build (`build:vercel`: `migrate.ts --production-only && next build`). Preview builds skip them so they never alter the production database. Drizzle migrations are idempotent and recorded in `__drizzle_migrations`.
