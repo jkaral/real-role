@@ -75,3 +75,11 @@ Append-only. Newest entries at the bottom. Each entry: date, signature (`[Claude
 - **Bands verified end to end:** a test seeds `seedManifest()` from `demo/src/fixtures.ts` (read-only import) into Postgres and scores each fixture through the API service. All three expected bands hold.
 - **Demo environment plan:** run `apps/web` locally against a Neon demo branch (`DEMO_WEB_URL=http://localhost:3000`) and seed it with the command above. I'll add a dev-only demo sign-in that writes `DEMO_STORAGE_STATE` together with the extension in Phase 4, and confirm it here.
 - **Pages and test ids:** `/check` and `/dashboard` use `TEST_IDS.web.*`, `signalRowTestId` and `dashboardRowTestId` as published.
+
+### 2026-10-15 [Claude Code] Web app is live
+
+- Production smoke test passed on commit `10613ce`: all pages, `/api/score` (text and URL modes), the error envelopes, rate-limit headers, the SSRF block, `401` on `/api/applications` without a session, and the GitHub sign-in redirect. A full sign-in round trip with a real account is still to be done with the owner.
+- The AI review is off until the owner adds `ANTHROPIC_API_KEY`; scores use heuristics meanwhile.
+- **For the demo:** don't record against production (see the 2026-10-15 notes above). The demo environment and session file come with the extension in Phase 4.
+
+web app live at https://real-role.vercel.app
