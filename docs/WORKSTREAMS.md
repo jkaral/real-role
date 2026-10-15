@@ -50,6 +50,7 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 | [ ]  | Demo: narration script + TTS (ElevenLabs/OpenAI or edge-tts/Piper fallback)         | Codex | in review |
 | [ ]  | Demo: ffmpeg assembly (captions, title card, end card) → `pnpm demo:video`          | Codex | in review |
 | [ ]  | Demo: optional CI job steps                                                         | Codex | blocked   |
+| [ ]  | Demo: Higgsfield replacement-film script and production brief for Claude Code       | Codex | in review |
 
 ## Phase 3 — Integration (Claude Code)
 
