@@ -164,3 +164,55 @@ Use these as starting directions, not claims about exact Higgsfield controls. Ad
 - Before final delivery, watch the full cut with sound and check: clear value by ten seconds; readable panel text; accurate three-result story; genuine save-to-dashboard continuity; no generated UI/text artifacts; natural voice; captions that fit; music below speech; and a clean, correct live URL.
 - Output the new film as `demo/output/real-role-higgsfield-demo.mp4`, plus a clean version and `real-role-higgsfield-demo.srt`. Preserve the original automated MP4 under its existing filename for comparison. Keep project files/prompts and a concise note of tools/voice/music rights with the deliverables.
 - Append a new handoff entry with the preview location, final export location, actual runtime, verified product results and any owner decision still needed. Do not describe the new Higgsfield film as finished until it has been produced and reviewed.
+
+### 2026-10-15 [Codex] Owner revision: lead with a complaint, then play as a demo trailer
+
+**This is the current creative direction.** The owner explicitly wants a demo trailer that opens on a presented situation: someone complaining that they cannot find a decent job and the listings they keep opening are old or low quality. Use the opening dialogue and revised trailer script below **instead of** the earlier “You found a role that looks right” opening and its shot table. Retain the earlier guidance on authentic product captures, fictional data, sharp typography, natural audio and Higgsfield production. Do not cut the complaint scene down to a generic narrator question or open on a logo.
+
+#### The hook: a person, a problem, then the reveal
+
+Start mid-conversation, at the job seeker's desk. They have been scrolling through listings, pause, and turn toward a friend just off camera. Their frustration is recognizable and conversational, not melodramatic. A couple of real, fictional-fixture inserts show an old posted date and a vague description. Let the complaint land before introducing the product. Then the friend offers Real Role and the trailer shifts from frustration to clarity through a real product demonstration.
+
+**First line, spoken by the job seeker in the first second:**
+
+> “I can't find a decent job.”
+
+**Follow immediately with:**
+
+> “Everything I open is months old—or barely tells me what the role is.”
+
+**Friend, off camera:**
+
+> “Have you tried Real Role?”
+
+These are a fictional character's experience, not a claim about all job boards or real employers. The scene must establish the problem of stale and vague listings, not promise that Real Role finds someone a job.
+
+#### Revised trailer script — approximately 78 seconds
+
+| Time  | Speaker and exact dialogue                                                                                                            | Picture and edit                                                                                                                                                                                                                                                              | On-screen accent                         |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| 00–04 | **Job seeker:** “I can't find a decent job.”                                                                                          | Cold open on a believable person at a laptop, mid-search. They stop scrolling and turn toward their friend. Begin with their voice immediately; no pre-roll logo, music-only title, or exposition.                                                                            | None; let the person carry the hook.     |
+| 04–11 | **Job seeker:** “Everything I open is months old—or barely tells me what the role is.”                                                | Cut to actual fictional-fixture inserts: an old posted date, then a vague description. Return to the person's reaction for the end of the sentence. Keep each insert readable and use the same desk/person throughout.                                                        | “Old listings.” → “Vague descriptions.”  |
+| 11–14 | **Friend, off camera:** “Have you tried Real Role?”                                                                                   | Stay with the job seeker's curious reaction. Briefly ease the music back, then introduce a gentle rhythmic lift on the product cut. No sales-pitch delivery.                                                                                                                  | None.                                    |
+| 14–20 | **Narrator:** “Before you spend another hour applying, take a closer look.”                                                           | Match the laptop/browser framing into a new real UI capture. Introduce the existing Real Role wordmark and extension badge. One purposeful cursor action opens the actual panel.                                                                                              | “Meet Real Role”                         |
+| 20–31 | **Narrator:** “See a Freshness Score and the signals behind it. This role is recent, with clear responsibilities and a pay range.”    | Show the actual fresh fixture and panel, then crop close to its verified high score and relevant age/description rows. Two or three clean cuts guide the eye. Avoid a full-screen wall of tiny text.                                                                          | “Recent. Specific. Explainable.”         |
+| 31–42 | **Narrator:** “This posting has been seen five times over sixty days. Its lower score gives you a reason to look closer.”             | Revisit the stale fictional role from the opening. Show the real low score and hold on its actual observation history. A restrained five-dot editorial timeline may clarify the existing sightings. The payoff should connect directly to the character's original complaint. | “See the history”                        |
+| 42–52 | **Narrator:** “Missing information? You'll see that too. Unknown details lower confidence, rather than counting against the posting.” | Show the real medium result, its confidence label, and the Careers page row marked “Not counted.” Hold on one readable detail at a time.                                                                                                                                      | “Know what’s known”                      |
+| 52–64 | **Narrator:** “Save the roles worth pursuing. Keep your applications together, with your next step in view.”                          | Click the genuine Save & track button for the fresh role, show its confirmation, then cut to that exact application in the real dashboard. Keep the click and result visibly connected.                                                                                       | “Save. Track. Follow through.”           |
+| 64–69 | **Job seeker:** “Okay. This one is worth a closer look.”                                                                              | Return to the same person, now focused rather than euphoric. A small nod and a deliberate look back at the screen complete the situation. No job-offer, interview, or hiring-success montage.                                                                                 | None.                                    |
+| 69–78 | **Narrator:** “Less guesswork. More informed applications. Try Real Role.”                                                            | Clean product hero and end card with the real wordmark. Hold `real-role.vercel.app` for at least three seconds after it appears. Include the discreet fictional-data/synthetic-narration disclosure.                                                                          | “Try Real Role” / “real-role.vercel.app” |
+
+#### Higgsfield opener prompt — replaces the earlier calm, silent opener
+
+> A believable opening scene for a premium job-search product demo trailer, 16:9. A fictional adult job seeker sits at a tidy home desk with a laptop after a long search, in soft natural afternoon light. They stop scrolling, give a small tired exhale, and turn toward a friend just off camera as if saying, “I can't find a decent job.” Their expression is mildly frustrated and sincere, with natural conversational gestures and realistic hands, not despairing or exaggerated. Continue with the same person and setting as they explain that listings seem old or vague. Warm ivory room with restrained forest-green details, contemporary everyday clothing, credible lived-in workspace. Use a medium close-up and a short over-the-shoulder laptop angle with a blank screen reserved for compositing real fictional-job captures. No generated readable text, logos, employers, interface widgets, watermarks, frantic typing or stock-advertisement grin. The scene starts already in progress; no establishing fly-through.
+
+Record the exact dialogue with a natural character voice. If the chosen workflow cannot produce convincing synchronized speech, use the over-the-shoulder/reaction shots while the character speaks; do not accept visibly mismatched lips. The friend's one line can remain off camera. A distinct narrator then handles the product section. Keep the job seeker's voice consistent in the opening and payoff.
+
+#### Trailer edit priorities
+
+- The first five seconds must show a person actually voicing the problem. The complaint should sound like someone talking to a friend, not reading product copy.
+- Use a problem → recommendation → real demonstration → human payoff → call-to-action arc. Aim for a polished demo trailer, with a rhythmic lift at the reveal and enough quiet holds to read the evidence. Avoid both an unbroken tutorial capture and a dramatic movie-trailer imitation.
+- Every complaint insert and every product screen uses fictional fixtures and genuine current UI. Recheck displayed scores; do not fabricate “verified active” status, employer intent, or hiring outcomes. The product's benefit is better-informed decisions about where to spend time.
+- Keep captions short, phrase-timed and clear of active UI. Character dialogue may use dialogue captions; do not plaster a full paragraph over the complaint or demonstration.
+- The final review must confirm that the complaint is present, audible and immediate; the old/vague-listing situation is understandable before the reveal; and the demo clearly answers that specific frustration.
+- Keep the requested deliverables and filenames from the earlier production brief. This entry replaces the creative script, not the requirement to produce and inspect the actual Higgsfield film.
