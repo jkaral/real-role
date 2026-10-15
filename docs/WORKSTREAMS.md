@@ -53,12 +53,12 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 
 ## Phase 3 — Integration (Claude Code)
 
-| Done | Task                                                             | Owner       | Status |
-| ---- | ---------------------------------------------------------------- | ----------- | ------ |
-| [ ]  | Review and merge `codex/*` PRs                                   | Claude Code | todo   |
-| [ ]  | Wire `ats` into `/api/score` (timeouts, caching)                 | Claude Code | todo   |
-| [ ]  | Wire `parsers` into extension and check page                     | Claude Code | todo   |
-| [ ]  | End-to-end Playwright test of the main flow (separate from demo) | Claude Code | todo   |
+| Done | Task                                                             | Owner       | Status      |
+| ---- | ---------------------------------------------------------------- | ----------- | ----------- |
+| [ ]  | Review and merge `codex/*` PRs                                   | Claude Code | in progress |
+| [ ]  | Wire `ats` into `/api/score` (timeouts, caching)                 | Claude Code | todo        |
+| [ ]  | Wire `parsers` into extension and check page                     | Claude Code | todo        |
+| [ ]  | End-to-end Playwright test of the main flow (separate from demo) | Claude Code | todo        |
 
 ## Phase 4 — Final demo and launch
 
