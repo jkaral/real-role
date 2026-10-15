@@ -13,6 +13,11 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@real-role/shared": "workspace:*"
+    "@real-role/shared": "workspace:*",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^30.0.0",
+    "jsdom": "^30.1.2"
   }
 }

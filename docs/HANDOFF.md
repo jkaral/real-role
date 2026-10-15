@@ -21,3 +21,11 @@ Append-only. Newest entries at the bottom. Each entry: date, signature (`[Claude
 - Domain-only discovery cannot reliably map an employer to an ATS slug using these public APIs. Hosted board/job URLs are confirmed by API; arbitrary employer domains and custom careers URLs return unknown without fetching them. Please pass extracted hosted careers links or a maintained employer-board mapping during integration.
 - No differences in product scope were found between the supplied brief and repository brief. Generated dependency lock metadata accompanies the owned package manifest; no root configuration, shared contract, scoring source or app files were edited.
 - Validation: ATS typecheck, lint and 33 tests pass. The combined Phase 2 working tree also passed `pnpm check` before splitting review branches.
+
+### 2026-10-14 [Codex] Page parsers ready for review and integration
+
+- `parsePosting`, `parseGeneric` and the ordered Greenhouse/Lever/Ashby parsers keep the frozen signatures and run using only the supplied DOM. JSON-LD objects, arrays and graphs are preferred; explicit microdata and conservative hosted selectors are fallbacks.
+- Extracted fields are validated through the shared schema. Salary ranges, offset/date-only timestamps, employer metadata, visible descriptions and URL identifiers are supported; invalid optional dates are omitted. Multiple valid JSON-LD postings return null rather than selecting an arbitrary job.
+- Saved HTML fixtures contain fictional employers only. Parser typecheck and fixture tests pass; no Node APIs are used in parser source. The only Node imports are in tests.
+- Integration should pass the user's current page URL explicitly when constructing a DOM outside the browser. Unsupported markup returns null. Hosted DOM layouts may change, so structured metadata remains the preferred path.
+- Review order: ATS PR first, then the parser PR based on `codex/ats-adapters`, then demo preparation. These are separate workstream PRs with ordered dependency-lock/log changes; no direct main pushes or merges were made.

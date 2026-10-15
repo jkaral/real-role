@@ -41,8 +41,8 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 | [ ]  | ATS adapter: Lever (public Postings API) + msw tests                                | Codex | in review |
 | [ ]  | ATS adapter: Ashby (public Job Postings API) + msw tests                            | Codex | in review |
 | [ ]  | `detectBoard` + fuzzy `findMatch` (title + location)                                | Codex | in review |
-| [ ]  | Parser: generic JSON-LD `JobPosting` fallback (`parseGeneric`)                      | Codex | todo      |
-| [ ]  | Parsers: board-specific (Greenhouse, Lever, Ashby hosted pages; others as feasible) | Codex | todo      |
+| [ ]  | Parser: generic JSON-LD `JobPosting` fallback (`parseGeneric`)                      | Codex | in review |
+| [ ]  | Parsers: board-specific (Greenhouse, Lever, Ashby hosted pages; others as feasible) | Codex | in review |
 | [ ]  | Scoring edge-case tests in `packages/scoring/test/edge/**` (after scoring lands)    | Codex | todo      |
 | [ ]  | Demo: three fictional fixture pages with JSON-LD (high / low / medium)              | Codex | todo      |
 | [ ]  | Demo: seed observations for repost history                                          | Codex | todo      |
