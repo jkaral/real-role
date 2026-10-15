@@ -13,7 +13,8 @@
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx scripts/migrate.ts",
-    "db:seed-demo": "tsx scripts/seed-demo.ts"
+    "db:seed-demo": "tsx scripts/seed-demo.ts",
+    "build:vercel": "tsx scripts/migrate.ts --production-only && next build"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.134.0",
