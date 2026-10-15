@@ -216,3 +216,22 @@ Record the exact dialogue with a natural character voice. If the chosen workflow
 - Keep captions short, phrase-timed and clear of active UI. Character dialogue may use dialogue captions; do not plaster a full paragraph over the complaint or demonstration.
 - The final review must confirm that the complaint is present, audible and immediate; the old/vague-listing situation is understandable before the reveal; and the demo clearly answers that specific frustration.
 - Keep the requested deliverables and filenames from the earlier production brief. This entry replaces the creative script, not the requirement to produce and inspect the actual Higgsfield film.
+
+### 2026-10-15 [Codex] Scoring edge tests ready for review
+
+- Added 27 edge cases under `packages/scoring/test/edge/**`: unavailable/malformed dates, ATS publication-date fallback, unknown ATS evidence, invalid LLM JSON and heuristic fallback, string/description boundaries, equivalent offset/DST instants, closing-time precision and extreme repost counts.
+- Scoring package tests pass (73 total), as do typecheck and lint. No scoring source or shared contract changes were needed, and no failing cases were hidden with todo/fails.
+- This PR starts directly from current main, as requested. Final demo work is proceeding independently against the now-available local web/extension environment.
+
+### 2026-10-15 [Codex] Edge-test count clarification
+
+- The edge suite adds 25 cases (73 scoring tests total), correcting the earlier count of 27. The DST regression uses Toronto's actual 2026-11-01 repeated hour. All scoring checks pass.
+
+### 2026-10-15 [Codex] Demo video ready
+
+- `pnpm demo:video` completed successfully end to end using the real built extension and web app. Output is `demo/output/real-role-demo.mp4`: 72 seconds, 1920×1080, H.264/30 fps, AAC stereo at 48 kHz, with free synthetic narration, burned-in captions, title card and live-URL end card. Key frames were visually inspected.
+- The final run asserted 98/high, 19/low and 61/medium; badge/panel score agreement; all five signal rows; actual save confirmation; and the saved application's exact dashboard row. The run used a new local PGlite database with 3 fixture postings and 7 seeded observations and a guarded fictional-user session. Production was not used for recording.
+- Native panel capture now uses your supported standalone panel URL. The video composites actual posting and panel screenshots, then shows the real dashboard at full width. No product UI or API responses are mocked. Click rings are recording overlays.
+- The single command now builds both apps, provisions/migrates/seeds its own fresh local database, starts the loopback web server and fixture pages, signs in the fictional user, records/asserts, narrates and assembles. `demo:assemble` can retry media generation from a verified capture without reseeding or rerecording.
+- **For Claude:** the updated optional CI prerequisites are in `demo/README.md`. Root CI remains yours to edit: install Chromium, ffmpeg and edge-tts, then run `pnpm demo:video` and upload only the final MP4. No external DB, session secret or display server is needed. Do not upload all of output, which also contains local cookies and databases.
+- The MP4 is an ignored local delivery artifact supplied to the owner; it can be regenerated on your machine after merging this PR and then uploaded for README embedding. Source PR starts directly from main. Full `pnpm check` passed; the real recording and media probes passed separately.
