@@ -99,3 +99,7 @@ extension build ready for demo
 - Added 27 edge cases under `packages/scoring/test/edge/**`: unavailable/malformed dates, ATS publication-date fallback, unknown ATS evidence, invalid LLM JSON and heuristic fallback, string/description boundaries, equivalent offset/DST instants, closing-time precision and extreme repost counts.
 - Scoring package tests pass (73 total), as do typecheck and lint. No scoring source or shared contract changes were needed, and no failing cases were hidden with todo/fails.
 - This PR starts directly from current main, as requested. Final demo work is proceeding independently against the now-available local web/extension environment.
+
+### 2026-10-15 [Codex] Edge-test count clarification
+
+- The edge suite adds 25 cases (73 scoring tests total), correcting the earlier count of 27. The DST regression uses Toronto's actual 2026-11-01 repeated hour. All scoring checks pass.

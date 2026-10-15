@@ -103,12 +103,12 @@ describe("time zones and closing boundaries", () => {
     );
   });
   it("distinguishes the two repeated fall-back clock hours", () => {
-    const now = new Date("2026-11-02T05:30:00Z");
+    const now = new Date("2026-12-01T05:30:00Z");
     const first = computeScore(
-      input({ now, posting: posting({ postedAt: "2026-10-02T01:30:00-04:00" }) }),
+      input({ now, posting: posting({ postedAt: "2026-11-01T01:30:00-04:00" }) }),
     );
     const second = computeScore(
-      input({ now, posting: posting({ postedAt: "2026-10-02T01:30:00-05:00" }) }),
+      input({ now, posting: posting({ postedAt: "2026-11-01T01:30:00-05:00" }) }),
     );
     expect(signal(second, "posting_age").value).toBeGreaterThan(
       signal(first, "posting_age").value!,
