@@ -35,21 +35,21 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 
 ### Codex
 
-| Done | Task                                                                                | Owner | Status |
-| ---- | ----------------------------------------------------------------------------------- | ----- | ------ |
-| [ ]  | ATS adapter: Greenhouse (public Job Board API) + msw tests                          | Codex | todo   |
-| [ ]  | ATS adapter: Lever (public Postings API) + msw tests                                | Codex | todo   |
-| [ ]  | ATS adapter: Ashby (public Job Postings API) + msw tests                            | Codex | todo   |
-| [ ]  | `detectBoard` + fuzzy `findMatch` (title + location)                                | Codex | todo   |
-| [ ]  | Parser: generic JSON-LD `JobPosting` fallback (`parseGeneric`)                      | Codex | todo   |
-| [ ]  | Parsers: board-specific (Greenhouse, Lever, Ashby hosted pages; others as feasible) | Codex | todo   |
-| [ ]  | Scoring edge-case tests in `packages/scoring/test/edge/**` (after scoring lands)    | Codex | todo   |
-| [ ]  | Demo: three fictional fixture pages with JSON-LD (high / low / medium)              | Codex | todo   |
-| [ ]  | Demo: seed observations for repost history                                          | Codex | todo   |
-| [ ]  | Demo: Playwright recorded run with extension, assertions, click highlight           | Codex | todo   |
-| [ ]  | Demo: narration script + TTS (ElevenLabs/OpenAI or edge-tts/Piper fallback)         | Codex | todo   |
-| [ ]  | Demo: ffmpeg assembly (captions, title card, end card) → `pnpm demo:video`          | Codex | todo   |
-| [ ]  | Demo: optional CI job steps                                                         | Codex | todo   |
+| Done | Task                                                                                | Owner | Status    |
+| ---- | ----------------------------------------------------------------------------------- | ----- | --------- |
+| [ ]  | ATS adapter: Greenhouse (public Job Board API) + msw tests                          | Codex | in review |
+| [ ]  | ATS adapter: Lever (public Postings API) + msw tests                                | Codex | in review |
+| [ ]  | ATS adapter: Ashby (public Job Postings API) + msw tests                            | Codex | in review |
+| [ ]  | `detectBoard` + fuzzy `findMatch` (title + location)                                | Codex | in review |
+| [ ]  | Parser: generic JSON-LD `JobPosting` fallback (`parseGeneric`)                      | Codex | todo      |
+| [ ]  | Parsers: board-specific (Greenhouse, Lever, Ashby hosted pages; others as feasible) | Codex | todo      |
+| [ ]  | Scoring edge-case tests in `packages/scoring/test/edge/**` (after scoring lands)    | Codex | todo      |
+| [ ]  | Demo: three fictional fixture pages with JSON-LD (high / low / medium)              | Codex | todo      |
+| [ ]  | Demo: seed observations for repost history                                          | Codex | todo      |
+| [ ]  | Demo: Playwright recorded run with extension, assertions, click highlight           | Codex | todo      |
+| [ ]  | Demo: narration script + TTS (ElevenLabs/OpenAI or edge-tts/Piper fallback)         | Codex | todo      |
+| [ ]  | Demo: ffmpeg assembly (captions, title card, end card) → `pnpm demo:video`          | Codex | todo      |
+| [ ]  | Demo: optional CI job steps                                                         | Codex | todo      |
 
 ## Phase 3 — Integration (Claude Code)
 
