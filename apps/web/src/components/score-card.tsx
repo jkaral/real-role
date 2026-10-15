@@ -2,9 +2,9 @@ import { TEST_IDS, signalRowTestId, type ScoreResult, type Signal } from "@real-
 import { BAND_LABELS, CONFIDENCE_LABELS, summarize } from "@real-role/scoring";
 
 const BAND_STYLES = {
-  high: { text: "text-high", bg: "bg-high-tint", ring: "#1d7a4f" },
-  medium: { text: "text-medium", bg: "bg-medium-tint", ring: "#9a6408" },
-  low: { text: "text-low", bg: "bg-low-tint", ring: "#a33a2b" },
+  high: { text: "text-high", bg: "bg-high-tint", ring: "var(--color-high)" },
+  medium: { text: "text-medium", bg: "bg-medium-tint", ring: "var(--color-medium)" },
+  low: { text: "text-low", bg: "bg-low-tint", ring: "var(--color-low)" },
 } as const;
 
 export function ScoreRing({ score, band }: { score: number; band: ScoreResult["band"] }) {
@@ -17,7 +17,7 @@ export function ScoreRing({ score, band }: { score: number; band: ScoreResult["b
       role="img"
       aria-label={`Freshness score ${score} out of 100`}
     >
-      <circle cx="50" cy="50" r={r} fill="none" stroke="#e4ebe7" strokeWidth="9" />
+      <circle cx="50" cy="50" r={r} fill="none" stroke="var(--color-track)" strokeWidth="9" />
       <circle
         cx="50"
         cy="50"
@@ -80,7 +80,7 @@ export function ScoreCard({
     <section
       data-testid={TEST_IDS.web.scoreCard}
       aria-labelledby="score-heading"
-      className="rounded-2xl border border-line bg-white p-5 shadow-sm sm:p-6"
+      className="rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6"
     >
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
         <ScoreRing score={result.score} band={result.band} />

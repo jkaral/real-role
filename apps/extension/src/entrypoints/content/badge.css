@@ -53,5 +53,20 @@
 @media (prefers-reduced-motion: no-preference) {
   .rr-badge {
     transition: box-shadow 120ms ease;
+    animation: rr-appear 1.4s ease-out 1;
+  }
+}
+
+/* One calm pulse when the badge first appears, then it stays still. */
+@keyframes rr-appear {
+  0% {
+    box-shadow:
+      0 6px 24px rgba(15, 31, 26, 0.18),
+      0 0 0 0 rgba(29, 107, 82, 0.45);
+  }
+  100% {
+    box-shadow:
+      0 6px 24px rgba(15, 31, 26, 0.18),
+      0 0 0 16px rgba(29, 107, 82, 0);
   }
 }

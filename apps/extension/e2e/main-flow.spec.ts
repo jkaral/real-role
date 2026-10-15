@@ -7,7 +7,7 @@ import {
   ListApplicationsResponseSchema,
 } from "@real-role/shared";
 import { chromium, expect, test, type BrowserContext, type Worker } from "@playwright/test";
-import { EXTENSION_DIR, FIXTURES_URL, WEB_URL } from "./env";
+import { EXTENSION_DIR, FIXTURES_URL, chromiumLaunch, WEB_URL } from "./env";
 
 let context: BrowserContext;
 let worker: Worker;
@@ -15,7 +15,7 @@ let extensionId: string;
 
 test.beforeAll(async () => {
   context = await chromium.launchPersistentContext("", {
-    channel: "chromium",
+    ...chromiumLaunch(),
     args: [`--disable-extensions-except=${EXTENSION_DIR}`, `--load-extension=${EXTENSION_DIR}`],
   });
   worker = context.serviceWorkers()[0] ?? (await context.waitForEvent("serviceworker"));

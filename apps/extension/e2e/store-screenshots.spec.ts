@@ -5,7 +5,7 @@ import { TEST_IDS } from "@real-role/shared";
 import { chromium, expect, test } from "@playwright/test";
 import { mkdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { EXTENSION_DIR, FIXTURES_URL } from "./env";
+import { EXTENSION_DIR, FIXTURES_URL, chromiumLaunch } from "./env";
 
 const OUT = fileURLToPath(new URL("../store/", import.meta.url));
 
@@ -14,7 +14,7 @@ test.skip(process.env.SCREENSHOTS !== "1", "set SCREENSHOTS=1 to regenerate stor
 test("store screenshots", async () => {
   mkdirSync(OUT, { recursive: true });
   const context = await chromium.launchPersistentContext("", {
-    channel: "chromium",
+    ...chromiumLaunch(),
     viewport: { width: 880, height: 800 },
     args: [`--disable-extensions-except=${EXTENSION_DIR}`, `--load-extension=${EXTENSION_DIR}`],
   });

@@ -30,8 +30,9 @@ export default function PrivacyPage() {
           status, dates and any notes you add.
         </li>
         <li>
-          <strong>Your account</strong>, if you sign in with GitHub: your GitHub display name and
-          account id. We don&apos;t store your email address or avatar.
+          <strong>Your account</strong>, if you sign in. With Google or GitHub: your display name
+          and account id, but not your email address or avatar. With an email link: your email
+          address, which we use only to send sign-in links.
         </li>
       </ul>
 

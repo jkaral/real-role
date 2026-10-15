@@ -3,7 +3,12 @@ import { CheckForm } from "./check-form";
 
 export const metadata: Metadata = { title: "Check a posting" };
 
-export default function CheckPage() {
+export default async function CheckPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
       <h1 className="text-3xl font-semibold tracking-tight">Check a posting</h1>
@@ -12,7 +17,10 @@ export default function CheckPage() {
         signal behind it.
       </p>
       <div className="mt-8">
-        <CheckForm />
+        <CheckForm
+          initialMode={params.mode === "text" ? "text" : "url"}
+          resume={params.resume === "1"}
+        />
       </div>
     </div>
   );

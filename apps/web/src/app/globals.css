@@ -1,21 +1,108 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens. Light values live in @theme; dark values override the same variables, so every
+ * Tailwind utility (bg-surface, text-ink, …) follows the theme. `data-theme` on <html> pins one.
+ */
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --color-ink: #0f1f1a;
   --color-ink-soft: #3c5249;
-  --color-muted: #64766f;
+  --color-muted: #5f716a;
   --color-line: #dbe4df;
+  --color-track: #e4ebe7;
   --color-paper: #f6f8f7;
+  --color-surface: #ffffff;
   --color-brand: #1d6b52;
   --color-brand-strong: #145040;
   --color-brand-tint: #e3f1eb;
+  --color-on-brand: #ffffff;
+  --color-accent: #e8a33d;
   --color-high: #1d7a4f;
   --color-high-tint: #e2f4ea;
-  --color-medium: #9a6408;
+  --color-medium: #8f5d07;
   --color-medium-tint: #fbf0d9;
   --color-low: #a33a2b;
   --color-low-tint: #fbe7e3;
+  --shadow-card: 0 1px 2px rgb(15 31 26 / 0.05), 0 8px 24px -12px rgb(15 31 26 / 0.12);
+  --animate-rise: rise 0.35s ease-out both;
+  --animate-pulse-once: pulse-once 1.2s ease-out 1;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes pulse-once {
+    0% {
+      box-shadow: 0 0 0 0 rgb(29 107 82 / 0.45);
+    }
+    100% {
+      box-shadow: 0 0 0 14px rgb(29 107 82 / 0);
+    }
+  }
+}
+
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+  &:where([data-theme="dark"] *) {
+    @slot;
+  }
+}
+
+/* Dark palette: same names, chosen for ≥ 4.5:1 text contrast on --color-surface. Kept in sync below. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-ink: #e6eeea;
+    --color-ink-soft: #b9c8c1;
+    --color-muted: #8fa29a;
+    --color-line: #26352f;
+    --color-track: #26352f;
+    --color-paper: #0b1310;
+    --color-surface: #121c18;
+    --color-brand: #4cc193;
+    --color-brand-strong: #6fd3aa;
+    --color-brand-tint: #15382b;
+    --color-on-brand: #04241a;
+    --color-high: #5fd093;
+    --color-high-tint: #123222;
+    --color-medium: #e8b45c;
+    --color-medium-tint: #33270f;
+    --color-low: #f08b79;
+    --color-low-tint: #3a1a15;
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --color-ink: #e6eeea;
+  --color-ink-soft: #b9c8c1;
+  --color-muted: #8fa29a;
+  --color-line: #26352f;
+  --color-track: #26352f;
+  --color-paper: #0b1310;
+  --color-surface: #121c18;
+  --color-brand: #4cc193;
+  --color-brand-strong: #6fd3aa;
+  --color-brand-tint: #15382b;
+  --color-on-brand: #04241a;
+  --color-high: #5fd093;
+  --color-high-tint: #123222;
+  --color-medium: #e8b45c;
+  --color-medium-tint: #33270f;
+  --color-low: #f08b79;
+  --color-low-tint: #3a1a15;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+  color-scheme: dark;
 }
 
 @layer base {
@@ -24,10 +111,16 @@
     background: var(--color-paper);
     -webkit-font-smoothing: antialiased;
   }
+  body {
+    background: var(--color-paper);
+  }
   :focus-visible {
     outline: 3px solid var(--color-brand);
     outline-offset: 2px;
     border-radius: 6px;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
   }
 }
 

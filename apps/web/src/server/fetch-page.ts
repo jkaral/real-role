@@ -10,8 +10,10 @@ const TIMEOUT_MS = 8000;
 const USER_AGENT = "RealRoleCheck/1.0 (single page fetch requested by a user)";
 
 const BLOCKED_MESSAGE = "Only public http(s) links can be checked.";
+const NOT_FOUND_MESSAGE =
+  "We couldn't find that website. Check the link for typos, or paste the posting text instead.";
 const UNREACHABLE_MESSAGE =
-  "We couldn't reach that site. Check the link, or paste the posting text instead.";
+  "We couldn't reach that page. The site may be slow or blocking automated checks; paste the posting text instead.";
 
 /** True for loopback, private, link-local, CGNAT, multicast and other non-public addresses. */
 export function isPrivateAddress(ip: string): boolean {
@@ -129,7 +131,7 @@ export async function assertPublicUrl(
   // Early, friendlier errors; the connect-time lookup is what actually enforces the rule.
   const addresses = await resolver(host).catch(() => null);
   if (!addresses || addresses.length === 0) {
-    throw new HttpError("upstream_unavailable", UNREACHABLE_MESSAGE);
+    throw new HttpError("upstream_unavailable", NOT_FOUND_MESSAGE);
   }
   if (addresses.some((a) => isPrivateAddress(a.address))) {
     throw new HttpError("bad_request", BLOCKED_MESSAGE);

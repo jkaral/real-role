@@ -131,6 +131,19 @@ describe("applications", () => {
     expect(updated.statusChangedAt).toBe(NOW.toISOString());
   });
 
+  it("keeps an explicit follow-up date when created as applied", async () => {
+    const user = await createUser(db);
+    const followUpAt = "2026-11-02T09:00:00.000Z";
+    const { application } = await createApplication(
+      db,
+      user,
+      { posting, status: "applied", followUpAt },
+      NOW,
+    );
+    expect(application.appliedAt).toBe(NOW.toISOString());
+    expect(application.followUpAt).toBe(followUpAt);
+  });
+
   it("keeps users' applications private", async () => {
     const alice = await createUser(db, "Alice");
     const bob = await createUser(db, "Bob");

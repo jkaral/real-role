@@ -3,7 +3,13 @@ import { defineBackground } from "wxt/utils/define-background";
 import type { ParsedPosting } from "@real-role/shared";
 import { ApiFailure, scorePosting } from "@/lib/api";
 import { validateMessage } from "@/lib/messages";
-import { badgeFor, tabKey, type BadgeUpdate, type TabState } from "@/lib/state";
+import {
+  badgeFor,
+  tabKey,
+  type BadgeUpdate,
+  type ContentMessage,
+  type TabState,
+} from "@/lib/state";
 
 async function setState(tabId: number, state: TabState | undefined): Promise<void> {
   if (state) await browser.storage.session.set({ [tabKey(tabId)]: state });
@@ -29,6 +35,12 @@ async function openPanel(tabId: number): Promise<void> {
 
 /** Run the content script on demand (toolbar click) on sites outside the automatic list. */
 async function checkTab(tabId: number): Promise<void> {
+  // Already injected (automatic match or an earlier click): ask it to read the page again.
+  const reached = await browser.tabs
+    .sendMessage(tabId, { type: "recheck" } satisfies ContentMessage)
+    .then(() => true)
+    .catch(() => false);
+  if (reached) return;
   try {
     await browser.scripting.executeScript({
       target: { tabId },

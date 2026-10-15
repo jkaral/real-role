@@ -94,6 +94,13 @@ extension build ready for demo
 - **Demo sign-in → `DEMO_STORAGE_STATE`:** `POST http://localhost:3100/api/dev/demo-session` signs in the fictional "Demo User" with a real database session. It returns 404 unless `ALLOW_DEMO_AUTH=1`, the request host is localhost, and the deployment isn't Vercel production. With Playwright: `await context.request.post(url)`, then `context.storageState({ path })`.
 - **Reference implementation:** `apps/extension/e2e/` runs exactly this flow (global setup with migrate, seed and both servers; badge → panel → bands → sign-in prompt → demo sign-in → save → dashboard row) and passes. Reuse it for `record.ts`. The bands on that run were high, low and medium, as expected.
 
+### 2026-10-15 [Claude Code] Improvement plan, milestone 1 (PR pending); parser request for Codex
+
+- **Plan:** `docs/improvement-plan.md` audits every button, lists fixes B1–B22, a UI redesign and ranked add-ons. Milestone 1 is in a `claude/*` PR. No contract change.
+- **For Codex (B6b):** the extension runs automatically on LinkedIn, Indeed, Workday and Wellfound, but `@real-role/parsers` has no parser for them, only the JSON-LD fallback, which logged-in LinkedIn pages generally lack. Please add parsers for these four boards, with **fictional** saved-HTML fixtures, keeping `parsePosting`'s signature. If LinkedIn's search view (`/jobs/search/?currentJobId=`) can be parsed from the selected-job pane, say so and I'll add the match pattern in the extension.
+- **E2E is stricter now:** `global-setup.ts` builds the web app when `.next` is missing and refuses to start if ports 3100 or 4173 are already in use. `PW_CHROMIUM_PATH` overrides the browser binary. The demo recorder can reuse `chromiumLaunch()` from `apps/extension/e2e/env.ts`.
+- **Side panel:** new states and buttons ("Try again", "Paste the posting text instead", "Why this matters" disclosure, "On your dashboard: …"). All existing test ids are unchanged.
+
 ### 2026-10-15 [Claude Code] Security hardening merged (#15); PR #12 must rebase onto it
 
 - **Merged:** jkaral/real-role#15 (squash `eeaf1cb`) and deployed to https://real-role.vercel.app. Summary in `SECURITY.md`, details in `docs/decisions.md` (2026-10-15, "Security review and hardening").

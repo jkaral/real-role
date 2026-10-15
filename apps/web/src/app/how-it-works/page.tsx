@@ -40,7 +40,7 @@ export default function HowItWorksPage() {
       <h2 className="mt-10 text-xl font-semibold">Five signals</h2>
       <ul className="mt-4 space-y-4">
         {SIGNAL_IDS.map((id) => (
-          <li key={id} className="rounded-xl border border-line bg-white p-5">
+          <li key={id} className="rounded-xl border border-line bg-surface p-5">
             <div className="flex items-baseline justify-between gap-4">
               <h3 className="font-semibold">{SIGNALS[id].name}</h3>
               <span className="text-sm tabular-nums text-muted">

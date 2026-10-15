@@ -22,30 +22,17 @@ export default async function DashboardPage() {
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Your applications</h1>
           <p className="mt-2 text-ink-soft">
-            Track where you applied. We&apos;ll flag the ones due for a follow-up.
+            Track where you applied and when to follow up. Press / to search.
           </p>
         </div>
         <Link
           href="/check"
-          className="rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white hover:bg-brand-strong"
+          className="rounded-lg bg-brand px-4 py-2 text-sm font-medium text-on-brand hover:bg-brand-strong"
         >
           Check a posting
         </Link>
       </div>
-      {applications.length === 0 ? (
-        <div
-          data-testid={TEST_IDS.web.dashboardEmpty}
-          className="mt-8 rounded-2xl border border-dashed border-line bg-white p-10 text-center"
-        >
-          <p className="font-medium">Nothing tracked yet</p>
-          <p className="mt-1 text-sm text-muted">
-            Use &ldquo;Save &amp; track&rdquo; on the check page or in the Chrome extension to add a
-            posting here.
-          </p>
-        </div>
-      ) : (
-        <ApplicationsTable initial={applications} />
-      )}
+      <ApplicationsTable initial={applications} />
     </div>
   );
 }

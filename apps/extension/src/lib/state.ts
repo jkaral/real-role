@@ -16,6 +16,9 @@ export type Message =
   | { type: "open-panel" }
   | { type: "check-tab"; tabId: number };
 
+/** Background → content script: read the page again (Retry, or toolbar click on a known tab). */
+export type ContentMessage = { type: "recheck" };
+
 /** Reply to "posting-found", used to update the in-page badge. */
 export type BadgeUpdate =
   | { ok: true; score: number; band: ScoreResponse["result"]["band"] }
