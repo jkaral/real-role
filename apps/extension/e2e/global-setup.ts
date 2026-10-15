@@ -69,6 +69,15 @@ export default async function globalSetup(): Promise<() => Promise<void>> {
   run(["--filter", "@real-role/web", "db:seed-demo", manifest], env);
   rmSync(manifest, { force: true });
 
+  // A leftover server would answer instead of this build and the tests would run against it.
+  for (const url of [WEB_URL, FIXTURES_URL]) {
+    const busy = await fetch(url).then(
+      () => true,
+      () => false,
+    );
+    if (busy) throw new Error(`${url} is already in use. Stop that server and run again.`);
+  }
+
   const web = start(["--filter", "@real-role/web", "start", "--port", "3100"], env);
   const fixtures = start(["--filter", "@real-role/demo", "demo:serve"], env);
   await Promise.all([waitFor(`${WEB_URL}/`), waitFor(`${FIXTURES_URL}/jobs/fresh`)]);

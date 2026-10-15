@@ -166,7 +166,7 @@ export default function HomePage() {
           aria-hidden="true"
           className="pointer-events-none absolute -bottom-48 left-[-10%] h-[420px] w-[520px] rounded-full bg-medium-tint opacity-60 blur-3xl"
         />
-        <div className="relative mx-auto grid max-w-6xl items-start gap-10 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:py-20">
+        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-start gap-10 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:py-20">
           <div className="lg:pt-10">
             <p className="inline-flex rounded-full bg-brand-tint px-3 py-1 text-sm font-medium text-brand">
               For job seekers

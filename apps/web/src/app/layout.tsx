@@ -48,7 +48,7 @@ async function Account() {
       <button
         type="submit"
         data-testid={TEST_IDS.web.signOutButton}
-        className="rounded-lg border border-line bg-surface px-3.5 py-2 text-sm font-medium hover:bg-paper"
+        className="whitespace-nowrap rounded-lg border border-line bg-surface px-3 py-2 text-sm font-medium hover:bg-paper sm:px-3.5"
       >
         Sign out
       </button>

@@ -77,7 +77,7 @@ export function ThemeToggle() {
       onClick={cycle}
       aria-label={`${LABEL[theme]}. Change theme`}
       title={LABEL[theme]}
-      className="rounded-md p-2 text-ink-soft hover:bg-paper hover:text-ink"
+      className="hidden rounded-md p-2 text-ink-soft hover:bg-paper hover:text-ink sm:inline-flex"
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         {theme === "dark" ? (

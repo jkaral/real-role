@@ -81,6 +81,8 @@ export async function createApplication(
       scoreAtSave: posting.lastScore,
       confidenceAtSave: posting.lastConfidence,
       ...appliedFields(input.status, appliedAt, now),
+      // An explicit follow-up date wins over the default that "applied" starts.
+      ...(input.followUpAt ? { followUpAt: new Date(input.followUpAt) } : {}),
     })
     .onConflictDoNothing()
     .returning();

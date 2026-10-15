@@ -390,7 +390,7 @@ export function ApplicationsTable({ initial }: { initial: TrackedApplication[] }
           </button>
         </div>
       ) : (
-        <div className="mt-4 overflow-x-auto rounded-2xl border border-line bg-surface shadow-card">
+        <div className="relative mt-4 overflow-x-auto rounded-2xl border border-line bg-surface shadow-card">
           <table className="w-full min-w-[820px] text-left text-sm">
             <caption className="sr-only">Tracked applications</caption>
             <thead className="border-b border-line bg-paper text-xs uppercase tracking-wide text-muted">

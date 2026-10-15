@@ -36,11 +36,18 @@ export default function OpengraphImage() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "#fff",
-              fontSize: 30,
             }}
           >
-            ✓
+            <svg width="30" height="30" viewBox="0 0 24 24">
+              <path
+                d="M5 12.5l4.5 4.5L19 7.5"
+                fill="none"
+                stroke="#fff"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
           Real Role
         </div>

@@ -68,3 +68,15 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 | [ ]  | Lighthouse + accessibility pass; error and empty states          | Claude Code | todo   |
 | [ ]  | Final README (Mermaid diagram, setup, live link, embedded video) | Claude Code | todo   |
 | [ ]  | Chrome Web Store submission                                      | Owner       | todo   |
+
+## Phase 5 — Improvement plan (`docs/improvement-plan.md`)
+
+| Done | Task                                                                                    | Owner       | Status    |
+| ---- | --------------------------------------------------------------------------------------- | ----------- | --------- |
+| [ ]  | M1 unbreak: e2e from fresh clone, sign-in options, check-page resume, install CTA, undo | Claude Code | in review |
+| [ ]  | M1: core-flow gaps (follow-up dates, notes, manual add, filters, panel next steps)      | Claude Code | in review |
+| [ ]  | M1: `buttons.spec.ts` permanent click-through test                                      | Claude Code | in review |
+| [ ]  | M2 (partial): tokens with dark mode, landing refresh, icons and link previews           | Claude Code | in review |
+| [ ]  | M2/M3: design direction, shadcn/ui primitives, full surface redesign                    | Claude Code | blocked   |
+| [ ]  | Board parsers for LinkedIn, Indeed, Workday, Wellfound (B6b)                            | Codex       | todo      |
+| [ ]  | Sign-in keys (Google, Resend), `ANTHROPIC_API_KEY`, `EXTENSION_STORE_URL` in Vercel     | Owner       | todo      |

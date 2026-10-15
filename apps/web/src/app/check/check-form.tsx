@@ -331,7 +331,9 @@ export function CheckForm({
                 type="button"
                 onClick={() => {
                   setError(null);
-                  switchTo("text", true);
+                  switchTo("text");
+                  // The textarea mounts on this render; focus it once it exists.
+                  setTimeout(() => document.getElementById("text")?.focus(), 0);
                 }}
                 className="mt-3 rounded-lg border border-low/40 bg-surface px-3 py-1.5 text-sm font-medium text-ink hover:bg-paper"
               >
