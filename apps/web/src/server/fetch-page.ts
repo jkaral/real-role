@@ -63,7 +63,13 @@ export async function assertPublicUrl(raw: string): Promise<URL> {
   const addresses = isIP(host)
     ? [{ address: host }]
     : await lookup(host, { all: true }).catch(() => []);
-  if (addresses.length === 0 || addresses.some((a) => isPrivateAddress(a.address))) {
+  if (addresses.length === 0) {
+    throw new HttpError(
+      "upstream_unavailable",
+      "We couldn't find that website. Check the link for typos, or paste the posting text instead.",
+    );
+  }
+  if (addresses.some((a) => isPrivateAddress(a.address))) {
     throw new HttpError("bad_request", "Only public http(s) links can be checked.");
   }
   return url;
@@ -86,7 +92,10 @@ export async function fetchPostingPage(raw: string): Promise<{ html: string; url
         headers: { "User-Agent": USER_AGENT, Accept: "text/html,application/xhtml+xml" },
       });
     } catch {
-      throw new HttpError("upstream_unavailable", "We couldn't reach that page.");
+      throw new HttpError(
+        "upstream_unavailable",
+        "We couldn't reach that page. The site may be slow or blocking automated checks; paste the posting text instead.",
+      );
     }
     if (response.status >= 300 && response.status < 400) {
       const location = response.headers.get("location");

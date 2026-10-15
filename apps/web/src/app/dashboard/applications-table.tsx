@@ -77,7 +77,7 @@ export function ApplicationsTable({ initial }: { initial: TrackedApplication[] }
           {error}
         </p>
       )}
-      <div className="overflow-x-auto rounded-2xl border border-line bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-2xl border border-line bg-surface shadow-sm">
         <table className="w-full min-w-[720px] text-left text-sm">
           <caption className="sr-only">Tracked applications</caption>
           <thead className="border-b border-line bg-paper text-xs uppercase tracking-wide text-muted">
@@ -136,7 +136,7 @@ export function ApplicationsTable({ initial }: { initial: TrackedApplication[] }
                       value={a.status}
                       onChange={(e) => update(a.id, e.target.value as ApplicationStatus)}
                       data-testid={TEST_IDS.web.dashboardStatusSelect}
-                      className="rounded-md border border-line bg-white px-2 py-1"
+                      className="rounded-md border border-line bg-surface px-2 py-1"
                     >
                       {APPLICATION_STATUSES.map((s) => (
                         <option key={s} value={s}>

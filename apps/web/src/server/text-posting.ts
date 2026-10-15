@@ -27,13 +27,28 @@ function firstLine(text: string): string | undefined {
     .find((l) => l.length >= 3 && l.length <= 120);
 }
 
+const ROLE_PHRASE =
+  /\b(?:[Hh]iring|[Ss]eeking|[Ss]eeks|[Ll]ooking for|[Rr]ecruiting|[Ss]earching for):?\s+(?:an?\s+|our\s+(?:next\s+)?)?([A-Z][\w&/+.-]*(?:\s+(?:(?:of|and|&)\s+)?[A-Z][\w&/+.-]*){0,5})/;
+
+/** "We're hiring a Senior Data Analyst to …" → "Senior Data Analyst" (capitalised words only). */
+export function titleFromText(text: string): string | undefined {
+  const phrase = text
+    .match(ROLE_PHRASE)?.[1]
+    ?.replace(/[./+&-]+$/, "")
+    .trim();
+  if (phrase && phrase.length >= 3 && phrase.length <= 80) return phrase;
+  // A short first line is usually the title when people paste the whole posting.
+  const line = firstLine(text);
+  return line && line.length <= 80 && !/[.!?]$/.test(line) ? line : undefined;
+}
+
 /** Build a posting from text pasted on the check page. */
 export function postingFromText(
   input: { text: string; title?: string | undefined; company?: string | undefined },
   now: Date,
 ): ParsedPosting {
   const text = input.text.trim();
-  const title = input.title?.trim() || firstLine(text) || "Untitled role";
+  const title = input.title?.trim() || titleFromText(text) || "Untitled role";
   const company = input.company?.trim() || UNKNOWN_EMPLOYER;
   const postedAt = postedAtFromText(text, now);
   const parsed = ParsedPostingSchema.safeParse({

@@ -4,7 +4,7 @@ import { careersCandidates } from "../src/server/careers";
 import { assertPublicUrl, isPrivateAddress } from "../src/server/fetch-page";
 import { HttpError, corsHeaders, readBody } from "../src/server/http";
 import { windowStart } from "../src/server/rate-limit";
-import { postedAtFromText, postingFromText } from "../src/server/text-posting";
+import { postedAtFromText, postingFromText, titleFromText } from "../src/server/text-posting";
 
 const NOW = new Date("2026-10-15T12:00:00.000Z");
 
@@ -29,6 +29,24 @@ describe("pasted text", () => {
       sourceUrl: "about:pasted-text",
     });
   });
+
+  it("finds the job title in running text", () => {
+    expect(
+      titleFromText(
+        "Northwind Lumen seeks a Data Analyst for the Finance Analytics team. Maintain dashboards.",
+      ),
+    ).toBe("Data Analyst");
+    expect(titleFromText("We're hiring: Senior Platform Engineer, remote in Canada.")).toBe(
+      "Senior Platform Engineer",
+    );
+    expect(titleFromText("Bramblecrest is looking for our next Head of Design to lead…")).toBe(
+      "Head of Design",
+    );
+    // No capitalised role and no short first line: leave it to the caller's fallback.
+    expect(
+      titleFromText("We are looking for a motivated self-starter to join our dynamic team today."),
+    ).toBeUndefined();
+  });
 });
 
 describe("URL safety", () => {
@@ -50,6 +68,12 @@ describe("URL safety", () => {
     }
     for (const ip of ["93.184.216.34", "2606:4700::1111"])
       expect(isPrivateAddress(ip), ip).toBe(false);
+  });
+
+  it("says a host that doesn't resolve can't be found", async () => {
+    await expect(assertPublicUrl("https://jobs.bramblecrest.invalid/1")).rejects.toMatchObject({
+      code: "upstream_unavailable",
+    });
   });
 
   it("rejects unsafe URLs without any network call", async () => {
