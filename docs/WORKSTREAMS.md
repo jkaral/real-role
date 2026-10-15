@@ -84,3 +84,9 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 | [ ]  | M2/M3: design direction, shadcn/ui primitives, full surface redesign                    | Claude Code | blocked   |
 | [ ]  | Board parsers for LinkedIn, Indeed, Workday, Wellfound (B6b)                            | Codex       | todo      |
 | [ ]  | Sign-in keys (Google, Resend), `ANTHROPIC_API_KEY`, `EXTENSION_STORE_URL` in Vercel     | Owner       | todo      |
+
+## Add-on rollout — Codex (2026-10-15)
+
+- [ ] Codex: employer-source finder, synced shortlist/preferences/facts, calendar/templates, prior-save notices, comparisons, analytics and CSV portability — implementation and validation in progress; see docs/addon-rollout.md.
+- [ ] Codex: interview preparation and coach workspace — queued; coach access requires owner approval.
+- [ ] Codex: scheduled monitoring — deferred by owner; do not activate.
