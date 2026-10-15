@@ -69,6 +69,16 @@ The Phase 1 stubs already have these shapes. Replace the bodies; keep the names 
 - Line endings are LF (`.gitattributes`); Prettier formats everything except the verbatim brief files.
 - Keep comments brief; explain why, not what.
 
+## Security rules (see `SECURITY.md`)
+
+- API routes go through `handle()` (`apps/web/src/server/route.ts`): rate limit, `assertTrustedOrigin` (CSRF), ApiError envelope. Scope every user-data query to the session's user id.
+- Server-side fetches of user-supplied URLs only via `fetchPostingPage` (connect-time IP checks). Never add another server-side fetch of arbitrary URLs.
+- Extension: validate every runtime message in `apps/extension/src/lib/messages.ts`; no `innerHTML`, `eval` or remote code; keep permissions, host patterns and the extension-page CSP as narrow as they are now.
+- Render model output and page-derived strings as text only. Never use `dangerouslySetInnerHTML`.
+- Never store description text, emails or avatars, and never link observations to users.
+- Secrets live in Vercel or GitHub secrets only; `.env.example` holds placeholders.
+- PRs are reviewed by the Claude security-review workflow; address its comments or explain why they don't apply.
+
 ## Branches, PRs and logs
 
 - Branches: `claude/<topic>` or `codex/<topic>`. No direct pushes to `main`; PRs need green CI.

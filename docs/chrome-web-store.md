@@ -101,3 +101,28 @@ Certify all three:
 4. Fill in **Privacy practices** from the section above.
 5. **Distribution:** Public (or Unlisted for a soft launch), all regions.
 6. Submit for review. After approval, send me the extension ID: it goes into `EXTENSION_ORIGINS` on Vercel (`chrome-extension://<id>`) and into the README.
+
+## Security checklist (Chrome Web Store best practices)
+
+Checked against https://developer.chrome.com/docs/webstore/best-practices and the linked "Stay secure" guide on 2026-10-15.
+
+| Practice                                                                  | Status                                                                                               |
+| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Manifest V3                                                               | Yes                                                                                                  |
+| User data sent only over HTTPS                                            | Yes: the production build talks only to `https://real-role.vercel.app`                               |
+| Minimal permissions and narrow host patterns                              | Yes: 4 permissions, the API host only, job-board content-script patterns; no `<all_urls>`, no `tabs` |
+| Explicit CSP for extension pages                                          | Yes: `script-src 'self'`, `object-src 'none'`, `connect-src` = API only                              |
+| `externally_connectable` restricted                                       | Yes: `{ "ids": [] }` (no websites or other extensions)                                               |
+| Minimal `web_accessible_resources`                                        | Yes: none                                                                                            |
+| No `innerHTML` / `document.write` / `eval` / remote code                  | Yes                                                                                                  |
+| Content-script messages validated; privileged calls in the service worker | Yes: `src/lib/messages.ts`, tested                                                                   |
+| No `unload` handlers; bfcache-friendly; no WebSockets in content scripts  | Yes                                                                                                  |
+| End-to-end tests                                                          | Yes: `apps/extension/e2e` (runs in CI)                                                               |
+| Privacy tab matches the privacy policy                                    | Yes: see "Privacy practices" above and https://real-role.vercel.app/privacy                          |
+| Listing images: icon, small tile, screenshots                             | Yes. A marquee (1400×560) is optional and only used if the item is featured                          |
+
+**Owner actions for the developer account:**
+
+- Turn on **2-step verification, preferably with a security key**, on the Google account that owns the Chrome Web Store developer account.
+- If you add other publishers to the account, give each the least role they need.
+- Optionally add a promo video to the listing (Codex's demo video, once it's recorded).

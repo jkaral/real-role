@@ -72,6 +72,15 @@ describe("rubric", () => {
     expect(RUBRIC_SYSTEM_PROMPT).toMatch(/Never call the posting/);
   });
 
+  it("drops accusatory reasons even if the model is steered into them", () => {
+    expect(
+      parseRubricResponse({
+        score: 0.1,
+        reasons: ["This is a scam posting.", "No pay range is listed.", "Looks FAKE."],
+      })?.reasons,
+    ).toEqual(["No pay range is listed."]);
+  });
+
   it("versions the cache key", () => {
     expect(rubricCacheKey("fp1_abc")).toBe("rubric-1:fp1_abc");
   });

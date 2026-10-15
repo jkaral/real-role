@@ -62,9 +62,10 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 
 ## Phase 4 — Final demo and launch
 
-| Done | Task                                                             | Owner       | Status |
-| ---- | ---------------------------------------------------------------- | ----------- | ------ |
-| [ ]  | Record final demo video against extension + deployed web app     | Codex       | todo   |
-| [ ]  | Lighthouse + accessibility pass; error and empty states          | Claude Code | todo   |
-| [ ]  | Final README (Mermaid diagram, setup, live link, embedded video) | Claude Code | todo   |
-| [ ]  | Chrome Web Store submission                                      | Owner       | todo   |
+| Done | Task                                                             | Owner       | Status    |
+| ---- | ---------------------------------------------------------------- | ----------- | --------- |
+| [ ]  | Record final demo video against extension + deployed web app     | Codex       | todo      |
+| [ ]  | Security review + hardening (extension best practices, web API)  | Claude Code | in review |
+| [ ]  | Lighthouse + accessibility pass; error and empty states          | Claude Code | todo      |
+| [ ]  | Final README (Mermaid diagram, setup, live link, embedded video) | Claude Code | todo      |
+| [ ]  | Chrome Web Store submission                                      | Owner       | todo      |
