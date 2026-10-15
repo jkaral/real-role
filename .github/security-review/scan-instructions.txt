@@ -1,0 +1,11 @@
+Project context: Real Role scores job postings. Surfaces: a Next.js web app + API on Vercel (apps/web), a Chrome MV3 extension (apps/extension), shared packages. Pay particular attention to:
+
+- SSRF in apps/web/src/server/fetch-page.ts (check page URL mode). The server must only fetch the single public http(s) page a user submitted. Every connection's IP must be validated at connect time (DNS rebinding), redirects re-validated, size and time capped.
+- Authorization (IDOR) on /api/applications and /api/applications/[id]: every query must be scoped to the signed-in user's id.
+- CSRF: state-changing API routes must go through assertTrustedOrigin (apps/web/src/server/http.ts) via handle() in apps/web/src/server/route.ts.
+- The local-only demo sign-in (apps/web/src/app/api/dev/demo-session, apps/web/src/server/demo-auth.ts) must never be reachable on Vercel, in any environment.
+- The PGlite database (DATABASE_URL=pglite:...) must never be usable on Vercel production.
+- Chrome extension: messages to the background worker must be validated (apps/extension/src/lib/messages.ts). Content scripts are untrusted; no innerHTML or eval; host permissions and content-script matches must stay narrow (no <all_urls>); extension pages keep an explicit CSP.
+- Data minimization (product rule): never store posting description text, user emails or avatars, or link anonymous observations to user ids.
+- Untrusted posting text reaches the Claude API (apps/web/src/server/rubric.ts). Model output must be schema-validated and must never be rendered as HTML.
+- Secrets: nothing in the repo; .env.example has placeholders only.

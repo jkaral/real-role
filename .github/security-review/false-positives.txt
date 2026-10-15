@@ -1,0 +1,8 @@
+Treat as expected, not findings:
+
+- Fictional data in tests and demo fixtures (e.g. "postgres://u:p@ep-demo.neon.example/db", "e2e-only-secret-not-used-anywhere-else"). These are not credentials.
+- packages/parsers uses template.innerHTML on an inert <template> element to strip HTML from JSON-LD descriptions. Template content doesn't execute scripts or load resources.
+- 'unsafe-inline' in the web app's script-src: Next.js App Router injects inline bootstrap scripts; there's no user-controlled HTML rendering (React escapes output).
+- Requests without an Origin header are allowed by assertTrustedOrigin by design (they carry no ambient browser cookies).
+- chrome-extension:// origins are allowed by assertTrustedOrigin by design (the extension calls the API with the user's session).
+- Rate-limit and denial-of-service concerns (excluded by default).

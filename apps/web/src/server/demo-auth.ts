@@ -7,13 +7,14 @@ export const DEMO_SESSION_DAYS = 1;
 
 /**
  * The demo sign-in exists only for local recordings and the e2e test: it needs ALLOW_DEMO_AUTH=1,
- * never runs on Vercel production, and only answers requests addressed to localhost.
+ * never runs on Vercel at all (any environment), and only answers requests addressed to localhost.
+ * The Host check alone isn't enough (clients control Host), hence the platform checks.
  */
 export function demoAuthAllowed(
   env: Record<string, string | undefined>,
   host: string | null,
 ): boolean {
-  if (env.ALLOW_DEMO_AUTH !== "1" || env.VERCEL_ENV === "production") return false;
+  if (env.ALLOW_DEMO_AUTH !== "1" || env.VERCEL === "1" || env.VERCEL_ENV) return false;
   const hostname = (host ?? "").replace(/:\d+$/, "").toLowerCase();
   return hostname === "localhost" || hostname === "127.0.0.1";
 }

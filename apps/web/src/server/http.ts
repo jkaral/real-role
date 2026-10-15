@@ -108,8 +108,34 @@ export async function readBody<S extends z.ZodType>(
   return parsed.data;
 }
 
-/** Best-effort client IP for rate limiting (Vercel sets x-forwarded-for). */
+/** Client IP for rate limiting. Vercel sets x-real-ip itself, so prefer it over x-forwarded-for. */
 export function clientIp(request: Request): string {
+  const real = request.headers.get("x-real-ip")?.trim();
+  if (real) return real;
   const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  return forwarded || request.headers.get("x-real-ip") || "unknown";
+  return forwarded || "unknown";
+}
+
+const SAFE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
+
+/**
+ * CSRF defense in depth (the session cookie is also SameSite=Lax): state-changing requests must
+ * come from this site or a browser extension. Requests without an Origin header (curl, servers)
+ * carry no ambient browser cookies, so they're allowed.
+ */
+export function assertTrustedOrigin(request: Request): void {
+  if (SAFE_METHODS.has(request.method)) return;
+  const origin = request.headers.get("origin");
+  if (!origin) return;
+  if (origin.startsWith("chrome-extension://")) return;
+  let originHost: string;
+  try {
+    originHost = new URL(origin).host;
+  } catch {
+    throw new HttpError("forbidden", "Cross-site request blocked.");
+  }
+  const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+  if (!host || originHost !== host) {
+    throw new HttpError("forbidden", "Cross-site request blocked.");
+  }
 }

@@ -11,6 +11,10 @@ on:
         type: boolean
         default: false
 
+# Least privilege for the GITHUB_TOKEN.
+permissions:
+  contents: read
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
