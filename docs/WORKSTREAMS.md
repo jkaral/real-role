@@ -37,34 +37,38 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 
 | Done | Task                                                                                | Owner | Status    |
 | ---- | ----------------------------------------------------------------------------------- | ----- | --------- |
-| [ ]  | ATS adapter: Greenhouse (public Job Board API) + msw tests                          | Codex | in review |
-| [ ]  | ATS adapter: Lever (public Postings API) + msw tests                                | Codex | in review |
-| [ ]  | ATS adapter: Ashby (public Job Postings API) + msw tests                            | Codex | in review |
-| [ ]  | `detectBoard` + fuzzy `findMatch` (title + location)                                | Codex | in review |
-| [ ]  | Parser: generic JSON-LD `JobPosting` fallback (`parseGeneric`)                      | Codex | in review |
-| [ ]  | Parsers: board-specific (Greenhouse, Lever, Ashby hosted pages; others as feasible) | Codex | in review |
-| [ ]  | Scoring edge-case tests in `packages/scoring/test/edge/**` (after scoring lands)    | Codex | blocked   |
-| [ ]  | Demo: three fictional fixture pages with JSON-LD (high / low / medium)              | Codex | in review |
-| [ ]  | Demo: seed observations for repost history                                          | Codex | blocked   |
-| [ ]  | Demo: Playwright recorded run with extension, assertions, click highlight           | Codex | blocked   |
+| [x]  | ATS adapter: Greenhouse (public Job Board API) + msw tests                          | Codex | done      |
+| [x]  | ATS adapter: Lever (public Postings API) + msw tests                                | Codex | done      |
+| [x]  | ATS adapter: Ashby (public Job Postings API) + msw tests                            | Codex | done      |
+| [x]  | `detectBoard` + fuzzy `findMatch` (title + location)                                | Codex | done      |
+| [x]  | Parser: generic JSON-LD `JobPosting` fallback (`parseGeneric`)                      | Codex | done      |
+| [x]  | Parsers: board-specific (Greenhouse, Lever, Ashby hosted pages; others as feasible) | Codex | done      |
+| [ ]  | Scoring edge-case tests in `packages/scoring/test/edge/**` (after scoring lands)    | Codex | in review |
+| [x]  | Demo: three fictional fixture pages with JSON-LD (high / low / medium)              | Codex | done      |
+| [x]  | Demo: seed observations for repost history                                          | Codex | done      |
+| [ ]  | Demo: Playwright recorded run with extension, assertions, click highlight           | Codex | in review |
 | [ ]  | Demo: narration script + TTS (ElevenLabs/OpenAI or edge-tts/Piper fallback)         | Codex | in review |
 | [ ]  | Demo: ffmpeg assembly (captions, title card, end card) → `pnpm demo:video`          | Codex | in review |
 | [ ]  | Demo: optional CI job steps                                                         | Codex | blocked   |
+| [ ]  | Demo: Higgsfield replacement-film script and production brief for Claude Code       | Codex | in review |
 
 ## Phase 3 — Integration (Claude Code)
 
-| Done | Task                                                             | Owner       | Status    |
-| ---- | ---------------------------------------------------------------- | ----------- | --------- |
-| [x]  | Review and merge `codex/*` PRs                                   | Claude Code | done      |
-| [x]  | Wire `ats` into `/api/score` (timeouts, caching)                 | Claude Code | done      |
-| [ ]  | Wire `parsers` into extension and check page                     | Claude Code | in review |
-| [ ]  | End-to-end Playwright test of the main flow (separate from demo) | Claude Code | in review |
+| Done | Task                                                             | Owner       | Status |
+| ---- | ---------------------------------------------------------------- | ----------- | ------ |
+| [x]  | Review and merge `codex/*` PRs                                   | Claude Code | done   |
+| [x]  | Wire `ats` into `/api/score` (timeouts, caching)                 | Claude Code | done   |
+| [x]  | Wire `parsers` into extension and check page                     | Claude Code | done   |
+| [x]  | End-to-end Playwright test of the main flow (separate from demo) | Claude Code | done   |
 
 ## Phase 4 — Final demo and launch
 
 | Done | Task                                                             | Owner       | Status |
 | ---- | ---------------------------------------------------------------- | ----------- | ------ |
-| [ ]  | Record final demo video against extension + deployed web app     | Codex       | todo   |
+| [x]  | Record final demo video against extension + deployed web app     | Codex       | done   |
+| [x]  | Security review + hardening (extension best practices, web API)  | Claude Code | done   |
+| [x]  | Root CI: optional demo job steps (per `demo/README.md`)          | Claude Code | done   |
+| [x]  | Release workflow (extension zip on `v*` tags)                    | Claude Code | done   |
 | [ ]  | Lighthouse + accessibility pass; error and empty states          | Claude Code | todo   |
 | [ ]  | Final README (Mermaid diagram, setup, live link, embedded video) | Claude Code | todo   |
 | [ ]  | Chrome Web Store submission                                      | Owner       | todo   |

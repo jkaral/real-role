@@ -125,7 +125,8 @@ export default defineContentScript({
     // Job boards are often single-page apps: re-check when the URL changes.
     ctx.addEventListener(window, "wxt:locationchange", () => void check());
     // Retry from the side panel or the toolbar: read this page again.
-    const onMessage = (message: unknown) => {
+    const onMessage = (message: unknown, sender: { id?: string }) => {
+      if (sender.id !== browser.runtime.id) return;
       if ((message as ContentMessage | undefined)?.type !== "recheck") return;
       checkedUrl = "";
       void check();

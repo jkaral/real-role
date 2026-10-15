@@ -69,8 +69,12 @@ export function parseRubricResponse(raw: unknown): RubricResult | null {
     }
   }
   const parsed = RubricResultSchema.safeParse(value);
-  return parsed.success ? parsed.data : null;
+  if (!parsed.success) return null;
+  // The posting text is untrusted (prompt injection); keep A2's neutral wording regardless.
+  return { ...parsed.data, reasons: parsed.data.reasons.filter((r) => !ACCUSATORY.test(r)) };
 }
+
+const ACCUSATORY = /\b(fake|scam|fraud|ghost|bogus|phony|illegitimate)/i;
 
 /** Cache key: same description text + same rubric version = same result. */
 export function rubricCacheKey(fingerprint: string): string {

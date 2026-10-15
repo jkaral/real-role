@@ -1,12 +1,13 @@
 import { browser } from "wxt/browser";
 import { defineBackground } from "wxt/utils/define-background";
+import type { ParsedPosting } from "@real-role/shared";
 import { ApiFailure, scorePosting } from "@/lib/api";
+import { validateMessage } from "@/lib/messages";
 import {
   badgeFor,
   tabKey,
   type BadgeUpdate,
   type ContentMessage,
-  type Message,
   type TabState,
 } from "@/lib/state";
 
@@ -55,10 +56,7 @@ async function checkTab(tabId: number): Promise<void> {
   }
 }
 
-async function handlePosting(
-  tabId: number,
-  posting: Extract<Message, { type: "posting-found" }>["posting"],
-): Promise<BadgeUpdate> {
+async function handlePosting(tabId: number, posting: ParsedPosting): Promise<BadgeUpdate> {
   const url = posting.sourceUrl;
   await setState(tabId, { status: "loading", url });
   try {
@@ -75,23 +73,22 @@ async function handlePosting(
 
 export default defineBackground(() => {
   browser.runtime.onMessage.addListener((raw, sender, sendResponse) => {
-    const message = raw as Message;
-    const tabId = message.type === "check-tab" ? message.tabId : sender.tab?.id;
-    if (tabId === undefined) return false;
+    const message = validateMessage(raw, sender, browser.runtime.id);
+    if (!message) return false;
 
     switch (message.type) {
       case "posting-found":
-        void handlePosting(tabId, message.posting).then(sendResponse);
+        void handlePosting(message.tabId, message.posting).then(sendResponse);
         return true; // async response
       case "no-posting":
-        void setState(tabId, { status: "not-a-posting", url: sender.tab?.url ?? "" });
+        void setState(message.tabId, { status: "not-a-posting", url: message.url });
         return false;
       case "open-panel":
         // Called from the badge's click handler, so the user gesture is still active.
-        void openPanel(tabId);
+        void openPanel(message.tabId);
         return false;
       case "check-tab":
-        void checkTab(tabId);
+        void checkTab(message.tabId);
         return false;
     }
   });

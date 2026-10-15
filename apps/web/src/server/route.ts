@@ -1,6 +1,13 @@
 import { auth } from "@/auth";
 import { getDb, type Db } from "@/db/client";
-import { HttpError, clientIp, errorResponse, json, type RateLimitInfo } from "./http";
+import {
+  HttpError,
+  assertTrustedOrigin,
+  clientIp,
+  errorResponse,
+  json,
+  type RateLimitInfo,
+} from "./http";
 import { rateLimit, type Bucket } from "./rate-limit";
 
 interface Ctx {
@@ -17,6 +24,7 @@ export async function handle<T>(
 ): Promise<Response> {
   let rate: RateLimitInfo | undefined;
   try {
+    assertTrustedOrigin(request);
     const db = getDb();
     rate = await rateLimit(db, bucket, clientIp(request));
     const out = await fn({ db, rate, now: new Date() });

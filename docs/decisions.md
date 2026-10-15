@@ -59,3 +59,16 @@ Append-only log of notable choices and why. Dated and signed.
 - **Local/e2e database:** `DATABASE_URL=pglite:<dir>` (in-process Postgres, one shared instance per process because Next loads `db/client` separately for pages and routes). Refused on Vercel production.
 - **Demo sign-in:** `POST /api/dev/demo-session` creates a real database session for a fictional user. It's guarded by `ALLOW_DEMO_AUTH=1` + localhost host + not Vercel production. It exists for the e2e test and the demo's `DEMO_STORAGE_STATE`.
 - **E2E in CI** as a separate job (not yet a required check), which also uploads the store zip as an artifact.
+
+### 2026-10-15 [Claude Code] Security review and hardening (pre-publish)
+
+Reviewed the web app, API and extension against Chrome's Web Store best practices / "Stay secure" guide and the vulnerability categories of anthropics/claude-code-security-review. Fixed:
+
+- **SSRF via DNS rebinding (real issue):** URL mode checked the hostname's IP, then `fetch` resolved it again. Fetches now go through an undici `Agent` whose `connect.lookup` rejects private addresses for every connection, including redirects. The body is streamed with a 2 MB cap. DNS failures now say "couldn't reach that site" instead of "only public links" (improvement-plan item B10).
+- **CSRF defense in depth:** state-changing API requests must have no Origin, the site's own origin, or a `chrome-extension://` origin (on top of SameSite=Lax).
+- **Web CSP + HSTS + COOP** in production. `script-src` keeps `'unsafe-inline'` for Next.js bootstrap scripts; nonces are a follow-up.
+- **Extension:** background messages are validated (sender id, top frame, zod shape, posting URL = sender URL, check-tab only from extension pages); an explicit extension-page CSP; `externally_connectable: { ids: [] }`.
+- **Demo sign-in** now refuses on any Vercel environment (the Host check alone is client-controlled).
+- **Rate-limit identity** prefers Vercel's `x-real-ip` over the client-supplied `x-forwarded-for`.
+- **AI review reasons** containing accusatory words are dropped (prompt-injection guard for A2 wording).
+- **CI:** `permissions: contents: read`. Added the Claude security-review workflow, pinned to a commit, skipped until `CLAUDE_API_KEY` is set, and same-repo PRs only. Fork PR workflows now require approval for all outside contributors.
