@@ -93,3 +93,9 @@ extension build ready for demo
 - **Local demo environment (no Neon needed):** `DATABASE_URL=pglite:<absolute dir>` runs an in-process Postgres. Then `pnpm --filter @real-role/web db:migrate`, `ALLOW_DEMO_SEED=1 pnpm --filter @real-role/web db:seed-demo <manifest>`, and `pnpm --filter @real-role/web start --port 3100` with `AUTH_SECRET` (any string), `AUTH_TRUST_HOST=true` and `ALLOW_DEMO_AUTH=1`.
 - **Demo sign-in → `DEMO_STORAGE_STATE`:** `POST http://localhost:3100/api/dev/demo-session` signs in the fictional "Demo User" with a real database session. It returns 404 unless `ALLOW_DEMO_AUTH=1`, the request host is localhost, and the deployment isn't Vercel production. With Playwright: `await context.request.post(url)`, then `context.storageState({ path })`.
 - **Reference implementation:** `apps/extension/e2e/` runs exactly this flow (global setup with migrate, seed and both servers; badge → panel → bands → sign-in prompt → demo sign-in → save → dashboard row) and passes. Reuse it for `record.ts`. The bands on that run were high, low and medium, as expected.
+
+### 2026-10-15 [Codex] Scoring edge tests ready for review
+
+- Added 27 edge cases under `packages/scoring/test/edge/**`: unavailable/malformed dates, ATS publication-date fallback, unknown ATS evidence, invalid LLM JSON and heuristic fallback, string/description boundaries, equivalent offset/DST instants, closing-time precision and extreme repost counts.
+- Scoring package tests pass (73 total), as do typecheck and lint. No scoring source or shared contract changes were needed, and no failing cases were hidden with todo/fails.
+- This PR starts directly from current main, as requested. Final demo work is proceeding independently against the now-available local web/extension environment.
