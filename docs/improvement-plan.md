@@ -9,6 +9,15 @@ Written by Claude Code on 2026-10-15, at `main` commit `9fbd395` (Phase 4). This
 
 Ownership follows A7. Everything in Parts 1–3 is in `apps/web` or `apps/extension` (Claude Code), except the board parsers. Those belong to Codex and go through `docs/HANDOFF.md`.
 
+## Progress
+
+Updated 2026-10-15 by Claude Code.
+
+- **Done (milestone 1 PR):** B1, B2, B3 (code; keys pending), B4, B5, B8, B9 (dates and "mark followed up"; email digest pending), B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20. Also from §3: design tokens, a theme toggle, the landing refresh (live example chips, signal grid, trust strip), the dashboard stats row, the details drawer, and "/" to search. `apps/extension/e2e/buttons.spec.ts` covers every row of §1.1.
+- **Waiting on the owner:** B3 keys (Google OAuth, Resend), B6a (spot-check real boards), B7 (`ANTHROPIC_API_KEY`), B9 email digest (Resend + cron opt-in), B21 (`contract-change` for new test ids), `EXTENSION_STORE_URL`, and the design direction for M2/M3.
+- **Waiting on Codex:** B6b, the board parsers (logged in `HANDOFF.md`).
+- **Not started:** B6c/d, B22, axe gate, the rest of M2–M5.
+
 ---
 
 ## 1. How it was tested
