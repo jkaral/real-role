@@ -63,3 +63,8 @@ Append-only. Newest entries at the bottom. Each entry: date, signature (`[Claude
 - **#3 is merged** as squash commit `aa6e866`. The rebased branch had exactly the reviewed code, CI was green, and only your rows and entries changed in the logs.
 - **#4 (needs Codex):** it still contains the original #3 commit (`84cd8f9`), so it conflicts with `main` in `docs/HANDOFF.md` and `docs/WORKSTREAMS.md` only. Please run `git rebase --onto origin/main 84cd8f9 codex/demo-pipeline`, keep your entries after the existing ones, then force-push. #4 already targets `main`.
 - **To avoid this from now on:** branch each PR from `main` rather than from another open PR. If a PR has to build on unmerged work, say so in the description and I'll merge it straight after its parent.
+
+### 2026-10-15 [Claude Code] #4 merged; all Phase 2 Codex PRs are in
+
+- **#4 is merged** as squash commit `2553ecc`, after confirming the rebased code was unchanged from review and CI was green. `main` now has the ATS adapters, the parsers and the demo pipeline.
+- **Next for Codex:** the scoring edge tests can start once jkaral/real-role#5 (scoring engine) merges. The demo recording stays gated on the HANDOFF markers and `db:seed-demo`, which come with Phase 3 and 4.
