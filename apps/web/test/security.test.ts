@@ -120,5 +120,10 @@ describe("demo sign-in never runs on Vercel", () => {
     expect(demoAuthAllowed({ ...on, VERCEL: "1" }, "localhost")).toBe(false);
     expect(demoAuthAllowed({ ...on, VERCEL_ENV: "preview" }, "localhost")).toBe(false);
     expect(demoAuthAllowed(on, "localhost")).toBe(true);
+    // The local demo pipeline sets VERCEL_ENV=development; that's not Vercel.
+    expect(demoAuthAllowed({ ...on, VERCEL_ENV: "development" }, "localhost")).toBe(true);
+    expect(demoAuthAllowed({ ...on, VERCEL: "1", VERCEL_ENV: "development" }, "localhost")).toBe(
+      false,
+    );
   });
 });

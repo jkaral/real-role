@@ -66,6 +66,7 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 | Done | Task                                                             | Owner       | Status |
 | ---- | ---------------------------------------------------------------- | ----------- | ------ |
 | [x]  | Record final demo video against extension + deployed web app     | Codex       | done   |
+| [x]  | Security review + hardening (extension best practices, web API)  | Claude Code | done   |
 | [ ]  | Lighthouse + accessibility pass; error and empty states          | Claude Code | todo   |
 | [ ]  | Final README (Mermaid diagram, setup, live link, embedded video) | Claude Code | todo   |
 | [ ]  | Chrome Web Store submission                                      | Owner       | todo   |
