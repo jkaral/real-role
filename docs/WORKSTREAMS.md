@@ -54,19 +54,21 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 
 ## Phase 3 — Integration (Claude Code)
 
-| Done | Task                                                             | Owner       | Status    |
-| ---- | ---------------------------------------------------------------- | ----------- | --------- |
-| [x]  | Review and merge `codex/*` PRs                                   | Claude Code | done      |
-| [x]  | Wire `ats` into `/api/score` (timeouts, caching)                 | Claude Code | done      |
-| [ ]  | Wire `parsers` into extension and check page                     | Claude Code | in review |
-| [ ]  | End-to-end Playwright test of the main flow (separate from demo) | Claude Code | in review |
+| Done | Task                                                             | Owner       | Status |
+| ---- | ---------------------------------------------------------------- | ----------- | ------ |
+| [x]  | Review and merge `codex/*` PRs                                   | Claude Code | done   |
+| [x]  | Wire `ats` into `/api/score` (timeouts, caching)                 | Claude Code | done   |
+| [x]  | Wire `parsers` into extension and check page                     | Claude Code | done   |
+| [x]  | End-to-end Playwright test of the main flow (separate from demo) | Claude Code | done   |
 
 ## Phase 4 — Final demo and launch
 
-| Done | Task                                                             | Owner       | Status |
-| ---- | ---------------------------------------------------------------- | ----------- | ------ |
-| [x]  | Record final demo video against extension + deployed web app     | Codex       | done   |
-| [x]  | Security review + hardening (extension best practices, web API)  | Claude Code | done   |
-| [ ]  | Lighthouse + accessibility pass; error and empty states          | Claude Code | todo   |
-| [ ]  | Final README (Mermaid diagram, setup, live link, embedded video) | Claude Code | todo   |
-| [ ]  | Chrome Web Store submission                                      | Owner       | todo   |
+| Done | Task                                                             | Owner       | Status    |
+| ---- | ---------------------------------------------------------------- | ----------- | --------- |
+| [x]  | Record final demo video against extension + deployed web app     | Codex       | done      |
+| [x]  | Security review + hardening (extension best practices, web API)  | Claude Code | done      |
+| [ ]  | Root CI: optional demo job steps (per `demo/README.md`)          | Claude Code | in review |
+| [ ]  | Release workflow (extension zip on `v*` tags) + `/install` page  | Claude Code | in review |
+| [ ]  | Lighthouse + accessibility pass; error and empty states          | Claude Code | todo      |
+| [ ]  | Final README (Mermaid diagram, setup, live link, embedded video) | Claude Code | todo      |
+| [ ]  | Chrome Web Store submission                                      | Owner       | todo      |

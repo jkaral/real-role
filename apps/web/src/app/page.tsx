@@ -73,6 +73,12 @@ export default function HomePage() {
               >
                 How the score works
               </Link>
+              <Link
+                href="/install"
+                className="rounded-lg border border-line bg-white px-5 py-3 font-medium hover:bg-paper"
+              >
+                Get the extension (beta)
+              </Link>
             </div>
             <p className="mt-4 text-sm text-muted">Free. No account needed to check a posting.</p>
           </div>
