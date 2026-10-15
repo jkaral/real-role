@@ -9,7 +9,7 @@ const config: NextConfig = {
     "@real-role/parsers",
   ],
   // jsdom is only used server-side (check page URL mode) and must not be bundled.
-  serverExternalPackages: ["jsdom"],
+  serverExternalPackages: ["jsdom", "@electric-sql/pglite"],
   poweredByHeader: false,
   async headers() {
     return [

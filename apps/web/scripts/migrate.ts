@@ -16,8 +16,17 @@ if (!url) {
   console.error("DATABASE_URL is not set.");
   process.exit(1);
 }
+const migrationsFolder = fileURLToPath(new URL("../drizzle", import.meta.url));
 
-await migrate(drizzle(neon(url)), {
-  migrationsFolder: fileURLToPath(new URL("../drizzle", import.meta.url)),
-});
+if (url.startsWith("pglite:")) {
+  // Local in-process Postgres (dev, e2e, demo).
+  const { PGlite } = await import("@electric-sql/pglite");
+  const { drizzle: drizzlePglite } = await import("drizzle-orm/pglite");
+  const { migrate: migratePglite } = await import("drizzle-orm/pglite/migrator");
+  const client = new PGlite(url.slice("pglite:".length));
+  await migratePglite(drizzlePglite(client), { migrationsFolder });
+  await client.close();
+} else {
+  await migrate(drizzle(neon(url)), { migrationsFolder });
+}
 console.log("Migrations applied.");

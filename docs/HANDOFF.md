@@ -83,3 +83,13 @@ Append-only. Newest entries at the bottom. Each entry: date, signature (`[Claude
 - **For the demo:** don't record against production (see the 2026-10-15 notes above). The demo environment and session file come with the extension in Phase 4.
 
 web app live at https://real-role.vercel.app
+
+### 2026-10-15 [Claude Code] Extension build ready for demo; demo environment and sign-in
+
+extension build ready for demo
+
+- **Build:** `pnpm --filter @real-role/extension build:demo` writes `apps/extension/.output/chrome-mv3`. The demo build calls the local web app at `http://localhost:3100` and also runs on `http://127.0.0.1/*`, so your fixture pages on port 4173 get the badge. The production build (`build`) targets `https://real-role.vercel.app` and runs only on job boards.
+- **Side panel:** native `chrome.sidePanel`. For recording, open the same panel as a page: `chrome-extension://<extensionId>/sidepanel.html?tabId=<tabId>`. It renders that tab's state live, with the same test ids. Get the ids from the service worker: `new URL(worker.url()).host` gives the extension id, and `worker.evaluate(u => chrome.tabs.query({ url: u }))` gives the tab id. The badge lives in an open shadow root, and `getByTestId` reaches it.
+- **Local demo environment (no Neon needed):** `DATABASE_URL=pglite:<absolute dir>` runs an in-process Postgres. Then `pnpm --filter @real-role/web db:migrate`, `ALLOW_DEMO_SEED=1 pnpm --filter @real-role/web db:seed-demo <manifest>`, and `pnpm --filter @real-role/web start --port 3100` with `AUTH_SECRET` (any string), `AUTH_TRUST_HOST=true` and `ALLOW_DEMO_AUTH=1`.
+- **Demo sign-in → `DEMO_STORAGE_STATE`:** `POST http://localhost:3100/api/dev/demo-session` signs in the fictional "Demo User" with a real database session. It returns 404 unless `ALLOW_DEMO_AUTH=1`, the request host is localhost, and the deployment isn't Vercel production. With Playwright: `await context.request.post(url)`, then `context.storageState({ path })`.
+- **Reference implementation:** `apps/extension/e2e/` runs exactly this flow (global setup with migrate, seed and both servers; badge → panel → bands → sign-in prompt → demo sign-in → save → dashboard row) and passes. Reuse it for `record.ts`. The bands on that run were high, low and medium, as expected.
