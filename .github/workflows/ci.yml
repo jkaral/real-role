@@ -64,7 +64,9 @@ jobs:
           name: e2e-traces
           path: apps/extension/test-results
 
-  # Optional demo job (A5). Owner: Codex fills in the steps; it never blocks merges.
+  # Optional demo job (A5), run manually with demo=true. Never blocks merges.
+  # Prerequisites follow demo/README.md. Upload only the MP4: demo/output also
+  # holds local databases and a session cookie.
   demo:
     name: demo recording (optional)
     if: github.event_name == 'workflow_dispatch' && inputs.demo
@@ -79,4 +81,14 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @real-role/demo exec playwright install --with-deps chromium
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg python3-venv fonts-dejavu-core
+      - run: python3 -m venv /tmp/real-role-tts && /tmp/real-role-tts/bin/pip install edge-tts
       - run: pnpm demo:video
+        env:
+          DEMO_PYTHON: /tmp/real-role-tts/bin/python
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-role-demo
+          path: demo/output/real-role-demo.mp4
+          if-no-files-found: error
