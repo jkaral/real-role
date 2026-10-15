@@ -1,0 +1,18 @@
+{
+  "name": "@real-role/parsers",
+  "version": "0.0.0",
+  "private": true,
+  "description": "DOM parsers per job board + JSON-LD fallback (owner: Codex)",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@real-role/shared": "workspace:*"
+  }
+}
