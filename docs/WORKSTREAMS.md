@@ -19,16 +19,16 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 
 | Done | Task                                                                            | Owner       | Status      |
 | ---- | ------------------------------------------------------------------------------- | ----------- | ----------- |
-| [ ]  | Scoring engine (`packages/scoring`) with unit tests                             | Claude Code | in review   |
-| [ ]  | `docs/scoring.md` (plain-language model)                                        | Claude Code | in review   |
-| [ ]  | LLM specificity rubric (Claude API, cached by fingerprint, heuristic fallback)  | Claude Code | in progress |
-| [ ]  | DB schema + migrations (Drizzle, Neon)                                          | Claude Code | todo        |
-| [ ]  | Auth.js with GitHub sign-in                                                     | Claude Code | todo        |
-| [ ]  | API routes: `/api/score`, `/api/observe`, `/api/applications` (+ rate limiting) | Claude Code | todo        |
-| [ ]  | Web: landing page                                                               | Claude Code | todo        |
-| [ ]  | Web: check page (URL or text)                                                   | Claude Code | todo        |
-| [ ]  | Web: dashboard with follow-up reminders                                         | Claude Code | todo        |
-| [ ]  | Vercel production deploy; "web app live" in HANDOFF                             | Claude Code | todo        |
+| [x]  | Scoring engine (`packages/scoring`) with unit tests                             | Claude Code | done        |
+| [x]  | `docs/scoring.md` (plain-language model)                                        | Claude Code | done        |
+| [ ]  | LLM specificity rubric (Claude API, cached by fingerprint, heuristic fallback)  | Claude Code | in review   |
+| [ ]  | DB schema + migrations (Drizzle, Neon)                                          | Claude Code | in review   |
+| [ ]  | Auth.js with GitHub sign-in                                                     | Claude Code | in review   |
+| [ ]  | API routes: `/api/score`, `/api/observe`, `/api/applications` (+ rate limiting) | Claude Code | in review   |
+| [ ]  | Web: landing page                                                               | Claude Code | in review   |
+| [ ]  | Web: check page (URL or text)                                                   | Claude Code | in review   |
+| [ ]  | Web: dashboard with follow-up reminders                                         | Claude Code | in review   |
+| [ ]  | Vercel production deploy; "web app live" in HANDOFF                             | Claude Code | in progress |
 | [ ]  | Extension: badge, side panel, save & track (WXT, MV3)                           | Claude Code | todo        |
 | [ ]  | Extension: unpacked build + Web Store zip; "extension build ready" in HANDOFF   | Claude Code | todo        |
 | [ ]  | `docs/chrome-web-store.md` (listing, privacy answers, screenshot list)          | Claude Code | todo        |
@@ -55,9 +55,9 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 
 | Done | Task                                                             | Owner       | Status      |
 | ---- | ---------------------------------------------------------------- | ----------- | ----------- |
-| [ ]  | Review and merge `codex/*` PRs                                   | Claude Code | in progress |
-| [ ]  | Wire `ats` into `/api/score` (timeouts, caching)                 | Claude Code | todo        |
-| [ ]  | Wire `parsers` into extension and check page                     | Claude Code | todo        |
+| [x]  | Review and merge `codex/*` PRs                                   | Claude Code | done        |
+| [ ]  | Wire `ats` into `/api/score` (timeouts, caching)                 | Claude Code | in review   |
+| [ ]  | Wire `parsers` into extension and check page                     | Claude Code | in progress |
 | [ ]  | End-to-end Playwright test of the main flow (separate from demo) | Claude Code | todo        |
 
 ## Phase 4 — Final demo and launch

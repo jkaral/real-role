@@ -16,6 +16,9 @@ Requires Node 22+ and pnpm 10 (`corepack enable` or `npm i -g pnpm`).
 | `pnpm --filter @real-role/<pkg> test` | One package, e.g. `@real-role/ats` |
 | `pnpm format` | Prettier write |
 | `pnpm demo:video` | Build the demo video (owner: Codex) |
+| `pnpm --filter @real-role/web dev` | Run the web app locally (needs `apps/web/.env.local`, see `.env.example`) |
+| `pnpm --filter @real-role/web db:migrate` | Apply Drizzle migrations to `DATABASE_URL` |
+| `ALLOW_DEMO_SEED=1 pnpm --filter @real-role/web db:seed-demo demo/output/seed.json` | Seed the demo manifest into a non-production database |
 
 ## Repo layout and package names
 
