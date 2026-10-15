@@ -19,27 +19,31 @@ import {
 import { getRubric } from "./rubric";
 import { UNKNOWN_EMPLOYER, postingFromText } from "./text-posting";
 
-/** URL mode: fetch the one page the user submitted and parse it like the extension would. */
-export async function postingFromUrl(rawUrl: string): Promise<ParsedPosting> {
-  const { html, url } = await fetchPostingPage(rawUrl);
+/** Parse fetched HTML like the extension would. jsdom: no scripts run, no subresources load. */
+export async function parsePostingHtml(html: string, url: string): Promise<ParsedPosting | null> {
   const [{ JSDOM }, { parsePosting }] = await Promise.all([
     import("jsdom"),
     import("@real-role/parsers"),
   ]);
-  // No scripts run and no subresources load: jsdom's defaults.
   const dom = new JSDOM(html, { url });
   try {
-    const posting = parsePosting(dom.window.document, url);
-    if (!posting) {
-      throw new HttpError(
-        "unparseable_posting",
-        "We couldn't find a single job posting on that page. Paste the posting text instead.",
-      );
-    }
-    return posting;
+    return parsePosting(dom.window.document, url);
   } finally {
     dom.window.close();
   }
+}
+
+/** URL mode: fetch the one page the user submitted and parse it. */
+export async function postingFromUrl(rawUrl: string): Promise<ParsedPosting> {
+  const { html, url } = await fetchPostingPage(rawUrl);
+  const posting = await parsePostingHtml(html, url);
+  if (!posting) {
+    throw new HttpError(
+      "unparseable_posting",
+      "We couldn't find a single job posting on that page. Paste the posting text instead.",
+    );
+  }
+  return posting;
 }
 
 export interface ScoreDeps {
