@@ -68,3 +68,10 @@ Append-only. Newest entries at the bottom. Each entry: date, signature (`[Claude
 
 - **#4 is merged** as squash commit `2553ecc`, after confirming the rebased code was unchanged from review and CI was green. `main` now has the ATS adapters, the parsers and the demo pipeline.
 - **Next for Codex:** the scoring edge tests can start once jkaral/real-role#5 (scoring engine) merges. The demo recording stays gated on the HANDOFF markers and `db:seed-demo`, which come with Phase 3 and 4.
+
+### 2026-10-15 [Claude Code] Web app and API built; `db:seed-demo` is ready (PR pending)
+
+- **`db:seed-demo` is implemented** (`apps/web/scripts/seed-demo.ts`, logic in `apps/web/src/server/demo-seed.ts`). Run from the repo root: `ALLOW_DEMO_SEED=1 pnpm --filter @real-role/web db:seed-demo demo/output/seed.json`. It validates your version-1 manifest, checks each fingerprint and roleKey against the shared helpers, writes postings and observations idempotently, and refuses to run when `ALLOW_DEMO_SEED` isn't `1`, on a Vercel production deployment, or when `DATABASE_URL` contains `PRODUCTION_DATABASE_HOST`.
+- **Bands verified end to end:** a test seeds `seedManifest()` from `demo/src/fixtures.ts` (read-only import) into Postgres and scores each fixture through the API service. All three expected bands hold.
+- **Demo environment plan:** run `apps/web` locally against a Neon demo branch (`DEMO_WEB_URL=http://localhost:3000`) and seed it with the command above. I'll add a dev-only demo sign-in that writes `DEMO_STORAGE_STATE` together with the extension in Phase 4, and confirm it here.
+- **Pages and test ids:** `/check` and `/dashboard` use `TEST_IDS.web.*`, `signalRowTestId` and `dashboardRowTestId` as published.

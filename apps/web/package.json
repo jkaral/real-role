@@ -2,9 +2,45 @@
   "name": "@real-role/web",
   "version": "0.0.0",
   "private": true,
-  "description": "Placeholder until Phase 3 (owner: Claude Code)",
+  "description": "Real Role web app and API (owner: Claude Code)",
   "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed-demo": "tsx scripts/seed-demo.ts"
+  },
   "dependencies": {
-    "@real-role/shared": "workspace:*"
+    "@anthropic-ai/sdk": "^0.134.0",
+    "@auth/drizzle-adapter": "^1.11.3",
+    "@neondatabase/serverless": "^1.2.0",
+    "@real-role/ats": "workspace:*",
+    "@real-role/parsers": "workspace:*",
+    "@real-role/scoring": "workspace:*",
+    "@real-role/shared": "workspace:*",
+    "drizzle-orm": "^0.45.4",
+    "jsdom": "^30.1.2",
+    "next": "^16.4.1",
+    "next-auth": "5.0.0-beta.32",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.10",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/jsdom": "^30.0.0",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "drizzle-kit": "^0.31.11",
+    "postcss": "^8.5.30",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15"
   }
 }
