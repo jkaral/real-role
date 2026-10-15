@@ -2,6 +2,7 @@ import {
   API_ROUTES,
   ApiErrorSchema,
   ApplicationResponseSchema,
+  ListApplicationsResponseSchema,
   ScoreResponseSchema,
   type ParsedPosting,
   type ScoreResponse,
@@ -65,5 +66,26 @@ export async function saveApplication(
   };
 }
 
+/**
+ * The signed-in user's tracked application for this posting, if any. Signed out or offline
+ * counts as "not tracked": the panel then simply offers Save & track.
+ */
+export async function findTracked(
+  postingId: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<TrackedApplication | null> {
+  try {
+    const res = await fetchImpl(`${API_BASE}${API_ROUTES.applications}`, {
+      credentials: "include",
+    });
+    if (!res.ok) return null;
+    const { applications } = ListApplicationsResponseSchema.parse(await res.json());
+    return applications.find((a) => a.postingId === postingId) ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export const signInUrl = () => `${API_BASE}/signin?callbackUrl=/dashboard`;
 export const dashboardUrl = () => `${API_BASE}/dashboard`;
+export const pasteTextUrl = () => `${API_BASE}/check?mode=text`;

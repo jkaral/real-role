@@ -1,14 +1,34 @@
 :root {
   --ink: #0f1f1a;
   --ink-soft: #3c5249;
-  --muted: #64766f;
+  --muted: #5f716a;
   --line: #dbe4df;
   --paper: #f6f8f7;
+  --surface: #ffffff;
   --brand: #1d6b52;
+  --on-ink: #ffffff;
   --low: #a33a2b;
   --low-tint: #fbe7e3;
   --high-tint: #e2f4ea;
   color-scheme: light;
+}
+
+/* Same palette as the web app's dark theme; follows Chrome's setting. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #e6eeea;
+    --ink-soft: #b9c8c1;
+    --muted: #8fa29a;
+    --line: #26352f;
+    --paper: #0b1310;
+    --surface: #121c18;
+    --brand: #4cc193;
+    --on-ink: #0b1310;
+    --low: #f08b79;
+    --low-tint: #3a1a15;
+    --high-tint: #123222;
+    color-scheme: dark;
+  }
 }
 
 * {
@@ -61,7 +81,7 @@ a {
   height: 22px;
   border-radius: 6px;
   background: var(--brand);
-  color: #fff;
+  color: var(--on-ink);
   font-size: 13px;
 }
 
@@ -80,7 +100,7 @@ a {
   height: 72px;
   border: 7px solid var(--muted);
   border-radius: 50%;
-  background: #fff;
+  background: var(--surface);
   font-size: 24px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
@@ -135,7 +155,7 @@ button {
 .primary {
   border: 0;
   background: var(--ink);
-  color: #fff;
+  color: var(--on-ink);
 }
 
 .primary:disabled {
@@ -144,7 +164,7 @@ button {
 
 .secondary {
   border: 1px solid var(--line);
-  background: #fff;
+  background: var(--surface);
   color: var(--ink);
 }
 
@@ -161,7 +181,7 @@ button {
 }
 
 .notice {
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--line);
 }
 
@@ -223,7 +243,7 @@ button {
   padding: 16px;
   border: 1px dashed var(--line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--surface);
 }
 
 .empty p {
@@ -232,4 +252,41 @@ button {
 
 footer {
   margin-top: auto;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.link-button {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.link-button:hover {
+  background: var(--surface);
+}
+
+.why {
+  margin-top: 6px;
+}
+
+.why summary {
+  width: fit-content;
+  color: var(--muted);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.why summary:hover {
+  color: var(--ink);
+}
+
+.why p.muted {
+  margin: 4px 0 0;
 }

@@ -1,6 +1,6 @@
 import type { ParsedPosting, ScoreResponse } from "@real-role/shared";
 import { describe, expect, it } from "vitest";
-import { ApiFailure, saveApplication, scorePosting } from "../src/lib/api";
+import { ApiFailure, findTracked, saveApplication, scorePosting } from "../src/lib/api";
 import { AUTO_MATCHES } from "../src/lib/config";
 import { BAND_COLORS, badgeFor, tabKey } from "../src/lib/state";
 
@@ -104,5 +104,39 @@ describe("automatic matches", () => {
       expect(m).not.toContain("<all_urls>");
       expect(m).not.toBe("https://*/*");
     }
+  });
+});
+
+describe("findTracked", () => {
+  const app = {
+    id: "a1",
+    postingId: "p1",
+    title: "Platform Engineer",
+    company: "Bramblecrest Analytics",
+    sourceUrl: posting.sourceUrl,
+    status: "applied",
+    savedAt: "2026-10-10T00:00:00.000Z",
+    appliedAt: "2026-10-11T00:00:00.000Z",
+    followUpAt: "2026-10-18T00:00:00.000Z",
+    statusChangedAt: "2026-10-11T00:00:00.000Z",
+    notes: null,
+    scoreAtSave: 82,
+    confidenceAtSave: "medium",
+  };
+
+  it("returns the user's application for this posting", async () => {
+    const seen: { init?: RequestInit } = {};
+    const found = await findTracked("p1", fakeFetch(200, { applications: [app] }, seen));
+    expect(found?.id).toBe("a1");
+    expect(seen.init?.credentials).toBe("include");
+  });
+
+  it("treats other postings, signed-out and network errors as not tracked", async () => {
+    expect(await findTracked("p2", fakeFetch(200, { applications: [app] }))).toBeNull();
+    expect(await findTracked("p1", fakeFetch(401, { error: {} }))).toBeNull();
+    const offline = (async () => {
+      throw new TypeError("offline");
+    }) as unknown as typeof fetch;
+    expect(await findTracked("p1", offline)).toBeNull();
   });
 });

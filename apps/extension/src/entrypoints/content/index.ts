@@ -8,7 +8,7 @@ import {
 } from "wxt/utils/content-script-ui/shadow-root";
 import { defineContentScript } from "wxt/utils/define-content-script";
 import { AUTO_MATCHES, DEMO_MATCHES } from "@/lib/config";
-import { BAND_COLORS, type BadgeUpdate, type Message } from "@/lib/state";
+import { BAND_COLORS, type BadgeUpdate, type ContentMessage, type Message } from "@/lib/state";
 import badgeCss from "./badge.css?inline";
 
 declare global {
@@ -124,5 +124,14 @@ export default defineContentScript({
     await check();
     // Job boards are often single-page apps: re-check when the URL changes.
     ctx.addEventListener(window, "wxt:locationchange", () => void check());
+    // Retry from the side panel or the toolbar: read this page again.
+    const onMessage = (message: unknown) => {
+      if ((message as ContentMessage | undefined)?.type !== "recheck") return;
+      checkedUrl = "";
+      void check();
+      return Promise.resolve(true);
+    };
+    browser.runtime.onMessage.addListener(onMessage);
+    ctx.onInvalidated(() => browser.runtime.onMessage.removeListener(onMessage));
   },
 });
