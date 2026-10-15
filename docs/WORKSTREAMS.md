@@ -4,34 +4,34 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 
 ## Phase 1 — Scaffold and contract (Claude Code, alone)
 
-| Done | Task                                                                                   | Owner       | Status      |
-| ---- | -------------------------------------------------------------------------------------- | ----------- | ----------- |
-| [x]  | Monorepo: pnpm workspaces, Turborepo, TS strict, ESLint, Prettier, Vitest              | Claude Code | done        |
-| [x]  | CI: lint, typecheck, test (+ optional demo job)                                        | Claude Code | done        |
-| [x]  | `packages/shared` contract: types, zod schemas, API contract, interfaces, `testids.ts` | Claude Code | done        |
-| [x]  | Stub packages: `ats`, `parsers`, `scoring`, `demo`, `apps/web`, `apps/extension`       | Claude Code | done        |
-| [x]  | `CLAUDE.md` / `AGENTS.md`, `docs/PROJECT_BRIEF.md`, logs                               | Claude Code | done        |
-| [ ]  | GitHub repo, PR merged, tag `v0.1-contract`                                            | Claude Code | in progress |
+| Done | Task                                                                                   | Owner       | Status |
+| ---- | -------------------------------------------------------------------------------------- | ----------- | ------ |
+| [x]  | Monorepo: pnpm workspaces, Turborepo, TS strict, ESLint, Prettier, Vitest              | Claude Code | done   |
+| [x]  | CI: lint, typecheck, test (+ optional demo job)                                        | Claude Code | done   |
+| [x]  | `packages/shared` contract: types, zod schemas, API contract, interfaces, `testids.ts` | Claude Code | done   |
+| [x]  | Stub packages: `ats`, `parsers`, `scoring`, `demo`, `apps/web`, `apps/extension`       | Claude Code | done   |
+| [x]  | `CLAUDE.md` / `AGENTS.md`, `docs/PROJECT_BRIEF.md`, logs                               | Claude Code | done   |
+| [x]  | GitHub repo, PR merged, tag `v0.1-contract`                                            | Claude Code | done   |
 
 ## Phase 2 — Parallel work
 
 ### Claude Code
 
-| Done | Task                                                                            | Owner       | Status |
-| ---- | ------------------------------------------------------------------------------- | ----------- | ------ |
-| [ ]  | Scoring engine (`packages/scoring`) with unit tests                             | Claude Code | todo   |
-| [ ]  | `docs/scoring.md` (plain-language model)                                        | Claude Code | todo   |
-| [ ]  | LLM specificity rubric (Claude API, cached by fingerprint, heuristic fallback)  | Claude Code | todo   |
-| [ ]  | DB schema + migrations (Drizzle, Neon)                                          | Claude Code | todo   |
-| [ ]  | Auth.js with GitHub sign-in                                                     | Claude Code | todo   |
-| [ ]  | API routes: `/api/score`, `/api/observe`, `/api/applications` (+ rate limiting) | Claude Code | todo   |
-| [ ]  | Web: landing page                                                               | Claude Code | todo   |
-| [ ]  | Web: check page (URL or text)                                                   | Claude Code | todo   |
-| [ ]  | Web: dashboard with follow-up reminders                                         | Claude Code | todo   |
-| [ ]  | Vercel production deploy; "web app live" in HANDOFF                             | Claude Code | todo   |
-| [ ]  | Extension: badge, side panel, save & track (WXT, MV3)                           | Claude Code | todo   |
-| [ ]  | Extension: unpacked build + Web Store zip; "extension build ready" in HANDOFF   | Claude Code | todo   |
-| [ ]  | `docs/chrome-web-store.md` (listing, privacy answers, screenshot list)          | Claude Code | todo   |
+| Done | Task                                                                            | Owner       | Status      |
+| ---- | ------------------------------------------------------------------------------- | ----------- | ----------- |
+| [ ]  | Scoring engine (`packages/scoring`) with unit tests                             | Claude Code | in review   |
+| [ ]  | `docs/scoring.md` (plain-language model)                                        | Claude Code | in review   |
+| [ ]  | LLM specificity rubric (Claude API, cached by fingerprint, heuristic fallback)  | Claude Code | in progress |
+| [ ]  | DB schema + migrations (Drizzle, Neon)                                          | Claude Code | todo        |
+| [ ]  | Auth.js with GitHub sign-in                                                     | Claude Code | todo        |
+| [ ]  | API routes: `/api/score`, `/api/observe`, `/api/applications` (+ rate limiting) | Claude Code | todo        |
+| [ ]  | Web: landing page                                                               | Claude Code | todo        |
+| [ ]  | Web: check page (URL or text)                                                   | Claude Code | todo        |
+| [ ]  | Web: dashboard with follow-up reminders                                         | Claude Code | todo        |
+| [ ]  | Vercel production deploy; "web app live" in HANDOFF                             | Claude Code | todo        |
+| [ ]  | Extension: badge, side panel, save & track (WXT, MV3)                           | Claude Code | todo        |
+| [ ]  | Extension: unpacked build + Web Store zip; "extension build ready" in HANDOFF   | Claude Code | todo        |
+| [ ]  | `docs/chrome-web-store.md` (listing, privacy answers, screenshot list)          | Claude Code | todo        |
 
 ### Codex
 
@@ -53,12 +53,12 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 
 ## Phase 3 — Integration (Claude Code)
 
-| Done | Task                                                             | Owner       | Status |
-| ---- | ---------------------------------------------------------------- | ----------- | ------ |
-| [ ]  | Review and merge `codex/*` PRs                                   | Claude Code | todo   |
-| [ ]  | Wire `ats` into `/api/score` (timeouts, caching)                 | Claude Code | todo   |
-| [ ]  | Wire `parsers` into extension and check page                     | Claude Code | todo   |
-| [ ]  | End-to-end Playwright test of the main flow (separate from demo) | Claude Code | todo   |
+| Done | Task                                                             | Owner       | Status      |
+| ---- | ---------------------------------------------------------------- | ----------- | ----------- |
+| [ ]  | Review and merge `codex/*` PRs                                   | Claude Code | in progress |
+| [ ]  | Wire `ats` into `/api/score` (timeouts, caching)                 | Claude Code | todo        |
+| [ ]  | Wire `parsers` into extension and check page                     | Claude Code | todo        |
+| [ ]  | End-to-end Playwright test of the main flow (separate from demo) | Claude Code | todo        |
 
 ## Phase 4 — Final demo and launch
 

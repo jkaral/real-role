@@ -13,6 +13,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@real-role/shared": "workspace:*"
+    "@real-role/shared": "workspace:*",
+    "zod": "^4.6.7"
   }
 }
