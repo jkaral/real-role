@@ -1,0 +1,10 @@
+{
+  "name": "@real-role/web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Placeholder until Phase 3 (owner: Claude Code)",
+  "type": "module",
+  "dependencies": {
+    "@real-role/shared": "workspace:*"
+  }
+}

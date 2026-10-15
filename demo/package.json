@@ -1,0 +1,19 @@
+{
+  "name": "@real-role/demo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Fixture pages + demo video pipeline (owner: Codex)",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "demo:video": "node -e \"console.log('demo:video is not implemented yet (owner: Codex, see docs/WORKSTREAMS.md)')\""
+  },
+  "dependencies": {
+    "@real-role/shared": "workspace:*"
+  }
+}
