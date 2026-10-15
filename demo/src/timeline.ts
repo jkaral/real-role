@@ -1,5 +1,5 @@
 export const segments = [
-  { start: 0, end: 4, text: "Real Role. See the signals behind a job posting before you apply." },
+  { start: 0, end: 4, text: "Real Role. Signals before you apply." },
   {
     start: 4,
     end: 20,
@@ -23,7 +23,7 @@ export const segments = [
   {
     start: 64,
     end: 72,
-    text: "Real Role. Make your next application an informed choice. Explore the live app at the address on screen.",
+    text: "Real Role. Make your next application an informed choice. Explore the live app.",
   },
 ] as const;
 export function srt(): string {

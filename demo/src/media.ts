@@ -1,10 +1,15 @@
 import { spawn } from "node:child_process";
-import { writeFile } from "node:fs/promises";
+import { access, copyFile, mkdir, writeFile } from "node:fs/promises";
+import { delimiter, resolve } from "node:path";
 import { segments } from "./timeline";
 
 export function run(command: string, args: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { stdio: "inherit", shell: false, windowsHide: true });
+    const child = spawn(
+      command,
+      command === "ffmpeg" ? ["-hide_banner", "-loglevel", "error", ...args] : args,
+      { stdio: "inherit", shell: false, windowsHide: true },
+    );
     child.once("error", reject);
     child.once("exit", (code) =>
       code === 0 ? resolve() : reject(new Error(`${command} exited with ${code}`)),
@@ -41,6 +46,17 @@ function duration(path: string): Promise<number> {
 }
 
 export async function narrate(): Promise<string> {
+  // An optional workspace-local Python install keeps host-wide packages unnecessary.
+  if (!process.env.OPENAI_API_KEY) {
+    try {
+      await access("output/python/edge_tts");
+      process.env.PYTHONPATH = [resolve("output/python"), process.env.PYTHONPATH]
+        .filter(Boolean)
+        .join(delimiter);
+    } catch {
+      /* Otherwise use the configured Python's installed edge-tts. */
+    }
+  }
   const audio: string[] = [];
   for (const [index, segment] of segments.entries()) {
     const mp3 = `output/voice-${index}.mp3`;
@@ -112,6 +128,20 @@ export async function narrate(): Promise<string> {
 }
 
 export async function assemble(recording: string, audio: string, webUrl: string): Promise<void> {
+  await mkdir("output/fonts/cache", { recursive: true });
+  const font =
+    process.env.DEMO_FONT_PATH ??
+    (process.platform === "win32"
+      ? "C:/Windows/Fonts/segoeui.ttf"
+      : "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf");
+  await copyFile(font, "output/fonts/demo.ttf");
+  const xml = (path: string) =>
+    path.replaceAll("\\", "/").replaceAll("&", "&amp;").replaceAll("<", "&lt;");
+  await writeFile(
+    "output/fonts/fonts.conf",
+    `<?xml version="1.0"?><!DOCTYPE fontconfig SYSTEM "fonts.dtd"><fontconfig><dir>${xml(resolve("output/fonts"))}</dir><cachedir>${xml(resolve("output/fonts/cache"))}</cachedir></fontconfig>`,
+  );
+  process.env.FONTCONFIG_FILE = resolve("output/fonts/fonts.conf");
   // Text files keep URL text out of ffmpeg's filter expression grammar.
   await writeFile("output/title.txt", "REAL ROLE\nSignals before you apply");
   await writeFile(
@@ -130,7 +160,7 @@ export async function assemble(recording: string, audio: string, webUrl: string)
       "-i",
       `color=c=0x18372d:s=1920x1080:r=30:d=${seconds}`,
       "-vf",
-      `drawtext=textfile=output/${name}.txt:${style}`,
+      `drawtext=fontfile=output/fonts/demo.ttf:textfile=output/${name}.txt:${style}`,
       "-c:v",
       "libx264",
       "-pix_fmt",
@@ -140,6 +170,10 @@ export async function assemble(recording: string, audio: string, webUrl: string)
   }
   await run("ffmpeg", [
     "-y",
+    "-f",
+    "concat",
+    "-safe",
+    "0",
     "-i",
     recording,
     "-vf",
@@ -165,7 +199,7 @@ export async function assemble(recording: string, audio: string, webUrl: string)
     "-i",
     audio,
     "-vf",
-    "subtitles=output/captions.srt:force_style='Fontsize=18,MarginV=32'",
+    "subtitles=output/captions.srt:fontsdir=output/fonts:force_style='Fontsize=14,MarginV=16'",
     "-c:v",
     "libx264",
     "-c:a",
