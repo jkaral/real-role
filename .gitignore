@@ -27,3 +27,6 @@ Thumbs.db
 
 # local agent tooling
 .claude/
+
+# local in-process Postgres (DATABASE_URL=pglite:...)
+.pglite*/

@@ -19,6 +19,10 @@ Requires Node 22+ and pnpm 10 (`corepack enable` or `npm i -g pnpm`).
 | `pnpm --filter @real-role/web dev` | Run the web app locally (needs `apps/web/.env.local`, see `.env.example`) |
 | `pnpm --filter @real-role/web db:migrate` | Apply Drizzle migrations to `DATABASE_URL` |
 | `ALLOW_DEMO_SEED=1 pnpm --filter @real-role/web db:seed-demo demo/output/seed.json` | Seed the demo manifest into a non-production database |
+| `pnpm --filter @real-role/extension build` | Production extension build → `apps/extension/.output/chrome-mv3` (API: real-role.vercel.app) |
+| `pnpm --filter @real-role/extension build:demo` | Demo/e2e build: API `http://localhost:3100`, also runs on `http://127.0.0.1/*` fixtures |
+| `pnpm --filter @real-role/extension e2e` | End-to-end test: local web on PGlite + demo fixtures + real extension in Chromium |
+| `pnpm --filter @real-role/extension zip` | Chrome Web Store zip → `apps/extension/.output/real-role-extension-<version>-chrome.zip` |
 
 ## Repo layout and package names
 

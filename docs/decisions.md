@@ -48,3 +48,14 @@ Append-only log of notable choices and why. Dated and signed.
 ### 2026-10-15 [Claude Code] Migrations run in the Vercel production build
 
 - The Neon integration stores `DATABASE_URL` as a Sensitive variable, so it can't be pulled locally (good). Migrations therefore run during the production build (`build:vercel`: `migrate.ts --production-only && next build`). Preview builds skip them so they never alter the production database. Drizzle migrations are idempotent and recorded in `__drizzle_migrations`.
+
+### 2026-10-15 [Claude Code] Chrome extension (Phase 4)
+
+- **WXT 0.21 + React** for the side panel; the content script is plain DOM in an open shadow root.
+- **Narrow permissions:** the content script runs automatically only on job-board URL patterns (Greenhouse, Lever, Ashby, Workday, Wellfound, Indeed `viewjob`, LinkedIn `jobs/view`). Elsewhere nothing runs until the user clicks the toolbar icon (`activeTab` + `scripting`). No `<all_urls>`, no `tabs` permission.
+- **Native side panel** with a standalone page mode (`?tabId=`) used for the fallback window and for recordings.
+- **Per-tab state in `storage.session`** (memory only, cleared on browser restart); the side panel subscribes to changes.
+- **Auth:** the extension uses the web app's session cookie via host permission (verified by the e2e test: Chrome sends the SameSite=Lax session cookie on extension requests to hosts it has permission for). No tokens are stored in the extension.
+- **Local/e2e database:** `DATABASE_URL=pglite:<dir>` (in-process Postgres, one shared instance per process because Next loads `db/client` separately for pages and routes). Refused on Vercel production.
+- **Demo sign-in:** `POST /api/dev/demo-session` creates a real database session for a fictional user. It's guarded by `ALLOW_DEMO_AUTH=1` + localhost host + not Vercel production. It exists for the e2e test and the demo's `DEMO_STORAGE_STATE`.
+- **E2E in CI** as a separate job (not yet a required check), which also uploads the store zip as an artifact.

@@ -16,6 +16,12 @@ export default function PrivacyPage() {
           reposts. We don&apos;t store the description text.
         </li>
         <li>
+          <strong>From the Chrome extension:</strong> the same posting fields, read from the job
+          posting page you&apos;re viewing, either on supported job boards (Greenhouse, Lever,
+          Ashby, Workday, Wellfound, Indeed and LinkedIn job pages) or on any page after you click
+          the Real Role icon. The posting text is sent to compute the score and isn&apos;t stored.
+        </li>
+        <li>
           <strong>Anonymous sightings.</strong> When a posting page is checked, we record that the
           role was seen on that URL that day. Sightings aren&apos;t linked to you or your account.
         </li>

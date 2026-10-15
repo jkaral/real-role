@@ -33,6 +33,33 @@ jobs:
       - name: Build web app
         run: pnpm turbo run build --filter=@real-role/web
 
+  e2e:
+    name: e2e (extension + web)
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @real-role/web build
+      - run: pnpm --filter @real-role/extension exec playwright install --with-deps chromium
+      - run: pnpm --filter @real-role/extension e2e
+      - name: Build Chrome Web Store zip
+        run: pnpm --filter @real-role/extension zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-role-extension
+          path: apps/extension/.output/*.zip
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-traces
+          path: apps/extension/test-results
+
   # Optional demo job (A5). Owner: Codex fills in the steps; it never blocks merges.
   demo:
     name: demo recording (optional)

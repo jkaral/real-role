@@ -1,0 +1,57 @@
+:host {
+  all: initial;
+}
+
+.rr-badge {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 6px;
+  border: 1px solid #dbe4df;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #0f1f1a;
+  font:
+    600 14px/1.2 ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  box-shadow: 0 6px 24px rgba(15, 31, 26, 0.18);
+  cursor: pointer;
+}
+
+.rr-badge:hover {
+  box-shadow: 0 8px 28px rgba(15, 31, 26, 0.26);
+}
+
+.rr-badge:focus-visible {
+  outline: 3px solid #1d6b52;
+  outline-offset: 2px;
+}
+
+.rr-score {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #64766f;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+}
+
+.rr-label {
+  color: #3c5249;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rr-badge {
+    transition: box-shadow 120ms ease;
+  }
+}
