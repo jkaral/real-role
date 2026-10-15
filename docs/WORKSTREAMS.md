@@ -43,13 +43,13 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 | [ ]  | `detectBoard` + fuzzy `findMatch` (title + location)                                | Codex | in review |
 | [ ]  | Parser: generic JSON-LD `JobPosting` fallback (`parseGeneric`)                      | Codex | in review |
 | [ ]  | Parsers: board-specific (Greenhouse, Lever, Ashby hosted pages; others as feasible) | Codex | in review |
-| [ ]  | Scoring edge-case tests in `packages/scoring/test/edge/**` (after scoring lands)    | Codex | todo      |
-| [ ]  | Demo: three fictional fixture pages with JSON-LD (high / low / medium)              | Codex | todo      |
-| [ ]  | Demo: seed observations for repost history                                          | Codex | todo      |
-| [ ]  | Demo: Playwright recorded run with extension, assertions, click highlight           | Codex | todo      |
-| [ ]  | Demo: narration script + TTS (ElevenLabs/OpenAI or edge-tts/Piper fallback)         | Codex | todo      |
-| [ ]  | Demo: ffmpeg assembly (captions, title card, end card) → `pnpm demo:video`          | Codex | todo      |
-| [ ]  | Demo: optional CI job steps                                                         | Codex | todo      |
+| [ ]  | Scoring edge-case tests in `packages/scoring/test/edge/**` (after scoring lands)    | Codex | blocked   |
+| [ ]  | Demo: three fictional fixture pages with JSON-LD (high / low / medium)              | Codex | in review |
+| [ ]  | Demo: seed observations for repost history                                          | Codex | blocked   |
+| [ ]  | Demo: Playwright recorded run with extension, assertions, click highlight           | Codex | blocked   |
+| [ ]  | Demo: narration script + TTS (ElevenLabs/OpenAI or edge-tts/Piper fallback)         | Codex | in review |
+| [ ]  | Demo: ffmpeg assembly (captions, title card, end card) → `pnpm demo:video`          | Codex | in review |
+| [ ]  | Demo: optional CI job steps                                                         | Codex | blocked   |
 
 ## Phase 3 — Integration (Claude Code)
 
