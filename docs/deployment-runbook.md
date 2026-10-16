@@ -36,7 +36,7 @@ Migrations are additive (new tables and columns, no drops) and run automatically
 3. Run the smoke test. For #24, use **with add-on routes**.
 4. Only then publish an extension that depends on the new routes (backend first). The release workflow enforces this with `--check-backend`; see [`chrome-web-store.md`](chrome-web-store.md#release-checks).
 
-Rollback and restore steps, including which data a restore would lose, are covered in `docs/database-operations.md` (backlog task 5, planned).
+Rollback and restore steps, including which data a restore would lose, are covered in [database operations](database-operations.md).
 
 ## Smoke test
 

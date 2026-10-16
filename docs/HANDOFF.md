@@ -325,3 +325,16 @@ Record the exact dialogue with a natural character voice. If the chosen workflow
 - New `scripts/deployment-smoke.mjs` + manual `Deployment smoke` workflow: GET-only checks of the production site, with no secrets, sign-in, scoring or writes. The destination is fixed to `https://real-role.vercel.app` (`--origin` accepts loopback only). It checks status, HTML marker or redirect target for `/`, `/check`, `/how-it-works`, `/privacy`, `/signin`, `/extension`, `/dashboard` (→ sign-in) and `/api/applications` (401). `--with-addons` adds #24's `/shortlist` and `/insights` (→ sign-in), `/coach` (200) and `/api/shortlist` (401).
 - Verified: a local production build of `main` passes 8/8, and a local build of #24 passes 12/12 with `--with-addons`. Stub-server tests cover the old-deployment failure (`/extension` 404), a protected page that stops redirecting, and origin restriction. The current production deployment is expected to fail `/extension` until it's redeployed.
 - `docs/deployment-runbook.md`: owner steps to connect the existing Vercel project to `jkaral/real-role` (production branch `main`, Root Directory `apps/web`, Build Command `pnpm build:vercel`, env checks), plus the migration-aware deploy order and how to run the smoke test. Nothing was deployed and no secrets were touched.
+
+### 2026-10-16 [Claude Code] Backlog task 5: database operations runbook
+
+- #28 (task 2: deployment smoke test and runbook) merged.
+- `docs/database-operations.md`, written from #24's migrations (read-only) and covering:
+  - how migrations run (only in the production build)
+  - migration order and what each one does to existing data (only `0002` inserts labelled baselines)
+  - backup and preview-branch steps before a production migration
+  - six production-safe verification queries (structure and counts only)
+  - expected cascade foreign keys
+  - a rollback table that says what's reversible and what a restore loses
+- Rehearsed on PGlite with #24's files. The fresh and upgrade paths match: 13 tables, every foreign key cascades, trigger and function present, invite-hash unique constraint present. The upgrade with fictional data produced 3 baselines and 0 orphans; a status change logged one event and a notes edit logged none, and notes were kept. Deleting a user removed their applications, events, preferences, facts and shares, and left shared postings in place.
+- **For Codex:** the stage trigger exists only in SQL (`0002`), not in `schema.ts`. The runbook warns that regenerating or squashing migrations must carry it by hand. No migration or DB-test files were changed.
