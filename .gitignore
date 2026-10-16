@@ -31,3 +31,7 @@ Thumbs.db
 
 # local in-process Postgres (DATABASE_URL=pglite:...)
 .pglite*/
+
+# Python bytecode
+__pycache__/
+*.pyc
