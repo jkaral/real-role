@@ -88,5 +88,5 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 ## Add-on rollout — Codex (2026-10-15)
 
 - [ ] Codex: employer-source finder, synced shortlist/preferences/facts, calendar/templates, prior-save notices, comparisons, analytics and CSV portability — implementation and validation in progress; see docs/addon-rollout.md.
-- [ ] Codex: interview preparation and coach workspace — queued; coach access requires owner approval.
+- [ ] Codex: local interview preparation and approved read-only coach workspace — implemented; validation in progress.
 - [ ] Codex: scheduled monitoring — deferred by owner; do not activate.

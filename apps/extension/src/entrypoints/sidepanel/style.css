@@ -260,6 +260,17 @@ footer {
   gap: 8px;
 }
 
+.stack input {
+  width: 100%;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+
 .link-button {
   display: block;
   padding: 10px 14px;

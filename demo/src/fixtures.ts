@@ -1,7 +1,10 @@
 import { fingerprint, roleKey, ParsedPostingSchema, type ParsedPosting } from "@real-role/shared";
 
 export const DAY = 86400000;
-export const FIXTURE_ORIGIN = "http://127.0.0.1:4173";
+const fixturePort = Number(process.env.RR_E2E_FIXTURE_PORT ?? "4173");
+if (!Number.isInteger(fixturePort) || fixturePort < 1024 || fixturePort > 65535)
+  throw new Error("RR_E2E_FIXTURE_PORT must be a port between 1024 and 65535.");
+export const FIXTURE_ORIGIN = `http://127.0.0.1:${fixturePort}`;
 export type Scenario = {
   slug: string;
   band: "high" | "low" | "medium";

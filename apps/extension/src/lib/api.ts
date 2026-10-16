@@ -2,13 +2,14 @@ import {
   API_ROUTES,
   ApiErrorSchema,
   ApplicationResponseSchema,
-  ListApplicationsResponseSchema,
   ScoreResponseSchema,
   type ParsedPosting,
   type ScoreResponse,
   type TrackedApplication,
 } from "@real-role/shared";
 import { API_BASE } from "./config";
+import { extractExperienceMinimum } from "@real-role/parsers";
+import { z } from "zod";
 
 export class ApiFailure extends Error {
   constructor(
@@ -56,8 +57,29 @@ export type SaveResult =
 export async function saveApplication(
   postingId: string,
   fetchImpl: typeof fetch = fetch,
+  posting?: ParsedPosting,
 ): Promise<SaveResult> {
-  const res = await post(API_ROUTES.applications, { postingId }, fetchImpl);
+  const res = await post(
+    posting ? "/api/shortlist" : API_ROUTES.applications,
+    posting
+      ? {
+          postingId,
+          facts: {
+            location: posting.location,
+            remote: posting.remote,
+            employmentType: posting.employmentType,
+            salary:
+              posting.salary?.min !== undefined &&
+              posting.salary.max !== undefined &&
+              posting.salary.min > posting.salary.max
+                ? undefined
+                : posting.salary,
+            experienceMinYears: extractExperienceMinimum(posting.descriptionText),
+          },
+        }
+      : { postingId },
+    fetchImpl,
+  );
   if (res.status === 401) return { status: "signin" };
   if (!res.ok) throw await failure(res);
   return {
@@ -75,12 +97,22 @@ export async function findTracked(
   fetchImpl: typeof fetch = fetch,
 ): Promise<TrackedApplication | null> {
   try {
-    const res = await fetchImpl(`${API_BASE}${API_ROUTES.applications}`, {
-      credentials: "include",
-    });
+    const res = await fetchImpl(
+      `${API_BASE}/api/shortlist?postingId=${encodeURIComponent(postingId)}`,
+      {
+        credentials: "include",
+        signal: AbortSignal.timeout(10000),
+      },
+    );
     if (!res.ok) return null;
-    const { applications } = ListApplicationsResponseSchema.parse(await res.json());
-    return applications.find((a) => a.postingId === postingId) ?? null;
+    const parsed = ApplicationResponseSchema.extend({
+      matchedPostingId: z.string().optional(),
+    }).safeParse(await res.json());
+    return parsed.success &&
+      (parsed.data.application.postingId === postingId ||
+        parsed.data.matchedPostingId === postingId)
+      ? parsed.data.application
+      : null;
   } catch {
     return null;
   }

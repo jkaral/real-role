@@ -11,6 +11,10 @@ import {
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ScoreCard } from "@/components/score-card";
+import { EmployerSource } from "@/components/employer-source";
+import { factsFromPosting } from "@/lib/job-preferences";
+import { PriorApplication } from "@/components/prior-application";
+import { InterviewBrief } from "@/components/interview-brief";
 
 type Mode = "url" | "text";
 type SaveState = "idle" | "saving" | "saved" | "signin" | "error";
@@ -127,10 +131,13 @@ export function CheckForm({
 
   async function saveApplication(target: ScoreResponse) {
     setSave("saving");
-    const res = await fetch(API_ROUTES.applications, {
+    const res = await fetch("/api/shortlist", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ postingId: target.postingId }),
+      body: JSON.stringify({
+        postingId: target.postingId,
+        facts: factsFromPosting(target.posting),
+      }),
     }).catch(() => null);
     if (res?.status === 401) {
       try {
@@ -361,6 +368,9 @@ export function CheckForm({
         )}
         {data && (
           <ScoreCard result={data.result} title={data.posting.title} company={data.posting.company}>
+            <EmployerSource key={data.postingId} posting={data.posting} />
+            <PriorApplication key={`prior-${data.postingId}`} postingId={data.postingId} />
+            <InterviewBrief key={`brief-${data.postingId}`} posting={data.posting} />
             <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-line pt-5">
               <button
                 type="button"
@@ -370,6 +380,11 @@ export function CheckForm({
               >
                 {save === "saved" ? "Saved" : save === "saving" ? "Saving…" : "Save & track"}
               </button>
+              {save === "saved" && (
+                <Link href="/shortlist" className="text-sm font-medium text-brand hover:underline">
+                  Open personal shortlist
+                </Link>
+              )}
               {save === "saved" && (
                 <Link href="/dashboard" className="text-sm font-medium text-brand hover:underline">
                   Open dashboard

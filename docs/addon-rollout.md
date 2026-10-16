@@ -8,12 +8,12 @@ Requested by the owner on 2026-10-15. Implementation proceeds in this order, wit
 | 2     | Employer-source finder                  | Matching official listing link, evidence and user-provided board fallback   | Implemented; source-finder stage passed 10 browser tests; later integration validation pending |
 | 3     | Personal application-priority shortlist | Explicit salary/location/experience preferences; separate fit and freshness | Approved by owner; implemented locally; validation in progress                                 |
 | 4     | Follow-up assistant                     | ICS/calendar export and editable templates; optional notifications          | Calendar/templates implemented locally; external notifications remain unapproved               |
-| 5     | Duplicate/prior-application warnings    | Account-scoped exact match first; similar roles explicitly qualified        | Queued                                                                                         |
+| 5     | Duplicate/prior-application warnings    | Account-scoped exact match first; similar roles explicitly qualified        | Implemented locally; validation in progress                                                    |
 | 6     | Side-by-side job comparison             | Disclosed pay/currency/period, location, requirements and unknowns          | Implemented locally using approved job facts; validation pending                               |
 | 7     | Personal search analytics/weekly review | Account-scoped stage history, funnel counts and honest sample sizes         | Approved by owner; implemented locally; validation in progress                                 |
 | 8     | Portable tracker                        | CSV export, then previewed/deduplicated import                              | Implemented locally with explicit preview; validation in progress                              |
-| 9     | Posting-grounded interview brief        | Questions/checklist grounded in the posting; transient optional background  | Queued; external AI processing/cost changes require owner approval                             |
-| 10    | Coach/career-center workspace           | Explicit sharing consent, revocation and separate client access             | Queued; major authorization-model change requires a separate owner checkpoint                  |
+| 9     | Posting-grounded interview brief        | Questions/checklist grounded in the posting; transient optional background  | Implemented locally without external AI or description storage; validation in progress         |
+| 10    | Coach/career-center workspace           | Explicit sharing consent, revocation and separate client access             | Approved by owner; read-only sharing implemented locally; validation in progress               |
 
 The first nine items follow the owner's requested list; the tenth retains the later-stage workspace opportunity in the diagnostic report. Optional fraud checks and mass auto-apply are outside this rollout. No résumé storage, logged-in session automation or bulk job-board crawling is proposed.
 
@@ -106,3 +106,20 @@ The synced shortlist/two-table proposal was approved by the owner on 2026-10-15.
 Show only current status counts, follow-ups due, applications added/applied in the last seven days and current time in stage from existing timestamps. No new table or historical conversion claims. This still provides a useful weekly review, but cannot show a true stage-transition funnel.
 
 Approve historical events/retention, choose the current-data-only alternative, or defer analytics and proceed to CSV portability. This checkpoint follows the owner's request to approve substantial storage changes.
+
+## Checkpoint 4: coach workspace / cross-account sharing
+
+Historical analytics and retention were approved by the owner. Add-ons 2–9 are now implemented locally and undergoing combined release validation; monitoring remains deferred. Interview preparation uses local posting-grounded prompts, not a new AI service or added model spend.
+
+The diagnostic's tenth, later-stage opportunity is a coach/career-center workspace. This is the largest remaining authorization change and stays unimplemented until approved.
+
+### Proposed first version
+
+- An application owner explicitly chooses one tracked application to share read-only. Share only title, company, posting link, current status, freshness at save and disclosed job facts. Never share preferences, private notes, follow-up drafts, account email, anonymous observations or other applications.
+- Add one `coach_shares` table: share ID, parent application ID (cascade deletion), hashed random invitation secret, seven-day invitation expiry, optional recipient account ID, accepted time and revoked time. Store only the hash of the secret; do not log it or place it in a server-visible URL query. A recipient must sign in and explicitly accept; the invitation is single use and then bound to that account.
+- The owner's details screen shows active/pending shares and recipient display names, with a revoke button. The coach workspace lists only accepted, unrevoked items bound to the coach's own account. Every server read rechecks the owner/application relationship and revocation. Revocation takes effect on the next request; it cannot erase information a recipient already copied.
+- Access ends on revocation, deletion of the parent application/account, or deletion of the recipient account. Pending links expire after seven days. No team-admin powers, editing client applications, bulk client exports, contact lookup or coach messaging in this first version.
+- Tests must prove that unrelated accounts, expired/reused invitations, revoked shares and tampered application IDs cannot reveal data. Apply no production migration or enable sharing until those tests and review pass.
+- No new paid service or outbound message. The owner manually copies an invitation link. This creates an opt-in data-sharing/privacy surface and requires an updated disclosure; it does not change default application visibility.
+
+Approve this read-only sharing model to proceed, or defer the coach workspace. Defer means add-ons 2–9 can be delivered without adding cross-account access. It does not authorize email notifications, monitoring or future coach write permissions.
