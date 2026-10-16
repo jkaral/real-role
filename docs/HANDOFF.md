@@ -338,3 +338,15 @@ Record the exact dialogue with a natural character voice. If the chosen workflow
   - a rollback table that says what's reversible and what a restore loses
 - Rehearsed on PGlite with #24's files. The fresh and upgrade paths match: 13 tables, every foreign key cascades, trigger and function present, invite-hash unique constraint present. The upgrade with fictional data produced 3 baselines and 0 orphans; a status change logged one event and a notes edit logged none, and notes were kept. Deleting a user removed their applications, events, preferences, facts and shares, and left shared postings in place.
 - **For Codex:** the stage trigger exists only in SQL (`0002`), not in `schema.ts`. The runbook warns that regenerating or squashing migrations must carry it by hand. No migration or DB-test files were changed.
+
+### 2026-10-16 [Claude Code] Backlog task 6: scoring validation plan
+
+- #29 (task 5: database operations runbook) merged.
+- `docs/scoring-validation.md` covers:
+  - what the score does and doesn't claim (a ranking, not a probability or a prediction of hiring outcomes)
+  - separate constructs for listing presence, stale dates, repeat observations, specificity and hiring outcomes
+  - a permitted corpus: fixtures, bounded official ATS samples, anonymous sightings, and opt-in outcome reports (not built; needs owner approval)
+  - label definitions, where "unknown" is never imputed as negative
+  - metrics reported per board: match precision, false-absence rate, unknown-evidence rate, AUC, band precision, confidence separation
+  - sample-size floors, calibration criteria (only if probabilities are ever advertised), and a repeatable protocol
+- New Claude-owned `packages/scoring/test/evaluation.test.ts`: 6 invariants the protocol relies on. An older posting, a longer or more frequent repost history, or an absence from the careers page never scores higher; missing evidence never raises confidence; output is deterministic. All pass (scoring: 80 tests). No weights, curves, source or `test/edge/**` changed.
