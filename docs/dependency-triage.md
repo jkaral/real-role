@@ -4,12 +4,12 @@ Checked on 2026-10-16 against `main` at `ecb57a1` (after #23), by Claude Code. R
 
 ## Summary
 
-| Check                   | Result                                                          |
-| ----------------------- | --------------------------------------------------------------- |
-| `pnpm audit --prod`     | **No known vulnerabilities** (production dependencies)          |
-| `pnpm audit` (all deps) | **1 moderate**: GHSA-67mh-4wv8-2f99 in `esbuild` 0.18.20        |
-| Affected code at runtime | **None.** Dev-only tooling, and the vulnerable feature is never used |
-| Proposed fix            | One pnpm override (below). Rehearsed and passing. **Not applied**: it changes the shared lockfile, which Codex's PR #24 also changes |
+| Check                    | Result                                                                                                                               |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `pnpm audit --prod`      | **No known vulnerabilities** (production dependencies)                                                                               |
+| `pnpm audit` (all deps)  | **1 moderate**: GHSA-67mh-4wv8-2f99 in `esbuild` 0.18.20                                                                             |
+| Affected code at runtime | **None.** Dev-only tooling, and the vulnerable feature is never used                                                                 |
+| Proposed fix             | One pnpm override (below). Rehearsed and passing. **Not applied**: it changes the shared lockfile, which Codex's PR #24 also changes |
 
 ## The advisory
 
@@ -57,12 +57,12 @@ Every other esbuild in the tree is patched: 0.25.12 (drizzle-kit, tsx) and 0.28.
 
 In a throwaway worktree of `main`:
 
-| Step                                                         | Result                                                                                               |
-| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
-| Add the override, `pnpm install`                             | Lockfile: +4 / −229 lines. Removes `esbuild@0.18.20` and its 22 per-platform `@esbuild/*@0.18.20` binaries |
-| `pnpm audit`                                                 | **No known vulnerabilities**                                                                         |
-| `pnpm --filter @real-role/web exec drizzle-kit generate`     | Loads `drizzle.config.ts` through the overridden loader: "No schema changes, nothing to migrate"     |
-| `pnpm check`                                                 | 21/21 tasks pass                                                                                     |
+| Step                                                     | Result                                                                                                     |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Add the override, `pnpm install`                         | Lockfile: +4 / −229 lines. Removes `esbuild@0.18.20` and its 22 per-platform `@esbuild/*@0.18.20` binaries |
+| `pnpm audit`                                             | **No known vulnerabilities**                                                                               |
+| `pnpm --filter @real-role/web exec drizzle-kit generate` | Loads `drizzle.config.ts` through the overridden loader: "No schema changes, nothing to migrate"           |
+| `pnpm check`                                             | 21/21 tasks pass                                                                                           |
 
 **To apply** (after coordinating with Codex, who changes `pnpm-lock.yaml` in #24): merge #24 first, then on a fresh branch from `main` add the override, run `pnpm install`, and re-run the four steps above. In the same PR, run `drizzle-kit generate` against #24's schema to confirm it still reports no changes.
 
