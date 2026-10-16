@@ -9,7 +9,7 @@ Requested by the owner on 2026-10-15 after reviewing main through `fb27755` (#22
 - Linux check/E2E CI, optional demo recording and a tag-triggered extension release workflow already exist.
 - Higgsfield generation and production Vercel configuration are blocked on owner accounts/credentials. Do not spend another turn rediscovering those blockers.
 
-Codex's current local implementation includes employer-source lookup, synced preferences/job facts, calendar/templates, prior-save notices, comparison, historical analytics, CSV portability, local interview preparation and approved read-only coach sharing. The owner approved preference/fact tables, status history retention and the coach authorization model. Monitoring remains deferred. Do not implement a parallel version of these features. The implementation PR is forthcoming; currently published coordination docs are not proof that these features are deployed.
+Codex's current local implementation includes employer-source lookup, synced preferences/job facts, calendar/templates, prior-save notices, comparison, historical analytics, CSV portability, local interview preparation and approved read-only coach sharing. The owner approved preference/fact tables, status history retention and the coach authorization model. Monitoring remains deferred. Do not implement a parallel version of these features. The implementation is pushed in PR #24 and locally validated; it is not deployed. Review the source there read-only while working on these independent tasks.
 
 ## 1. Finish the README and supporting user documentation
 
@@ -71,7 +71,7 @@ After reading the actual auth and approved add-on design, correct outdated state
 
 ## Coordination and delivery
 
-- Begin with tasks 1, 3 and 4; task 2 can be built without credentials; task 5 uses the implementation PR once pushed. Tasks 6 and 7 are independent documentation/review work.
+- Begin with tasks 1, 3 and 4; task 2 can be built without credentials; task 5 can now use the migration files in PR #24 read-only. Tasks 6 and 7 are independent documentation/review work.
 - Use small PRs from main. Append results and exact PR links to HANDOFF.md. Never silently resolve a conflict by replacing Codex's app or schema code.
 - Keep UI review fixes, new parser coverage, scoring-path caching/timeouts and rate-limit retention implementation queued for the app handback. They would overlap the active code and should not be started in parallel.
 - Web Store screenshot regeneration and final demo recapture should use the merged final app, not an older UI. Prepare copy/checklists now; generate final assets after the add-on merge.
