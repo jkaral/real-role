@@ -2,18 +2,18 @@
 
 Requested by the owner on 2026-10-15. Implementation proceeds in this order, with review checkpoints for substantial changes. Status below distinguishes working code from planned integrations.
 
-| Order | Add-on                                  | Initial scope                                                               | Status                                                                                         |
-| ----- | --------------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| 1     | Saved-job status and change alerts      | Opt-in official-ATS watches, exact listing identifiers, in-app alerts       | Deferred by owner at checkpoint 1; no monitoring scheduled or persisted                        |
-| 2     | Employer-source finder                  | Matching official listing link, evidence and user-provided board fallback   | Implemented; source-finder stage passed 10 browser tests; later integration validation pending |
-| 3     | Personal application-priority shortlist | Explicit salary/location/experience preferences; separate fit and freshness | Approved by owner; implemented locally; validation in progress                                 |
-| 4     | Follow-up assistant                     | ICS/calendar export and editable templates; optional notifications          | Calendar/templates implemented locally; external notifications remain unapproved               |
-| 5     | Duplicate/prior-application warnings    | Account-scoped exact match first; similar roles explicitly qualified        | Implemented locally; validation in progress                                                    |
-| 6     | Side-by-side job comparison             | Disclosed pay/currency/period, location, requirements and unknowns          | Implemented locally using approved job facts; validation pending                               |
-| 7     | Personal search analytics/weekly review | Account-scoped stage history, funnel counts and honest sample sizes         | Approved by owner; implemented locally; validation in progress                                 |
-| 8     | Portable tracker                        | CSV export, then previewed/deduplicated import                              | Implemented locally with explicit preview; validation in progress                              |
-| 9     | Posting-grounded interview brief        | Questions/checklist grounded in the posting; transient optional background  | Implemented locally without external AI or description storage; validation in progress         |
-| 10    | Coach/career-center workspace           | Explicit sharing consent, revocation and separate client access             | Approved by owner; read-only sharing implemented locally; validation in progress               |
+| Order | Add-on                                  | Initial scope                                                               | Status                                                                              |
+| ----- | --------------------------------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| 1     | Saved-job status and change alerts      | Opt-in official-ATS watches, exact listing identifiers, in-app alerts       | Deferred by owner at checkpoint 1; no monitoring scheduled or persisted             |
+| 2     | Employer-source finder                  | Matching official listing link, evidence and user-provided board fallback   | Implemented in PR #24; local functional validation passed                           |
+| 3     | Personal application-priority shortlist | Explicit salary/location/experience preferences; separate fit and freshness | Approved and implemented in PR #24; local validation passed                         |
+| 4     | Follow-up assistant                     | ICS/calendar export and editable templates; optional notifications          | Calendar/templates implemented and tested; external notifications remain unapproved |
+| 5     | Duplicate/prior-application warnings    | Account-scoped exact match first; similar roles explicitly qualified        | Implemented in PR #24; local validation passed                                      |
+| 6     | Side-by-side job comparison             | Disclosed pay/currency/period, location, requirements and unknowns          | Implemented using approved job facts; comparison flow tested                        |
+| 7     | Personal search analytics/weekly review | Account-scoped stage history, funnel counts and honest sample sizes         | Approved and implemented in PR #24; local validation passed                         |
+| 8     | Portable tracker                        | CSV export, then previewed/deduplicated import                              | Implemented with explicit preview; import/export flow tested                        |
+| 9     | Posting-grounded interview brief        | Questions/checklist grounded in the posting; transient optional background  | Implemented locally without external AI or description storage; tested              |
+| 10    | Coach/career-center workspace           | Explicit sharing consent, revocation and separate client access             | Approved read-only sharing implemented; authorization and UI tests passed           |
 
 The first nine items follow the owner's requested list; the tenth retains the later-stage workspace opportunity in the diagnostic report. Optional fraud checks and mass auto-apply are outside this rollout. No résumé storage, logged-in session automation or bulk job-board crawling is proposed.
 
@@ -123,3 +123,13 @@ The diagnostic's tenth, later-stage opportunity is a coach/career-center workspa
 - No new paid service or outbound message. The owner manually copies an invitation link. This creates an opt-in data-sharing/privacy surface and requires an updated disclosure; it does not change default application visibility.
 
 Approve this read-only sharing model to proceed, or defer the coach workspace. Defer means add-ons 2–9 can be delivered without adding cross-account access. It does not authorize email notifications, monitoring or future coach write permissions.
+
+## Implementation delivery: PR #24
+
+- Source: https://github.com/jkaral/real-role/pull/24 (`codex/prioritized-addons`, rebased from main). Add-ons 2–10 are implemented; scheduled monitoring is still deferred by the owner.
+- Local verification: `pnpm check` (21 tasks, 244 tests accounted for, with unchanged package caches), production Next build, and all 12 functional Chromium tests. The migration-upgrade rehearsal preserved existing notes and labelled old status history as a baseline. Coach authorization tests cover unrelated users, expired/replayed links, concurrent acceptance, revocation and cascades.
+- Desktop/mobile shortlist screenshots were inspected. A browser-shutdown hang after completed assertions was corrected by using the persistent-context lifecycle already used by the extension tests; the final combined run passed without raising the timeout or skipping assertions.
+- Three additive migrations introduce four tables. No existing table is dropped. These migrations have only been exercised locally; production activation remains pending.
+- Deploy the compatible backend/schema before distributing the production extension. No release tag, store submission, Vercel configuration change or production migration was performed. The owner's production deployment action is separate from code completion.
+- Current limits: source lookup supports official Greenhouse/Lever/Ashby boards; CSV import previews up to 50 rows/100 kB and skips duplicates; imported old scores/transitions are not invented; interview preparation is a local checklist rather than an external AI interview service; coach sharing is read-only and excludes private notes/preferences. Email/push and background monitoring remain disabled.
+- Claude's parallel root/docs/release backlog is published separately in PR #23. UI polish findings from #22 remain a follow-up after the app handback, rather than being silently folded into this feature release.
