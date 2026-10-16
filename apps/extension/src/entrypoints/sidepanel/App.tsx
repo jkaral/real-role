@@ -17,6 +17,7 @@ import {
   signInUrl,
 } from "@/lib/api";
 import { BAND_COLORS, tabKey, type Message, type TabState } from "@/lib/state";
+import { EmployerSource } from "./EmployerSource";
 
 type SaveState = "idle" | "saving" | "saved" | "signin" | "error";
 
@@ -139,7 +140,7 @@ function Result({ data }: { data: ScoreResponse }) {
   const onSave = useCallback(async () => {
     setSave("saving");
     try {
-      const res = await saveApplication(data.postingId);
+      const res = await saveApplication(data.postingId, undefined, data.posting);
       if (res.status === "saved") {
         setTracked(res.application);
         setSave("saved");
@@ -174,6 +175,7 @@ function Result({ data }: { data: ScoreResponse }) {
         </div>
       </header>
       <p className="summary">{summarize(result)}</p>
+      <EmployerSource key={data.postingId} posting={posting} />
 
       <div className="actions">
         {save === "saved" ? (

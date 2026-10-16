@@ -35,6 +35,9 @@ importers:
 
   apps/extension:
     dependencies:
+      '@real-role/ats':
+        specifier: workspace:*
+        version: link:../../packages/ats
       '@real-role/parsers':
         specifier: workspace:*
         version: link:../../packages/parsers

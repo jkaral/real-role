@@ -9,6 +9,7 @@ import {
   dashboardRowTestId,
   defaultFollowUpAt,
   isFollowUpDue,
+  ListApplicationsResponseSchema,
   type ApplicationStatus,
   type CreateApplicationRequest,
   type TrackedApplication,
@@ -16,6 +17,9 @@ import {
 } from "@real-role/shared";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FollowUpTools } from "@/components/follow-up-tools";
+import { Portability } from "@/components/portability";
+import { CoachSharing } from "@/components/coach-sharing";
 
 const STATUS_LABELS: Record<ApplicationStatus, string> = {
   saved: "Saved",
@@ -260,6 +264,15 @@ export function ApplicationsTable({ initial }: { initial: TrackedApplication[] }
 
   return (
     <div className="mt-8">
+      <Portability
+        applications={apps}
+        onImported={() => {
+          void fetch(API_ROUTES.applications)
+            .then((r) => r.json())
+            .then((body) => setApps(ListApplicationsResponseSchema.parse(body).applications))
+            .catch(() => setError("Import finished. Reload to see your latest applications."));
+        }}
+      />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat label="Active" value={String(active)} hint={`${apps.length} tracked in total`} />
         <Stat label="Follow-ups due" value={String(due)} hint="Applied or interviewing" />
@@ -709,6 +722,8 @@ function DetailsDrawer({
               )}
             </div>
           </div>
+          <FollowUpTools key={app.id} application={app} />
+          <CoachSharing key={`share-${app.id}`} applicationId={app.id} />
         </div>
         <div className="border-t border-line p-5">
           <button
