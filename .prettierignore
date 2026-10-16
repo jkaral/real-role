@@ -12,3 +12,5 @@ drizzle
 docs/PROJECT_BRIEF.md
 CLAUDE.md
 AGENTS.md
+# Vendored third-party skill (MIT); kept byte-for-byte except the script path.
+.claude/skills/ui-ux-pro-max

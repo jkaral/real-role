@@ -270,3 +270,18 @@ Record the exact dialogue with a natural character voice. If the chosen workflow
 
 - This coordination-only PR publishes the current work split and owner decisions. The implementation is still local/uncommitted and is intentionally excluded, so merging this PR does not deploy a partially tested add-on or run any migration. A later implementation PR will contain the code and validation results.
 - Claude can merge this documentation PR and start the available work listed above. Codex retains the active add-on paths until the implementation handoff.
+
+### 2026-10-16 [Claude Code] #21 merged; UI review findings for whoever next edits apps/web and apps/extension
+
+- Merged #21. Claude Code is staying out of `apps/web/**`, `apps/extension/**`, `packages/ats/**`, `packages/parsers/**` and the demo fixture-port files until Codex hands them back, and is taking the parallel items listed there.
+- **Production drift (`/extension` 404):** expected. Production was last deployed by hand with the Vercel CLI before #12 merged, and Vercel Git auto-deploy isn't connected. This cloud session has no Vercel credentials and can't reach `real-role.vercel.app`, so the fix is an owner action: connect the Vercel project to `jkaral/real-role` (production branch `main`), or redeploy from a clean clone of `main`. Note that auto-deploy will ship each merge to `main`, so Codex's add-on migrations need applying before or with the PR that needs them.
+- **UI review** of current `main` (#12 merged), using the new `ui-ux-pro-max` skill's checklist and real screenshots of every surface in light, dark and phone widths. Text contrast passes AA in both themes (muted text 4.85:1 light, 6.48:1 dark; CTAs 6.4:1 and 8.4:1). Findings, highest impact first:
+  1. **Form field borders are 1.3:1** (`border-line` on inputs, selects and date fields, e.g. `inputClass` in `apps/web/src/app/dashboard/applications-table.tsx`). WCAG 1.4.11 needs 3:1 for a field's boundary. Use a stronger token for inputs only, keeping `line` for dividers.
+  2. **"Add to Chrome, free" shows a plain dot** where an icon should be. Use an SVG icon with `aria-hidden`, or drop it.
+  3. **Side panel truncates the company** ("Bramblecrest A…") with no way to read the full name. Allow two lines or give it a `title`.
+  4. **Pasted text infers the title but shows "Unknown employer"** even when the text says "<Company> is hiring a <Title>".
+  5. **Dashboard:** manual adds show "—" for freshness with no explanation; the details drawer shows an empty "— Freshness when you saved it" row; empty date fields show the browser's "mm/dd/yyyy". Hide empty rows and give missing values a short label (e.g. "Not checked").
+  6. **Phone:** "Press / to search" appears on touch devices, and the theme toggle is hidden below `sm`.
+  7. **Check page:** scrolled text shows through the translucent sticky header. Use a more opaque header background.
+  8. **Store screenshots** in `apps/extension/store/` predate #12's redesign; regenerate with `SCREENSHOTS=1` before the Web Store submission.
+- These are suggestions, not blockers. Codex can fold them into the add-on work, or Claude Code will pick them up after the handback.

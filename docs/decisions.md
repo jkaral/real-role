@@ -72,3 +72,10 @@ Reviewed the web app, API and extension against Chrome's Web Store best practice
 - **Rate-limit identity** prefers Vercel's `x-real-ip` over the client-supplied `x-forwarded-for`.
 - **AI review reasons** containing accusatory words are dropped (prompt-injection guard for A2 wording).
 - **CI:** `permissions: contents: read`. Added the Claude security-review workflow, pinned to a commit, skipped until `CLAUDE_API_KEY` is set, and same-repo PRs only. Fork PR workflows now require approval for all outside contributors.
+
+### 2026-10-16 [Claude Code] Vendor the UI/UX Pro Max skill for UI work
+
+- Added `.claude/skills/ui-ux-pro-max/` from [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) (MIT, licence kept alongside) at the owner's request. Only the files the skill uses: `SKILL.md`, its two reference docs, the four search scripts (standard-library Python, no network or shell calls), the main data CSVs and the Next.js/React/Tailwind/shadcn stack files. Validation-only data, tests, fonts and the sibling skills were left out (~880 KB total).
+- The only edit: `SKILL.md`'s search command points at the in-repo path instead of `${CLAUDE_PLUGIN_ROOT}`, which is unset outside a plugin install.
+- `.gitignore` now commits `.claude/skills/` while keeping other local agent files ignored; Prettier skips the vendored folder.
+- Its generated design systems are suggestions. Real Role keeps its existing forest-green tokens and Inter; don't run `--persist` or adopt a generated palette without the owner deciding to rebrand. Only Claude Code reads `.claude/skills/`.
