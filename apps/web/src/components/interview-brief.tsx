@@ -34,7 +34,7 @@ export function InterviewBrief({ posting }: { posting: ParsedPosting }) {
             value={brief}
             maxLength={15000}
             onChange={(e) => setBrief(e.target.value)}
-            className="w-full rounded-lg border border-line bg-surface p-3 text-sm"
+            className="w-full rounded-lg border border-field bg-surface p-3 text-sm"
           />
           <div className="flex flex-wrap gap-3">
             <button

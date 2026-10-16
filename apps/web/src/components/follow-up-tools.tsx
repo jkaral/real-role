@@ -45,7 +45,7 @@ export function FollowUpTools({ application }: { application: TrackedApplication
       </label>
       <select
         aria-label="Template stage"
-        className="w-full rounded border border-line bg-surface p-2"
+        className="w-full rounded border border-field bg-surface p-2"
         defaultValue={application.status === "interviewing" ? "interview" : "application"}
         onChange={(e) =>
           setDraft(followUpDraft(application, e.target.value as "interview" | "application"))
@@ -60,7 +60,7 @@ export function FollowUpTools({ application }: { application: TrackedApplication
         maxLength={5000}
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
-        className="w-full rounded border border-line bg-surface p-2"
+        className="w-full rounded border border-field bg-surface p-2"
       />
       <p className="text-muted">
         Replace placeholders and review every detail before sending. This draft is not saved or

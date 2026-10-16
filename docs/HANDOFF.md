@@ -350,3 +350,17 @@ Record the exact dialogue with a natural character voice. If the chosen workflow
   - metrics reported per board: match precision, false-absence rate, unknown-evidence rate, AUC, band precision, confidence separation
   - sample-size floors, calibration criteria (only if probabilities are ever advertised), and a repeatable protocol
 - New Claude-owned `packages/scoring/test/evaluation.test.ts`: 6 invariants the protocol relies on. An older posting, a longer or more frequent repost history, or an absence from the careers page never scores higher; missing evidence never raises confidence; output is deterministic. All pass (scoring: 80 tests). No weights, curves, source or `test/edge/**` changed.
+
+### 2026-10-16 [Claude Code] #24 merged (owner instruction); UI review fixes; db:migrate reads .env.local
+
+- The owner asked Claude Code to merge #24 and work solo until 2026-10-16 09:00 ET. #24 was brought up to date with `main` through GitHub's update-branch merge commit (no force-push) and squash-merged once CI passed. Before that, a local merge with `main` had passed `pnpm check`, the web build and all 12 browser tests. #32 (security and agent docs, backlog task 7) also merged.
+- UI fixes from the #22 review, kept out of the files `codex/extension-reliability` changes:
+  - form fields use a new `--color-field` border (3.4:1 light, 3.3:1 dark; WCAG 1.4.11)
+  - the "Add to Chrome" button's dot is replaced with a plus icon
+  - the side panel's title and company wrap to two lines, with the full text on hover
+  - pasted text infers the employer from "<Company> is hiring…", with unit tests
+  - unscored applications show "Not scored" in the table and an explanation in the drawer
+  - phones get a theme toggle in the footer, and the "/" search hint appears only with a mouse
+  - the sticky header is more opaque
+- `apps/web/scripts/migrate.ts` now reads `apps/web/.env.local` locally (never on Vercel), and shell variables win. The docs no longer tell people to pass the URL inline.
+- Verified: `pnpm check` 21/21, web build, all 12 browser tests, and screenshots of each change. Not touched: `background.ts`, `content/index.ts`, `api.ts`, `messages.ts` and their tests.

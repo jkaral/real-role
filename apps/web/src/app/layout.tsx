@@ -69,7 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to content
         </a>
-        <header className="sticky top-0 z-40 border-b border-line bg-surface/85 backdrop-blur">
+        <header className="sticky top-0 z-40 border-b border-line bg-surface/95 backdrop-blur">
           <nav
             aria-label="Main"
             className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6"
@@ -94,7 +94,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <footer className="border-t border-line bg-surface">
           <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-sm text-muted sm:flex-row sm:justify-between sm:px-6">
             <p>Real Role shows signals, not verdicts. Scores are estimates.</p>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap items-center gap-4">
+              <ThemeToggle className="-ml-2 inline-flex sm:hidden" />
               <Link href="/how-it-works" className="hover:text-ink">
                 How scoring works
               </Link>

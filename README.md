@@ -74,8 +74,7 @@ Run the web app against an in-process Postgres (no accounts or cloud database ne
 ```bash
 cp .env.example apps/web/.env.local
 # in apps/web/.env.local set:  DATABASE_URL=pglite:./.pglite-dev   and   AUTH_SECRET=<npx auth secret>
-# db:migrate doesn't read .env.local, so pass the URL inline:
-DATABASE_URL=pglite:./.pglite-dev pnpm --filter @real-role/web db:migrate
+pnpm --filter @real-role/web db:migrate      # reads apps/web/.env.local
 pnpm --filter @real-role/web dev        # http://localhost:3000 (Next.js reads .env.local)
 ```
 

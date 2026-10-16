@@ -22,7 +22,8 @@ export default async function DashboardPage() {
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Your applications</h1>
           <p className="mt-2 text-ink-soft">
-            Track where you applied and when to follow up. Press / to search.
+            Track where you applied and when to follow up.
+            <span className="hidden pointer-fine:inline"> Press / to search.</span>
           </p>
         </div>
         <Link

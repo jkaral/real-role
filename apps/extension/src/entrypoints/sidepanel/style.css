@@ -125,11 +125,14 @@ a {
   font-size: 12.5px;
 }
 
-.truncate {
+/* Up to two lines, so long employer names stay readable; the full text is in the title. */
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  max-width: 220px;
+  overflow-wrap: anywhere;
   margin: 0;
 }
 
