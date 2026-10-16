@@ -6,3 +6,5 @@ Treat as expected, not findings:
 - Requests without an Origin header are allowed by assertTrustedOrigin by design (they carry no ambient browser cookies).
 - chrome-extension:// origins are allowed by assertTrustedOrigin by design (the extension calls the API with the user's session).
 - Rate-limit and denial-of-service concerns (excluded by default).
+- apps/web/src/app/layout.tsx uses dangerouslySetInnerHTML for THEME_SCRIPT (apps/web/src/components/nav.tsx): a fixed string constant that reads localStorage to set the theme before paint. No user, page or model data reaches it.
+- Coach-share recipients reading another account's application in apps/web/src/server/coach.ts: this is the owner-approved, consented exception to owner-only reads (see SECURITY.md). Findings there should be about missing checks (revocation, acceptance, field exclusions), not the existence of the read.
