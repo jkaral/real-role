@@ -85,7 +85,7 @@ Production is the Vercel project serving https://real-role.vercel.app, with a Ne
 
 **Environment variables (Vercel → Project → Settings → Environment Variables):** `DATABASE_URL` (Neon, pooled), optionally `DATABASE_URL_UNPOOLED`, `AUTH_SECRET`, the provider variables you use, `SITE_URL`, optional `EXTENSION_ORIGINS` (`chrome-extension://<id>`, comma-separated; adds CORS headers for those extension ids, which the extension doesn't strictly need because of its host permission), optional `ANTHROPIC_API_KEY`, and `EXTENSION_STORE_URL` once the Web Store listing exists. Never set `ALLOW_DEMO_SEED` in production.
 
-**Build command:** `pnpm --filter @real-role/web build:vercel`. It runs migrations only when `VERCEL_ENV=production`, then `next build`. Preview builds never touch the production database. Migrations are additive and are not undone by redeploying older code; see `docs/database-operations.md` (planned) before rolling back.
+**Build command:** `pnpm --filter @real-role/web build:vercel`. It runs migrations only when `VERCEL_ENV=production`, then `next build`. Preview builds never touch the production database. Migrations are additive and are not undone by redeploying older code; see [database operations](database-operations.md) before rolling back.
 
 **Deploy order: backend first, then the extension.** A new extension build can call API routes that only the new backend has. Ship in this order:
 
