@@ -113,7 +113,7 @@ export default async function SignInPage({
               required
               autoComplete="email"
               placeholder="you@example.com"
-              className="mt-1 block w-full rounded-lg border border-line bg-surface px-3 py-2 placeholder:text-muted focus:border-brand"
+              className="mt-1 block w-full rounded-lg border border-field bg-surface px-3 py-2 placeholder:text-muted focus:border-brand"
             />
             <button
               type="submit"

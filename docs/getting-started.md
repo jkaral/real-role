@@ -29,8 +29,7 @@ Edit `apps/web/.env.local`. The minimum for local work:
 Then:
 
 ```bash
-# db:migrate doesn't load .env.local, so pass the database URL inline
-DATABASE_URL=pglite:./.pglite-dev pnpm --filter @real-role/web db:migrate
+pnpm --filter @real-role/web db:migrate   # reads apps/web/.env.local
 pnpm --filter @real-role/web dev
 ```
 

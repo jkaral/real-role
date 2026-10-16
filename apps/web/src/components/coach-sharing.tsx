@@ -76,7 +76,7 @@ export function CoachSharing({ applicationId }: { applicationId: string }) {
             id="coach-invite-link"
             readOnly
             value={link}
-            className="w-full rounded border border-line bg-surface p-2"
+            className="w-full rounded border border-field bg-surface p-2"
           />
           <button
             type="button"

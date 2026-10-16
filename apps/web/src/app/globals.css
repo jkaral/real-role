@@ -10,6 +10,8 @@
   --color-ink-soft: #3c5249;
   --color-muted: #5f716a;
   --color-line: #dbe4df;
+  /* Form-field outlines: 3:1 against surfaces (WCAG 1.4.11); `line` stays for dividers. */
+  --color-field: #7d8f88;
   --color-track: #e4ebe7;
   --color-paper: #f6f8f7;
   --color-surface: #ffffff;
@@ -66,6 +68,7 @@
     --color-ink-soft: #b9c8c1;
     --color-muted: #8fa29a;
     --color-line: #26352f;
+    --color-field: #5c7068;
     --color-track: #26352f;
     --color-paper: #0b1310;
     --color-surface: #121c18;
@@ -88,6 +91,7 @@
   --color-ink-soft: #b9c8c1;
   --color-muted: #8fa29a;
   --color-line: #26352f;
+  --color-field: #5c7068;
   --color-track: #26352f;
   --color-paper: #0b1310;
   --color-surface: #121c18;

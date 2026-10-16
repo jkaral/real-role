@@ -73,7 +73,12 @@ const toDateInput = (iso: string | null) => {
 const fromDateInput = (v: string) => (v ? new Date(`${v}T09:00:00`).toISOString() : null);
 
 function ScorePill({ score }: { score: number | null }) {
-  if (score === null) return <span className="text-muted">—</span>;
+  if (score === null)
+    return (
+      <span className="text-muted" title="Added by hand or imported, so no Freshness Score">
+        Not scored
+      </span>
+    );
   const [tone, label] =
     score >= 70
       ? ["bg-high-tint text-high", "High"]
@@ -130,7 +135,7 @@ function Stat({ label, value, hint }: { label: string; value: string; hint?: str
 }
 
 const inputClass =
-  "mt-1 block w-full rounded-lg border border-line bg-surface px-3 py-2 placeholder:text-muted focus:border-brand";
+  "mt-1 block w-full rounded-lg border border-field bg-surface px-3 py-2 placeholder:text-muted focus:border-brand";
 
 export function ApplicationsTable({ initial }: { initial: TrackedApplication[] }) {
   const [apps, setApps] = useState(initial);
@@ -328,15 +333,24 @@ export function ApplicationsTable({ initial }: { initial: TrackedApplication[] }
           <label className="sr-only" htmlFor="app-search">
             Search applications
           </label>
-          <input
-            id="app-search"
-            ref={searchRef}
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search role or company   /"
-            className="w-full rounded-lg border border-line bg-surface px-3 py-1.5 text-sm placeholder:text-muted sm:w-60"
-          />
+          <span className="relative w-full sm:w-60">
+            <input
+              id="app-search"
+              ref={searchRef}
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search role or company"
+              className="w-full rounded-lg border border-field bg-surface px-3 py-1.5 text-sm placeholder:text-muted pointer-fine:pr-8"
+            />
+            {/* The "/" shortcut needs a keyboard; touch devices don't show it. */}
+            <kbd
+              aria-hidden="true"
+              className="pointer-events-none absolute right-2 top-1/2 hidden -translate-y-1/2 rounded border border-line px-1.5 text-xs text-muted pointer-fine:inline"
+            >
+              /
+            </kbd>
+          </span>
           <label className="sr-only" htmlFor="app-sort">
             Sort by
           </label>
@@ -344,7 +358,7 @@ export function ApplicationsTable({ initial }: { initial: TrackedApplication[] }
             id="app-sort"
             value={sort}
             onChange={(e) => setSort(e.target.value as Sort)}
-            className="rounded-lg border border-line bg-surface px-2 py-1.5 text-sm"
+            className="rounded-lg border border-field bg-surface px-2 py-1.5 text-sm"
           >
             {Object.entries(SORTS).map(([id, label]) => (
               <option key={id} value={id}>
@@ -507,7 +521,7 @@ export function ApplicationsTable({ initial }: { initial: TrackedApplication[] }
                             onChange={(e) =>
                               void patch(a.id, { followUpAt: fromDateInput(e.target.value) })
                             }
-                            className="rounded-md border border-line bg-surface px-2 py-1"
+                            className="rounded-md border border-field bg-surface px-2 py-1"
                           />
                         </>
                       )}
@@ -629,10 +643,17 @@ function DetailsDrawer({
           </button>
         </div>
         <div className="flex-1 space-y-5 overflow-y-auto p-5 text-sm">
-          <div className="flex items-center gap-3">
-            <ScorePill score={app.scoreAtSave} />
-            <span className="text-muted">Freshness when you saved it</span>
-          </div>
+          {app.scoreAtSave === null ? (
+            <p className="text-muted">
+              No Freshness Score: this role was added by hand or imported. Check the posting to
+              score it.
+            </p>
+          ) : (
+            <div className="flex items-center gap-3">
+              <ScorePill score={app.scoreAtSave} />
+              <span className="text-muted">Freshness when you saved it</span>
+            </div>
+          )}
           {hasLink && (
             <a
               href={app.sourceUrl}

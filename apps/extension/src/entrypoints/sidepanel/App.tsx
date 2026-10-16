@@ -158,7 +158,7 @@ function Result({ data }: { data: ScoreResponse }) {
           <span data-testid={TEST_IDS.extension.score}>{result.score}</span>
         </div>
         <div>
-          <p className="muted small truncate">
+          <p className="muted small clamp-2" title={`${posting.title} · ${posting.company}`}>
             {posting.title} · {posting.company}
           </p>
           <p

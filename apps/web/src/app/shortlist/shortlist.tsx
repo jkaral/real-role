@@ -9,7 +9,7 @@ import {
   type JobFacts,
 } from "@/lib/job-preferences";
 
-const field = "mt-1 block w-full rounded-lg border border-line bg-surface px-3 py-2";
+const field = "mt-1 block w-full rounded-lg border border-field bg-surface px-3 py-2";
 type Initial = {
   applications: TrackedApplication[];
   facts: Record<string, JobFacts>;
