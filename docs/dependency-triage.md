@@ -4,12 +4,12 @@ Checked on 2026-10-16 against `main` at `ecb57a1` (after #23), by Claude Code. R
 
 ## Summary
 
-| Check                    | Result                                                                                                                               |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `pnpm audit --prod`      | **No known vulnerabilities** (production dependencies)                                                                               |
-| `pnpm audit` (all deps)  | **1 moderate**: GHSA-67mh-4wv8-2f99 in `esbuild` 0.18.20                                                                             |
-| Affected code at runtime | **None.** Dev-only tooling, and the vulnerable feature is never used                                                                 |
-| Proposed fix             | One pnpm override (below). Rehearsed and passing. **Not applied**: it changes the shared lockfile, which Codex's PR #24 also changes |
+| Check                    | Result                                                                                        |
+| ------------------------ | --------------------------------------------------------------------------------------------- |
+| `pnpm audit --prod`      | **No known vulnerabilities** (production dependencies)                                        |
+| `pnpm audit` (all deps)  | **1 moderate**: GHSA-67mh-4wv8-2f99 in `esbuild` 0.18.20                                      |
+| Affected code at runtime | **None.** Dev-only tooling, and the vulnerable feature is never used                          |
+| Fix                      | **Applied 2026-10-16** after #24 merged: one pnpm override (below). `pnpm audit` is now clean |
 
 ## The advisory
 
@@ -64,9 +64,10 @@ In a throwaway worktree of `main`:
 | `pnpm --filter @real-role/web exec drizzle-kit generate` | Loads `drizzle.config.ts` through the overridden loader: "No schema changes, nothing to migrate"           |
 | `pnpm check`                                             | 21/21 tasks pass                                                                                           |
 
-**To apply** (after coordinating with Codex, who changes `pnpm-lock.yaml` in #24): merge #24 first, then on a fresh branch from `main` add the override, run `pnpm install`, and re-run the four steps above. In the same PR, run `drizzle-kit generate` against #24's schema to confirm it still reports no changes.
+**Applied** on `main` after #24 merged. Re-run on that tree: the lockfile has no `0.18.20` left, `pnpm audit` and `pnpm audit --prod` report no known vulnerabilities, `drizzle-kit generate` against #24's schema reports "No schema changes", and `pnpm check` passes 21/21. **To undo:** remove the `overrides` entry from `pnpm-workspace.yaml` and run `pnpm install`.
 
 ## Follow-ups
 
-- `SECURITY.md` says "`pnpm audit --prod` is clean as of 2026-10-15". That's still true for production dependencies, but it doesn't mention this development-only advisory. Backlog task 7 updates it once the override decision is made.
+- `SECURITY.md` now records that both audits are clean.
+- Remove the override once `drizzle-kit` stops depending on `@esbuild-kit/esm-loader`.
 - Re-run `pnpm audit --prod` and `pnpm audit` before each release.
