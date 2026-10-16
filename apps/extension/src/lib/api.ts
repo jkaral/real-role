@@ -27,27 +27,67 @@ async function failure(res: Response): Promise<ApiFailure> {
     : new ApiFailure(res.status, "internal", "Real Role is unavailable right now.");
 }
 
-async function post(path: string, body: unknown, fetchImpl: typeof fetch): Promise<Response> {
+const REQUEST_TIMEOUT_MS = 15_000;
+
+/** Keep the deadline active through response-body consumption, including error replies. */
+async function request<T>(
+  path: string,
+  init: RequestInit,
+  read: (res: Response) => Promise<T>,
+  fetchImpl: typeof fetch,
+): Promise<T> {
+  const controller = new AbortController();
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const deadline = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => {
+      reject(
+        new ApiFailure(
+          0,
+          "timeout",
+          "Real Role took too long to respond. Try again. If you were saving, check your dashboard first.",
+        ),
+      );
+      controller.abort();
+    }, REQUEST_TIMEOUT_MS);
+  });
   try {
-    // Cookies (the web app session) are sent because the extension has host permission.
-    return await fetchImpl(`${API_BASE}${path}`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-  } catch {
-    throw new ApiFailure(0, "network", "Couldn't reach Real Role. Check your connection.");
+    return await Promise.race([
+      fetchImpl(`${API_BASE}${path}`, {
+        ...init,
+        credentials: "include",
+        signal: controller.signal,
+      }).then(read),
+      deadline,
+    ]);
+  } catch (error) {
+    if (error instanceof ApiFailure) throw error;
+    throw new ApiFailure(0, "network", "Couldn't read Real Role's response. Please try again.");
+  } finally {
+    clearTimeout(timer);
   }
+}
+
+function post(body: unknown): RequestInit {
+  return {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  };
 }
 
 export async function scorePosting(
   posting: ParsedPosting,
   fetchImpl: typeof fetch = fetch,
 ): Promise<ScoreResponse> {
-  const res = await post(API_ROUTES.score, { kind: "parsed", posting }, fetchImpl);
-  if (!res.ok) throw await failure(res);
-  return ScoreResponseSchema.parse(await res.json());
+  return request(
+    API_ROUTES.score,
+    post({ kind: "parsed", posting }),
+    async (res) => {
+      if (!res.ok) throw await failure(res);
+      return ScoreResponseSchema.parse(await res.json());
+    },
+    fetchImpl,
+  );
 }
 
 export type SaveResult =
@@ -57,13 +97,19 @@ export async function saveApplication(
   postingId: string,
   fetchImpl: typeof fetch = fetch,
 ): Promise<SaveResult> {
-  const res = await post(API_ROUTES.applications, { postingId }, fetchImpl);
-  if (res.status === 401) return { status: "signin" };
-  if (!res.ok) throw await failure(res);
-  return {
-    status: "saved",
-    application: ApplicationResponseSchema.parse(await res.json()).application,
-  };
+  return request(
+    API_ROUTES.applications,
+    post({ postingId }),
+    async (res): Promise<SaveResult> => {
+      if (res.status === 401) return { status: "signin" };
+      if (!res.ok) throw await failure(res);
+      return {
+        status: "saved",
+        application: ApplicationResponseSchema.parse(await res.json()).application,
+      };
+    },
+    fetchImpl,
+  );
 }
 
 /**
@@ -75,12 +121,16 @@ export async function findTracked(
   fetchImpl: typeof fetch = fetch,
 ): Promise<TrackedApplication | null> {
   try {
-    const res = await fetchImpl(`${API_BASE}${API_ROUTES.applications}`, {
-      credentials: "include",
-    });
-    if (!res.ok) return null;
-    const { applications } = ListApplicationsResponseSchema.parse(await res.json());
-    return applications.find((a) => a.postingId === postingId) ?? null;
+    return await request(
+      API_ROUTES.applications,
+      {},
+      async (res) => {
+        if (!res.ok) return null;
+        const { applications } = ListApplicationsResponseSchema.parse(await res.json());
+        return applications.find((a) => a.postingId === postingId) ?? null;
+      },
+      fetchImpl,
+    );
   } catch {
     return null;
   }

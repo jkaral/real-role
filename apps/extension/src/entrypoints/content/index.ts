@@ -92,47 +92,70 @@ export default defineContentScript({
 
     let ui: ShadowRootContentScriptUi<HTMLElement> | undefined;
     let checkedUrl = "";
+    let generation = 0;
 
-    const check = async () => {
+    const check = async (force = false) => {
       const url = location.href;
-      if (url === checkedUrl) return;
+      if (!force && url === checkedUrl) return;
       checkedUrl = url;
+      const current = ++generation;
+      const isCurrent = () => current === generation && location.href === url && !ctx.isInvalid;
+      ui?.remove();
+      ui = undefined;
 
       let posting = null;
       for (const delay of RETRY_MS) {
         if (delay) await new Promise<void>((r) => ctx.setTimeout(r, delay));
-        if (location.href !== url || ctx.isInvalid) return;
+        if (!isCurrent()) return;
         // Read only this page's DOM (A2). Nothing leaves the browser unless it's a posting.
         posting = parsePosting(document, url);
         if (posting) break;
       }
 
       if (!posting) {
-        ui?.remove();
-        ui = undefined;
         await send({ type: "no-posting" });
         return;
       }
 
-      ui ??= await mountBadge(ctx);
+      const mounted = await mountBadge(ctx);
+      if (!isCurrent()) {
+        mounted.remove();
+        return;
+      }
+      ui = mounted;
       const root = ui.mounted;
       if (root) renderBadge(root, "loading");
-      const update = (await send({ type: "posting-found", posting })) as BadgeUpdate | undefined;
-      if (root && update && location.href === url) renderBadge(root, update);
+      try {
+        const update = (await send({ type: "posting-found", posting })) as BadgeUpdate | undefined;
+        if (root && update && isCurrent()) renderBadge(root, update);
+      } catch {
+        if (root && isCurrent())
+          renderBadge(root, {
+            ok: false,
+            message: "Couldn't reach Real Role. Try checking again.",
+          });
+      }
     };
 
-    await check();
+    // Listen before the initial async parse/score so navigation and retries cannot be missed.
     // Job boards are often single-page apps: re-check when the URL changes.
-    ctx.addEventListener(window, "wxt:locationchange", () => void check());
+    ctx.addEventListener(window, "wxt:locationchange", () => {
+      // WXT's Navigation API event fires before location.href commits.
+      ctx.setTimeout(() => void check(), 0);
+    });
     // Retry from the side panel or the toolbar: read this page again.
     const onMessage = (message: unknown, sender: { id?: string }) => {
       if (sender.id !== browser.runtime.id) return;
       if ((message as ContentMessage | undefined)?.type !== "recheck") return;
-      checkedUrl = "";
-      void check();
+      void check(true);
       return Promise.resolve(true);
     };
     browser.runtime.onMessage.addListener(onMessage);
-    ctx.onInvalidated(() => browser.runtime.onMessage.removeListener(onMessage));
+    ctx.onInvalidated(() => {
+      generation++;
+      browser.runtime.onMessage.removeListener(onMessage);
+      ui?.remove();
+    });
+    await check();
   },
 });
