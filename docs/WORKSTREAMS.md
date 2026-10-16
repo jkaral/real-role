@@ -90,3 +90,7 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 - [ ] Codex: employer-source finder, synced shortlist/preferences/facts, calendar/templates, prior-save notices, comparisons, analytics and CSV portability — implementation and validation in progress; see docs/addon-rollout.md.
 - [ ] Codex: interview preparation and coach workspace — queued; coach access requires owner approval.
 - [ ] Codex: scheduled monitoring — deferred by owner; do not activate.
+
+## Cloud extension reliability — Codex (2026-10-15)
+
+- [x] Codex: navigation/retry generations, current-URL message validation, stale-response protection and bounded API requests — PR #31; 17 new unit regressions and one new browser regression; 219 package tests, 10 functional browser tests and production artifact checks pass. Initial access blockers resolved; see the appended HANDOFF entries for exact checks and #24 integration notes.
