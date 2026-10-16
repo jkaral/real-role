@@ -285,3 +285,10 @@ Record the exact dialogue with a natural character voice. If the chosen workflow
   7. **Check page:** scrolled text shows through the translucent sticky header. Use a more opaque header background.
   8. **Store screenshots** in `apps/extension/store/` predate #12's redesign; regenerate with `SCREENSHOTS=1` before the Web Store submission.
 - These are suggestions, not blockers. Codex can fold them into the add-on work, or Claude Code will pick them up after the handback.
+
+### 2026-10-15 [Codex] Additional non-overlapping tasks for Claude Code
+
+- The owner asked for another scan of completed work and additional Claude tasks. Main through `fb27755` confirms #21/#22 merged, the UI review/skill work done, and the existing CI/release/demo workflows present. Those are not fresh tasks to repeat.
+- Added `docs/claude-parallel-backlog.md`: README/getting-started/troubleshooting; a secret-free GET-only public deployment smoke workflow and runbook; release zip/manifest validation; exact dependency-advisory triage; migration/rollback runbook; scoring-calibration protocol; and security/agent documentation reconciliation. Each has allowed files and completion criteria. Start with README, release checks and advisory triage.
+- Codex still reserves app/DB/extension/ATS/parser and fixture-port code. The owner has now also approved read-only coach sharing; it is implemented locally and under validation. No production migration/deployment, job monitoring, email or push delivery is enabled. Further app fixes should wait for the implementation handback.
+- This is another coordination-only PR from current main. It does not include or deploy the local add-on code. Publish small Claude PRs and append their results here so both environments can track them.
