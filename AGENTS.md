@@ -72,10 +72,11 @@ The Phase 1 stubs already have these shapes. Replace the bodies; keep the names 
 ## Security rules (see `SECURITY.md`)
 
 - API routes go through `handle()` (`apps/web/src/server/route.ts`): rate limit, `assertTrustedOrigin` (CSRF), ApiError envelope. Scope every user-data query to the session's user id.
-- Server-side fetches of user-supplied URLs only via `fetchPostingPage` (connect-time IP checks). Never add another server-side fetch of arbitrary URLs.
+- Server-side fetches of user-supplied URLs only via `fetchPostingPage` (connect-time IP checks). ATS lookups go only to the allow-listed Greenhouse, Lever and Ashby API hosts, with URLs built by the adapter. Never add another server-side fetch of arbitrary URLs.
 - Extension: validate every runtime message in `apps/extension/src/lib/messages.ts`; no `innerHTML`, `eval` or remote code; keep permissions, host patterns and the extension-page CSP as narrow as they are now.
-- Render model output and page-derived strings as text only. Never use `dangerouslySetInnerHTML`.
-- Never store description text, emails or avatars, and never link observations to users.
+- Render model output and page-derived strings as text only. Never use `dangerouslySetInnerHTML` (the one exception is the fixed `THEME_SCRIPT` constant in the root layout).
+- Never store description text, résumés or avatars, and never link observations to users. Email addresses are stored only for email sign-in. Every per-user table cascades on delete from its application or account.
+- Coach sharing is the only cross-account read: single-use hashed invitations, revocation re-checked on each read, and notes and preferences never shared. Don't add other cross-account access without the owner's approval.
 - Secrets live in Vercel or GitHub secrets only; `.env.example` holds placeholders.
 - PRs are reviewed by the Claude security-review workflow; address its comments or explain why they don't apply.
 
