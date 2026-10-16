@@ -26,13 +26,14 @@ jobs:
       - run: pnpm check
       - name: Build Chrome Web Store zip (production API)
         run: pnpm --filter @real-role/extension zip
-      - name: Check tag matches the extension version
-        run: |
-          version=$(node -p "require('./apps/extension/package.json').version")
-          case "$GITHUB_REF_NAME" in
-            "v$version"|"v$version"-*) ;;
-            *) echo "Tag $GITHUB_REF_NAME does not match extension version $version"; exit 1 ;;
-          esac
+      - name: Test the release verifier
+        run: node --test scripts/*.test.mjs
+      # Tag/version, production-only hosts, reviewed permissions and CSP, required files, no demo
+      # or fixture content, and no API path the deployed backend answers with 404 (backend first).
+      - name: Verify the zip
+        run: >
+          node scripts/verify-extension-release.mjs --tag "$GITHUB_REF_NAME" --check-backend
+          --checksum-out apps/extension/.output/SHA256SUMS
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -51,7 +52,10 @@ jobs:
 
           The extension reads only the page you're viewing and talks only to https://real-role.vercel.app.
           To update, unzip the new release over the same folder and click the reload icon on `chrome://extensions`.
+
+          To check the download, compare `sha256sum real-role-extension-*-chrome.zip` with `SHA256SUMS`.
           EOF
           prerelease=""
           case "$TAG" in *-*) prerelease="--prerelease" ;; esac
-          gh release create "$TAG" "$zip" --title "Real Role $TAG" --notes-file notes.md $prerelease
+          gh release create "$TAG" "$zip" apps/extension/.output/SHA256SUMS \
+            --title "Real Role $TAG" --notes-file notes.md $prerelease

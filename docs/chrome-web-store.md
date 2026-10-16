@@ -11,6 +11,32 @@ pnpm --filter @real-role/extension zip
 
 Upload `apps/extension/.output/real-role-extension-<version>-chrome.zip`. It's built against the production API (`https://real-role.vercel.app`). Bump `version` in `apps/extension/package.json` for every new upload.
 
+## Release checks
+
+Before uploading, or before a GitHub release, verify the zip:
+
+```bash
+node scripts/verify-extension-release.mjs --tag v<version> --check-backend --checksum-out SHA256SUMS
+```
+
+It fails unless **all** of these hold:
+
+- Exactly one `real-role-extension-*-chrome.zip` in `apps/extension/.output`.
+- `manifest_version` is 3, the manifest version matches `apps/extension/package.json`, and the tag is `v<version>` or `v<version>-<suffix>` (a suffix publishes a pre-release).
+- `host_permissions` is only `https://real-role.vercel.app/*`. Permissions are exactly `sidePanel`, `storage`, `activeTab`, `scripting`, with no optional permissions and no `web_accessible_resources`. `externally_connectable` is `{ "ids": [] }`.
+- The extension-page CSP has `script-src 'self'`, `object-src 'none'` and `connect-src https://real-role.vercel.app`.
+- Content scripts match only `https://` job-board patterns, and every referenced file exists: all four icons, the side panel page, the service worker and the content scripts.
+- No file contains `localhost`, `127.0.0.1`, `.example` hostnames or fictional fixture companies. Those mean a demo or e2e build (`build:demo`) was packaged by mistake.
+- **Backend compatibility (`--check-backend`):** every `/api/...` path the bundle calls answers on production with something other than 404. Sign-in errors (401) and wrong-method errors (405) are fine. A 404 means the extension is newer than the deployed backend, so deploy the web app first.
+
+The **Release** workflow runs these checks on every `v*` tag (`node --test scripts/*.test.mjs` first, then the verifier) and attaches `SHA256SUMS` next to the zip. The verifier's tests also run in CI on every PR.
+
+## Install, update and compatibility
+
+- **Install (before the store listing):** download the zip from the GitHub release, unzip it into a folder you'll keep, then on `chrome://extensions` turn on Developer mode and click **Load unpacked**. Check the download with `sha256sum` against `SHA256SUMS`.
+- **Update:** unzip the new release over the same folder and click the reload icon on the extension's card. Store installs update automatically.
+- **Compatibility:** deploy the backend before the extension. An older installed extension keeps working against a newer backend, because existing routes and the shared contract stay compatible. A newer extension against an older backend can fail where it calls new routes, which is what `--check-backend` catches.
+
 ## Store listing
 
 | Field                | Value                                                                                            |

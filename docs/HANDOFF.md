@@ -285,3 +285,68 @@ Record the exact dialogue with a natural character voice. If the chosen workflow
   7. **Check page:** scrolled text shows through the translucent sticky header. Use a more opaque header background.
   8. **Store screenshots** in `apps/extension/store/` predate #12's redesign; regenerate with `SCREENSHOTS=1` before the Web Store submission.
 - These are suggestions, not blockers. Codex can fold them into the add-on work, or Claude Code will pick them up after the handback.
+
+### 2026-10-15 [Codex] Additional non-overlapping tasks for Claude Code
+
+- The owner asked for another scan of completed work and additional Claude tasks. Main through `fb27755` confirms #21/#22 merged, the UI review/skill work done, and the existing CI/release/demo workflows present. Those are not fresh tasks to repeat.
+- Added `docs/claude-parallel-backlog.md`: README/getting-started/troubleshooting; a secret-free GET-only public deployment smoke workflow and runbook; release zip/manifest validation; exact dependency-advisory triage; migration/rollback runbook; scoring-calibration protocol; and security/agent documentation reconciliation. Each has allowed files and completion criteria. Start with README, release checks and advisory triage.
+- Codex still reserves app/DB/extension/ATS/parser and fixture-port code. The owner has now also approved read-only coach sharing; it is implemented locally and under validation. No production migration/deployment, job monitoring, email or push delivery is enabled. Further app fixes should wait for the implementation handback.
+- This is another coordination-only PR from current main. It does not include or deploy the local add-on code. Publish small Claude PRs and append their results here so both environments can track them.
+
+### 2026-10-15 [Codex] Add-ons ready for review: PR #24
+
+- Implementation is pushed at https://github.com/jkaral/real-role/pull/24 (`codex/prioritized-addons`), based on main after #22. This supersedes the earlier “implementation still local” note. It contains add-ons 2–10, including the owner-approved read-only coach workspace; monitoring remains deferred.
+- Local verification completed: pnpm check (21 tasks; 244 tests accounted for, some unchanged packages cached), production Next build, production extension zip, all 12 functional browser tests, and an upgrade rehearsal preserving pre-existing application notes with labelled history baselines. Coach service tests cover cross-account access, expiry/replay, concurrent acceptance, revocation and deletion. The production manifest has only the existing API host and permissions. Desktop/mobile shortlist screenshots were inspected.
+- No production migration/deployment/release tag/store submission was performed. Review/apply the three additive migrations with the compatible backend before distributing the extension. Four new tables store approved preferences/facts/history and coach shares; no descriptions or résumés are stored. Email/push and scheduled job monitoring are not enabled.
+- For Claude: review #24, especially schema/trigger upgrades, privacy copy, ownership scoping, invitation revocation, CSV safety and old-client compatibility. The independent work in docs/claude-parallel-backlog.md remains available. App UI-polish changes from #22 should wait until #24 is merged or be explicitly coordinated against that branch. Do not replace its app/schema files with the older main versions.
+- GitHub CI/review status is visible on #24; the code is ready for review, not claimed as live production. The owner is being notified in this chat.
+
+### 2026-10-16 [Claude Code] #23 merged; #24 reviewed; backlog task 1 (README and user docs)
+
+- Merged #23 (Codex's backlog for Claude). Posted a read-only review on #24 ([comment](https://github.com/jkaral/real-role/pull/24#issuecomment-6205258400)): no blocking issues. Non-blocking: (1) the new extension's Save & track and prior-save lookup call `/api/shortlist`, which today's production backend returns 404 for, so deploy the backend before shipping an extension built from #24 (optionally fall back to `API_ROUTES.applications` on 404); (2) the stage-event trigger exists only in SQL migration 0002, so regenerating or squashing migrations must carry it by hand.
+- Backlog task 1: `README.md` rewritten (Mermaid architecture, packages, quick start, commands, install, demo, local vs cloud workspaces, honest status), plus new `docs/getting-started.md` and `docs/troubleshooting.md`. The quick start was run in this session: migrations apply on PGlite and `/`, `/check`, `/signin`, `/how-it-works` and `/extension` return 200, `/dashboard` redirects to sign-in. No app source changed.
+- **For the app owner (after the handback):** `apps/web/scripts/migrate.ts` doesn't load `.env.local`, so `pnpm --filter @real-role/web db:migrate` fails with "DATABASE_URL is not set" unless the variable is passed inline. The docs say so; a small fix would load `.env.local` for local runs (e.g. Next's `loadEnvConfig`).
+
+### 2026-10-16 [Claude Code] Backlog task 3: release artifact checks
+
+- #25 (task 1: README, getting started, troubleshooting) merged.
+- New `scripts/verify-extension-release.mjs` (Node built-ins only) checks the release zip: exactly one zip; MV3; manifest version = `apps/extension/package.json` = tag; only the production API host; the reviewed four permissions; CSP `script-src 'self'`, `object-src 'none'`, `connect-src` = API; `externally_connectable: { ids: [] }`; no `web_accessible_resources`; all icons/panel/worker/content files present; and no `localhost`, `127.0.0.1`, `.example` hosts or fixture company names in any file. `--check-backend` fails if production answers 404 to any `/api/...` path the bundle calls, which enforces backend-first deploys (the #24 `/api/shortlist` case). It writes `SHA256SUMS`.
+- The Release workflow now runs the verifier's tests, then the verifier, and attaches `SHA256SUMS`; CI runs the tests on every PR. Verified locally: the production zip passes (and rebuilds byte-identical), a real `build:demo` zip fails with nine problems, and a wrong tag fails. No tag pushed, no version bump, nothing in `apps/extension/**` changed.
+
+### 2026-10-16 [Claude Code] Backlog task 4: dependency advisory triage (needs Codex's OK on the lockfile)
+
+- #26 (task 3: release artifact checks) merged.
+- `docs/dependency-triage.md`: `pnpm audit --prod` is clean. The one moderate advisory (GHSA-67mh-4wv8-2f99) is a single dev-only copy of `esbuild` 0.18.20, reached via `apps/web` → `drizzle-kit` → `@esbuild-kit/esm-loader` → `@esbuild-kit/core-utils`. That package only calls `transform`/`transformSync`, never esbuild's dev server (the advisory's subject), so nothing is exploitable. Upgrading `drizzle-kit` doesn't help: 0.31.11 is the latest stable.
+- **Proposed fix, rehearsed but not applied:** `overrides: "@esbuild-kit/core-utils>esbuild": "^0.25.0"` in `pnpm-workspace.yaml`. In a throwaway worktree it cleared `pnpm audit`, `drizzle-kit generate` still worked, `pnpm check` passed 21/21, and the lockfile dropped by 229 lines. **For Codex:** it regenerates `pnpm-lock.yaml`, which #24 also changes, so I'll apply it on a fresh branch after #24 merges unless you'd rather fold it into #24.
+
+### 2026-10-16 [Claude Code] Backlog task 2: deployment smoke test and runbook
+
+- #27 (task 4: dependency triage) merged. The esbuild override is still waiting on #24 (lockfile).
+- New `scripts/deployment-smoke.mjs` + manual `Deployment smoke` workflow: GET-only checks of the production site, with no secrets, sign-in, scoring or writes. The destination is fixed to `https://real-role.vercel.app` (`--origin` accepts loopback only). It checks status, HTML marker or redirect target for `/`, `/check`, `/how-it-works`, `/privacy`, `/signin`, `/extension`, `/dashboard` (→ sign-in) and `/api/applications` (401). `--with-addons` adds #24's `/shortlist` and `/insights` (→ sign-in), `/coach` (200) and `/api/shortlist` (401).
+- Verified: a local production build of `main` passes 8/8, and a local build of #24 passes 12/12 with `--with-addons`. Stub-server tests cover the old-deployment failure (`/extension` 404), a protected page that stops redirecting, and origin restriction. The current production deployment is expected to fail `/extension` until it's redeployed.
+- `docs/deployment-runbook.md`: owner steps to connect the existing Vercel project to `jkaral/real-role` (production branch `main`, Root Directory `apps/web`, Build Command `pnpm build:vercel`, env checks), plus the migration-aware deploy order and how to run the smoke test. Nothing was deployed and no secrets were touched.
+
+### 2026-10-16 [Claude Code] Backlog task 5: database operations runbook
+
+- #28 (task 2: deployment smoke test and runbook) merged.
+- `docs/database-operations.md`, written from #24's migrations (read-only) and covering:
+  - how migrations run (only in the production build)
+  - migration order and what each one does to existing data (only `0002` inserts labelled baselines)
+  - backup and preview-branch steps before a production migration
+  - six production-safe verification queries (structure and counts only)
+  - expected cascade foreign keys
+  - a rollback table that says what's reversible and what a restore loses
+- Rehearsed on PGlite with #24's files. The fresh and upgrade paths match: 13 tables, every foreign key cascades, trigger and function present, invite-hash unique constraint present. The upgrade with fictional data produced 3 baselines and 0 orphans; a status change logged one event and a notes edit logged none, and notes were kept. Deleting a user removed their applications, events, preferences, facts and shares, and left shared postings in place.
+- **For Codex:** the stage trigger exists only in SQL (`0002`), not in `schema.ts`. The runbook warns that regenerating or squashing migrations must carry it by hand. No migration or DB-test files were changed.
+
+### 2026-10-16 [Claude Code] Backlog task 6: scoring validation plan
+
+- #29 (task 5: database operations runbook) merged.
+- `docs/scoring-validation.md` covers:
+  - what the score does and doesn't claim (a ranking, not a probability or a prediction of hiring outcomes)
+  - separate constructs for listing presence, stale dates, repeat observations, specificity and hiring outcomes
+  - a permitted corpus: fixtures, bounded official ATS samples, anonymous sightings, and opt-in outcome reports (not built; needs owner approval)
+  - label definitions, where "unknown" is never imputed as negative
+  - metrics reported per board: match precision, false-absence rate, unknown-evidence rate, AUC, band precision, confidence separation
+  - sample-size floors, calibration criteria (only if probabilities are ever advertised), and a repeatable protocol
+- New Claude-owned `packages/scoring/test/evaluation.test.ts`: 6 invariants the protocol relies on. An older posting, a longer or more frequent repost history, or an absence from the careers page never scores higher; missing evidence never raises confidence; output is deterministic. All pass (scoring: 80 tests). No weights, curves, source or `test/edge/**` changed.
