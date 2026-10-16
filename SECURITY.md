@@ -58,7 +58,7 @@ Please report security issues privately through GitHub: **Security → Report a 
 - **Least-privilege workflows:** the `GITHUB_TOKEN` is read-only by default.
 - **Automated security review:** every same-repo PR is reviewed by [claude-code-security-review](https://github.com/anthropics/claude-code-security-review), pinned to a commit and steered by `.github/security-review/`.
 - **Outside contributors:** workflows on their PRs wait for maintainer approval.
-- **Dependencies:** `pnpm audit --prod` is clean (checked 2026-10-16). The full audit's one dev-only advisory is triaged in [`docs/dependency-triage.md`](docs/dependency-triage.md).
+- **Dependencies:** `pnpm audit` and `pnpm audit --prod` are clean (checked 2026-10-16). A pnpm override pins a patched esbuild under `drizzle-kit`'s loader; see [`docs/dependency-triage.md`](docs/dependency-triage.md).
 - **Release artifacts:** `scripts/verify-extension-release.mjs` checks the extension zip's permissions, CSP and hosts before every release.
 
 ## Known limitations
