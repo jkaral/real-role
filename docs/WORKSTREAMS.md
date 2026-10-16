@@ -93,4 +93,4 @@ Checkbox board of every task. Each agent updates **only its own rows**, in the P
 
 ## Cloud extension reliability — Codex (2026-10-15)
 
-- [ ] Codex: navigation/retry generations, background stale-response protection and bounded API requests — implemented on `codex/extension-reliability`; 14 regression tests added, 216 package tests and production artifact checks pass; full extension browser validation and PR creation blocked by environment access. See the appended HANDOFF entry for exact checks and #24 integration notes.
+- [x] Codex: navigation/retry generations, current-URL message validation, stale-response protection and bounded API requests — PR #31; 17 new unit regressions and one new browser regression; 219 package tests, 10 functional browser tests and production artifact checks pass. Initial access blockers resolved; see the appended HANDOFF entries for exact checks and #24 integration notes.

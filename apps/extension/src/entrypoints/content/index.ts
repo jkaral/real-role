@@ -127,7 +127,11 @@ export default defineContentScript({
       if (root) renderBadge(root, "loading");
       try {
         const update = (await send({ type: "posting-found", posting })) as BadgeUpdate | undefined;
-        if (root && update && isCurrent()) renderBadge(root, update);
+        if (root && isCurrent())
+          renderBadge(
+            root,
+            update ?? { ok: false, message: "Couldn't score this posting. Try checking again." },
+          );
       } catch {
         if (root && isCurrent())
           renderBadge(root, {

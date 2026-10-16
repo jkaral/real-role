@@ -53,6 +53,37 @@ describe("validateMessage", () => {
     ).toBeNull();
   });
 
+  it("uses the browser's current top-frame URL for same-origin SPA navigation", () => {
+    const current = "https://jobs.lever.co/bramblecrest/43";
+    const sender = { ...contentScript, tab: { id: 7, url: current } };
+    expect(
+      validateMessage(
+        { type: "posting-found", posting: { ...posting, sourceUrl: current } },
+        sender,
+        ID,
+      ),
+    ).toMatchObject({ type: "posting-found", tabId: 7 });
+    expect(validateMessage({ type: "posting-found", posting }, sender, ID)).toBeNull();
+    expect(validateMessage({ type: "no-posting" }, sender, ID)).toEqual({
+      type: "no-posting",
+      tabId: 7,
+      url: current,
+    });
+  });
+
+  it("rejects an old document claiming a tab that navigated to a different origin", () => {
+    const current = "https://careers.example/role";
+    const sender = { ...contentScript, tab: { id: 7, url: current } };
+    expect(
+      validateMessage(
+        { type: "posting-found", posting: { ...posting, sourceUrl: current } },
+        sender,
+        ID,
+      ),
+    ).toBeNull();
+    expect(validateMessage({ type: "no-posting" }, sender, ID)).toBeNull();
+  });
+
   it("ignores subframes", () => {
     expect(
       validateMessage({ type: "open-panel" }, { ...contentScript, frameId: 3 }, ID),

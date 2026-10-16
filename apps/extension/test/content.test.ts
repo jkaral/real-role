@@ -124,6 +124,15 @@ describe("content navigation", () => {
     expect(mocks.send).toHaveBeenCalledTimes(1);
   });
 
+  it("shows a recoverable error when the worker does not return a score", async () => {
+    mocks.parse.mockReturnValue(posting);
+    mocks.send.mockResolvedValue(undefined);
+    await content.main(ctx);
+    const badge = await mocks.mount.mock.results[0]!.value;
+    expect(badge.mounted.textContent).toContain("!");
+    expect(badge.mounted.textContent).not.toContain("…");
+  });
+
   it("lets same-URL retries supersede a pending score without repainting the new badge", async () => {
     mocks.parse.mockReturnValue(posting);
     let finish!: (value: unknown) => void;
