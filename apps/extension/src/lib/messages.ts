@@ -46,13 +46,21 @@ export function validateMessage(
 
   const tabId = sender.tab?.id;
   if (tabId === undefined || sender.frameId !== 0 || !sender.url) return null;
+  // Chrome keeps sender.url at document creation after pushState. The browser-supplied
+  // top-frame tab URL tracks SPA navigation; never accept a different document origin.
+  const pageUrl = sender.tab?.url ?? sender.url;
+  try {
+    if (new URL(pageUrl).origin !== new URL(sender.url).origin) return null;
+  } catch {
+    return null;
+  }
   switch (message.type) {
     case "posting-found":
-      return message.posting.sourceUrl === sender.url
+      return message.posting.sourceUrl === pageUrl
         ? { type: "posting-found", tabId, posting: message.posting }
         : null;
     case "no-posting":
-      return { type: "no-posting", tabId, url: sender.url };
+      return { type: "no-posting", tabId, url: pageUrl };
     case "open-panel":
       return { type: "open-panel", tabId };
     case "check-tab":

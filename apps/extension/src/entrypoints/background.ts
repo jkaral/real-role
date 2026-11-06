@@ -56,18 +56,26 @@ async function checkTab(tabId: number): Promise<void> {
   }
 }
 
+// A retry or navigation supersedes older requests, including retries at the same URL.
+const requests = new Map<number, symbol>();
+
 async function handlePosting(tabId: number, posting: ParsedPosting): Promise<BadgeUpdate> {
   const url = posting.sourceUrl;
+  const request = Symbol();
+  requests.set(tabId, request);
+  const isCurrent = () => requests.get(tabId) === request;
   await setState(tabId, { status: "loading", url });
   try {
     const data = await scorePosting(posting);
-    await setState(tabId, { status: "ready", url, data });
+    if (isCurrent()) await setState(tabId, { status: "ready", url, data });
     return { ok: true, score: data.result.score, band: data.result.band };
   } catch (error) {
     const message =
       error instanceof ApiFailure ? error.message : "Something went wrong scoring this posting.";
-    await setState(tabId, { status: "error", url, message });
+    if (isCurrent()) await setState(tabId, { status: "error", url, message });
     return { ok: false, message };
+  } finally {
+    if (isCurrent()) requests.delete(tabId);
   }
 }
 
@@ -81,6 +89,7 @@ export default defineBackground(() => {
         void handlePosting(message.tabId, message.posting).then(sendResponse);
         return true; // async response
       case "no-posting":
+        requests.delete(message.tabId);
         void setState(message.tabId, { status: "not-a-posting", url: message.url });
         return false;
       case "open-panel":
@@ -104,9 +113,15 @@ export default defineBackground(() => {
 
   // A new page in the tab invalidates what we knew; the content script reports again.
   browser.tabs.onUpdated.addListener((tabId, change) => {
-    if (change.url) void setState(tabId, undefined);
+    if (change.url) {
+      requests.delete(tabId);
+      void setState(tabId, undefined);
+    }
   });
-  browser.tabs.onRemoved.addListener((tabId) => void browser.storage.session.remove(tabKey(tabId)));
+  browser.tabs.onRemoved.addListener((tabId) => {
+    requests.delete(tabId);
+    void browser.storage.session.remove(tabKey(tabId));
+  });
 
   // Let the side panel (an extension page) read session storage.
   void browser.storage.session.setAccessLevel?.({ accessLevel: "TRUSTED_CONTEXTS" });

@@ -86,3 +86,51 @@ test("badge, side panel, save & track, dashboard", async () => {
   await expect(page.getByTestId(TEST_IDS.web.dashboard)).toBeVisible();
   await expect(page.getByTestId(dashboardRowTestId(saved!.id))).toContainText("Platform Engineer");
 });
+
+test("SPA navigation during the initial delayed parse checks the new posting", async () => {
+  const page = await context.newPage();
+  const loadingUrl = `${FIXTURES_URL}/jobs/loading`;
+  await page.route(loadingUrl, (route) =>
+    route.fulfill({
+      contentType: "text/html",
+      body: "<!doctype html><html><body><p>Loading the selected role…</p></body></html>",
+    }),
+  );
+  await page.goto(loadingUrl);
+  const tabId = await tabIdFor(loadingUrl);
+  // Wait for injection, while the initial posting parser is still waiting for content.
+  await expect
+    .poll(() =>
+      worker.evaluate(async (id) => {
+        const results = await chrome.scripting.executeScript({
+          target: { tabId: id },
+          func: () => Boolean((window as Window & { __realRoleLoaded?: boolean }).__realRoleLoaded),
+        });
+        return results[0]?.result;
+      }, tabId),
+    )
+    .toBe(true);
+
+  await page.evaluate(async (url) => {
+    const html = await (await fetch(url)).text();
+    const next = new DOMParser().parseFromString(html, "text/html");
+    document.body.replaceChildren(...Array.from(next.body.childNodes));
+    document.head.querySelectorAll('script[type="application/ld+json"]').forEach((s) => s.remove());
+    next.head
+      .querySelectorAll('script[type="application/ld+json"]')
+      .forEach((s) => document.head.append(s));
+    history.pushState(null, "", url);
+  }, `${FIXTURES_URL}/jobs/vague`);
+
+  await expect(page.getByTestId(TEST_IDS.extension.badgeScore)).toHaveText(/^\d{1,3}$/, {
+    timeout: 30_000,
+  });
+  const panel = await context.newPage();
+  await panel.goto(`chrome-extension://${extensionId}/sidepanel.html?tabId=${tabId}`);
+  await expect(panel.getByTestId(TEST_IDS.extension.band)).toHaveText(/medium freshness/i);
+  await expect(panel.getByTestId(TEST_IDS.extension.score)).toHaveText(
+    await page.getByTestId(TEST_IDS.extension.badgeScore).innerText(),
+  );
+  await panel.close();
+  await page.close();
+});
