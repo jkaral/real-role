@@ -54,7 +54,8 @@ function readTheme(): Theme {
 /** Applies a stored theme before first paint, so there's no flash. Inlined in <head>. */
 export const THEME_SCRIPT = `try{var t=localStorage.getItem("rr-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
 
-export function ThemeToggle() {
+/** The header shows it from `sm` up; the footer shows a second one on phones. */
+export function ThemeToggle({ className = "hidden sm:inline-flex" }: { className?: string }) {
   const [theme, setTheme] = useState<Theme>("system");
   useEffect(() => setTheme(readTheme()), []);
 
@@ -77,7 +78,7 @@ export function ThemeToggle() {
       onClick={cycle}
       aria-label={`${LABEL[theme]}. Change theme`}
       title={LABEL[theme]}
-      className="hidden rounded-md p-2 text-ink-soft hover:bg-paper hover:text-ink sm:inline-flex"
+      className={`rounded-md p-2 text-ink-soft hover:bg-paper hover:text-ink ${className}`}
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         {theme === "dark" ? (

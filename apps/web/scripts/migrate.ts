@@ -11,6 +11,16 @@ if (process.argv.includes("--production-only") && process.env.VERCEL_ENV !== "pr
   process.exit(0);
 }
 
+// Locally, read apps/web/.env.local like `next dev` does. Variables already set (CI, Vercel or the
+// command line) win, and Vercel builds never read a file.
+if (!process.env.VERCEL) {
+  try {
+    process.loadEnvFile(fileURLToPath(new URL("../.env.local", import.meta.url)));
+  } catch {
+    /* no .env.local: rely on the environment */
+  }
+}
+
 const url = process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL;
 if (!url) {
   console.error("DATABASE_URL is not set.");

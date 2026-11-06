@@ -42,6 +42,21 @@ export function titleFromText(text: string): string | undefined {
   return line && line.length <= 80 && !/[.!?]$/.test(line) ? line : undefined;
 }
 
+const EMPLOYER_PHRASE =
+  /(?:^|[.!?]\s+|\n)((?:[A-Z][\w&'.-]*)(?:\s+(?:[A-Z][\w&'.-]*|&|and|of)){0,4})\s+(?:is|are)\s+(?:now\s+)?(?:hiring|seeking|looking for|recruiting)\b/;
+const NOT_EMPLOYERS =
+  /^(?:we|our|our team|the team|this team|my team|my client|our client|they|the company)$/i;
+
+/** "Bramblecrest Analytics is hiring a …" → "Bramblecrest Analytics" (capitalised words only). */
+export function companyFromText(text: string): string | undefined {
+  const name = text
+    .match(EMPLOYER_PHRASE)?.[1]
+    ?.replace(/['’]s$/, "")
+    .trim();
+  if (!name || name.length < 2 || name.length > 80 || NOT_EMPLOYERS.test(name)) return undefined;
+  return name;
+}
+
 /** Build a posting from text pasted on the check page. */
 export function postingFromText(
   input: { text: string; title?: string | undefined; company?: string | undefined },
@@ -49,7 +64,7 @@ export function postingFromText(
 ): ParsedPosting {
   const text = input.text.trim();
   const title = input.title?.trim() || titleFromText(text) || "Untitled role";
-  const company = input.company?.trim() || UNKNOWN_EMPLOYER;
+  const company = input.company?.trim() || companyFromText(text) || UNKNOWN_EMPLOYER;
   const postedAt = postedAtFromText(text, now);
   const parsed = ParsedPostingSchema.safeParse({
     title: title.slice(0, 300),

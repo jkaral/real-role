@@ -36,6 +36,39 @@ export default function PrivacyPage() {
         </li>
       </ul>
 
+      <h2>Your shortlist and analytics</h2>
+      <p>
+        We keep application status-change events for your personal analytics until you delete the
+        tracked application or account. Events contain only the application reference, old/new
+        status and timestamp; they do not contain your notes or messages. Older applications begin
+        with a baseline, not reconstructed history. No analytics data is shared with other users or
+        advertisers.
+      </p>
+      <p>
+        When you save a checked opening, we also keep its disclosed salary, location, workplace and
+        employment type for your personal shortlist. Optional job preferences are saved to your
+        account across devices until you clear them. Deleting a tracked application removes its
+        saved job facts; deleting your account removes preferences and facts. Missing details are
+        left unknown. Explicitly disclosed minimum experience requirements may also be saved; we do
+        not infer them from job titles. We do not store job descriptions or résumés for this
+        feature.
+      </p>
+      <h2>Optional coach sharing</h2>
+      <p>
+        You can explicitly share one tracked opening read-only with a coach. The invitation contains
+        a random secret; only its hash is stored, and pending invitations expire after seven days. A
+        recipient must sign in and accept. Shared details include your display name, the opening’s
+        title/company/link/status, freshness at save and disclosed job facts. Notes, preferences,
+        drafts and other applications are excluded. The owner can revoke access; deletion of either
+        account or the tracked application ends access. Revocation cannot erase information the
+        recipient already copied. Invitation records are retained until a linked account/application
+        is deleted.
+      </p>
+      <p>
+        A pending invitation secret may be kept temporarily in your browser tab’s session storage to
+        complete sign-in. It is removed from that storage when you return; the server stores only
+        its hash.
+      </p>
       <h2>What we don&apos;t collect</h2>
       <ul>
         <li>

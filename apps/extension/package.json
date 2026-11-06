@@ -5,6 +5,7 @@
   "description": "Real Role Chrome extension (MV3): badge, side panel, save & track (owner: Claude Code)",
   "type": "module",
   "dependencies": {
+    "@real-role/ats": "workspace:*",
     "@real-role/parsers": "workspace:*",
     "@real-role/scoring": "workspace:*",
     "@real-role/shared": "workspace:*",

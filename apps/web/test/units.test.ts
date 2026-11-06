@@ -4,7 +4,12 @@ import { careersCandidates } from "../src/server/careers";
 import { assertPublicUrl, isPrivateAddress } from "../src/server/fetch-page";
 import { HttpError, corsHeaders, readBody } from "../src/server/http";
 import { windowStart } from "../src/server/rate-limit";
-import { postedAtFromText, postingFromText, titleFromText } from "../src/server/text-posting";
+import {
+  companyFromText,
+  postedAtFromText,
+  postingFromText,
+  titleFromText,
+} from "../src/server/text-posting";
 
 const NOW = new Date("2026-10-15T12:00:00.000Z");
 
@@ -46,6 +51,37 @@ describe("pasted text", () => {
     expect(
       titleFromText("We are looking for a motivated self-starter to join our dynamic team today."),
     ).toBeUndefined();
+  });
+});
+
+describe("pasted text: employer", () => {
+  it("reads the employer from '<Company> is hiring'", () => {
+    expect(
+      companyFromText(
+        "Bramblecrest Analytics is hiring a Platform Engineer on the Infrastructure team.",
+      ),
+    ).toBe("Bramblecrest Analytics");
+    expect(companyFromText("About us. Northwind Lumen is now recruiting analysts.")).toBe(
+      "Northwind Lumen",
+    );
+    expect(companyFromText("Mapleglass Systems are looking for an Operations Associate.")).toBe(
+      "Mapleglass Systems",
+    );
+  });
+
+  it("ignores pronouns and text without an employer", () => {
+    expect(companyFromText("We are hiring a Senior Data Analyst.")).toBeUndefined();
+    expect(companyFromText("Our team is looking for a designer.")).toBeUndefined();
+    expect(companyFromText("Seeking a motivated self-starter.")).toBeUndefined();
+  });
+
+  it("uses it when no company is given, and an explicit company wins", () => {
+    const text =
+      "Bramblecrest Analytics is hiring a Platform Engineer. Salary $140,000. Posted 3 days ago.";
+    expect(postingFromText({ text }, NOW).company).toBe("Bramblecrest Analytics");
+    expect(postingFromText({ text, company: "Harrowgate Partners" }, NOW).company).toBe(
+      "Harrowgate Partners",
+    );
   });
 });
 

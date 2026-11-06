@@ -22,7 +22,8 @@ export default async function DashboardPage() {
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Your applications</h1>
           <p className="mt-2 text-ink-soft">
-            Track where you applied and when to follow up. Press / to search.
+            Track where you applied and when to follow up.
+            <span className="hidden pointer-fine:inline"> Press / to search.</span>
           </p>
         </div>
         <Link
@@ -32,6 +33,17 @@ export default async function DashboardPage() {
           Check a posting
         </Link>
       </div>
+      <nav aria-label="Application tools" className="mt-6 flex flex-wrap gap-4">
+        <Link href="/coach" className="font-medium text-brand underline">
+          Coach workspace
+        </Link>
+        <Link href="/insights" className="font-medium text-brand underline">
+          View search insights
+        </Link>
+        <Link href="/shortlist" className="font-medium text-brand underline">
+          Open your personal shortlist
+        </Link>
+      </nav>
       <ApplicationsTable initial={applications} />
     </div>
   );

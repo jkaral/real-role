@@ -184,9 +184,17 @@ export default function HomePage() {
                 href="/extension"
                 className="inline-flex items-center gap-2 rounded-lg bg-brand px-5 py-3 font-medium text-on-brand shadow-card hover:bg-brand-strong"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-                  <circle cx="12" cy="12" r="10" fill="currentColor" opacity=".25" />
-                  <circle cx="12" cy="12" r="4.2" fill="currentColor" />
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.25"
+                  strokeLinecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14M5 12h14" />
                 </svg>
                 Add to Chrome, free
               </Link>

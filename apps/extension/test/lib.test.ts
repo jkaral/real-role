@@ -126,13 +126,14 @@ describe("findTracked", () => {
 
   it("returns the user's application for this posting", async () => {
     const seen: { init?: RequestInit } = {};
-    const found = await findTracked("p1", fakeFetch(200, { applications: [app] }, seen));
+    const found = await findTracked("p1", fakeFetch(200, { application: app }, seen));
     expect(found?.id).toBe("a1");
     expect(seen.init?.credentials).toBe("include");
   });
 
   it("treats other postings, signed-out and network errors as not tracked", async () => {
-    expect(await findTracked("p2", fakeFetch(200, { applications: [app] }))).toBeNull();
+    expect(await findTracked("p2", fakeFetch(200, { application: app }))).toBeNull();
+    expect(await findTracked("p1", fakeFetch(200, { application: null }))).toBeNull();
     expect(await findTracked("p1", fakeFetch(401, { error: {} }))).toBeNull();
     const offline = (async () => {
       throw new TypeError("offline");

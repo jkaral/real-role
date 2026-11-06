@@ -1,11 +1,14 @@
 Project context: Real Role scores job postings. Surfaces: a Next.js web app + API on Vercel (apps/web), a Chrome MV3 extension (apps/extension), shared packages. Pay particular attention to:
 
 - SSRF in apps/web/src/server/fetch-page.ts (check page URL mode). The server must only fetch the single public http(s) page a user submitted. Every connection's IP must be validated at connect time (DNS rebinding), redirects re-validated, size and time capped.
-- Authorization (IDOR) on /api/applications and /api/applications/[id]: every query must be scoped to the signed-in user's id.
+- Authorization (IDOR) on /api/applications, /api/applications/[id], /api/applications/import, /api/shortlist, /api/job-preferences and /api/coach-shares: every query must be scoped to the signed-in user's id. The only cross-account read is coach sharing (apps/web/src/server/coach.ts).
+- Coach sharing: invitations must stay single-use (accept only where recipient_id IS NULL, not revoked, not expired), store only the token hash, exclude the owner, and every recipient read must re-check revoked_at. Recipients must never receive notes, preferences or other applications, and must have no write path.
+- CSV (apps/web/src/lib/portability.ts): export must escape cells starting with = + - @ (after whitespace); import must stay validated, capped and user-scoped.
+- Employer-source lookup (packages/ats/src/adapters.ts, apps/web/src/app/api/employer-source): board URLs must resolve only through the exact ATS hostname allow-list and token pattern; no user-controlled host or path may reach fetch.
 - CSRF: state-changing API routes must go through assertTrustedOrigin (apps/web/src/server/http.ts) via handle() in apps/web/src/server/route.ts.
 - The local-only demo sign-in (apps/web/src/app/api/dev/demo-session, apps/web/src/server/demo-auth.ts) must never be reachable on Vercel, in any environment.
 - The PGlite database (DATABASE_URL=pglite:...) must never be usable on Vercel production.
 - Chrome extension: messages to the background worker must be validated (apps/extension/src/lib/messages.ts). Content scripts are untrusted; no innerHTML or eval; host permissions and content-script matches must stay narrow (no <all_urls>); extension pages keep an explicit CSP.
-- Data minimization (product rule): never store posting description text, user emails or avatars, or link anonymous observations to user ids.
+- Data minimization (product rule): never store posting description text, résumés or avatars, or link anonymous observations to user ids. Email addresses are stored only for email sign-in. New per-user tables must cascade-delete with their application or account.
 - Untrusted posting text reaches the Claude API (apps/web/src/server/rubric.ts). Model output must be schema-validated and must never be rendered as HTML.
 - Secrets: nothing in the repo; .env.example has placeholders only.

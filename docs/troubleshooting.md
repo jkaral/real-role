@@ -58,7 +58,7 @@ Real Role limits requests per client per minute: 30 score checks, 10 link checks
 
 ### `db:migrate` says "DATABASE_URL is not set."
 
-The migration script doesn't load `apps/web/.env.local`. Pass the URL inline: `DATABASE_URL=pglite:./.pglite-dev pnpm --filter @real-role/web db:migrate`.
+The script reads `apps/web/.env.local` and the shell environment. Check that `.env.local` exists in `apps/web` (not the repo root) and sets `DATABASE_URL`, or pass it inline: `DATABASE_URL=pglite:./.pglite-dev pnpm --filter @real-role/web db:migrate`.
 
 ### E2E fails to start, or serves an old build
 

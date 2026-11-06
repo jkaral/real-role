@@ -1,4 +1,5 @@
 import {
+  boolean,
   date,
   index,
   integer,
@@ -9,9 +10,11 @@ import {
   timestamp,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 import type { AdapterAccountType } from "next-auth/adapters";
 import type { RubricResult } from "@real-role/scoring";
 import type { ApplicationStatus, Confidence, JobSource } from "@real-role/shared";
+import type { JobFacts, JobPreferences } from "../lib/job-preferences";
 
 const id = () =>
   text("id")
@@ -133,6 +136,59 @@ export const trackedApplications = pgTable(
 );
 
 // ---------- Caches and rate limits ----------
+
+export const jobPreferences = pgTable("job_preferences", {
+  userId: text("user_id")
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  values: jsonb("values").$type<JobPreferences>().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const trackedJobFacts = pgTable("tracked_job_facts", {
+  applicationId: text("application_id")
+    .primaryKey()
+    .references(() => trackedApplications.id, { onDelete: "cascade" }),
+  values: jsonb("values").$type<JobFacts>().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const applicationStageEvents = pgTable(
+  "application_stage_events",
+  {
+    id: text("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()::text`),
+    applicationId: text("application_id")
+      .notNull()
+      .references(() => trackedApplications.id, { onDelete: "cascade" }),
+    fromStatus: text("from_status").$type<ApplicationStatus>(),
+    toStatus: text("to_status").$type<ApplicationStatus>().notNull(),
+    changedAt: timestamp("changed_at", { withTimezone: true }).notNull(),
+    baseline: boolean("baseline").notNull().default(false),
+  },
+  (t) => [index("application_stage_events_app_time_idx").on(t.applicationId, t.changedAt)],
+);
+
+export const coachShares = pgTable(
+  "coach_shares",
+  {
+    id: id(),
+    applicationId: text("application_id")
+      .notNull()
+      .references(() => trackedApplications.id, { onDelete: "cascade" }),
+    inviteHash: text("invite_hash").notNull().unique(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    recipientId: text("recipient_id").references(() => users.id, { onDelete: "cascade" }),
+    acceptedAt: timestamp("accepted_at", { withTimezone: true }),
+    revokedAt: timestamp("revoked_at", { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    index("coach_shares_app_idx").on(t.applicationId),
+    index("coach_shares_recipient_idx").on(t.recipientId),
+  ],
+);
 
 /** LLM rubric results keyed by rubric version + fingerprint (A3: cache by fingerprint). */
 export const rubricCache = pgTable("rubric_cache", {

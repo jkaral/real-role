@@ -19,10 +19,8 @@ await writeFile("output/captions.srt", srt());
 for (const scenario of mode === "assemble" ? [] : scenarios(now))
   await writeFile(`output/fixtures/${scenario.slug}.html`, fixtureHtml(scenario));
 if (mode === "serve") {
-  await startFixtureServer(now);
-  console.log(
-    "Fictional fixture pages: http://127.0.0.1:4173/jobs/fresh (also /reposted and /vague)",
-  );
+  const fixtures = await startFixtureServer(now, Number(process.env.RR_E2E_FIXTURE_PORT ?? "4173"));
+  console.log(`Fictional fixture pages: ${fixtures.origin}/jobs/fresh (also /reposted and /vague)`);
 } else if (mode === "prepare") {
   console.log(
     "Prepared three fictional pages, observation seed manifest and timed captions in demo/output.",

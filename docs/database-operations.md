@@ -6,7 +6,7 @@ How Real Role's Postgres schema changes are applied, checked and (where possible
 
 - Migrations live in `apps/web/drizzle/` and are generated with `pnpm --filter @real-role/web db:generate` (drizzle-kit). Drizzle records applied migrations in `drizzle.__drizzle_migrations` and applies each file once, in journal order.
 - **Production:** the Vercel build command `build:vercel` runs `scripts/migrate.ts --production-only` before `next build`, but only when `VERCEL_ENV=production`. Preview deployments never migrate. The script prefers `DATABASE_URL_UNPOOLED`.
-- **Locally:** `DATABASE_URL=… pnpm --filter @real-role/web db:migrate` (the script doesn't read `.env.local`).
+- **Locally:** `pnpm --filter @real-role/web db:migrate`. It reads `apps/web/.env.local`; a `DATABASE_URL` set in the shell takes precedence.
 - If a migration fails, the production build fails and the previous deployment keeps serving. Fix forward with a new migration; don't edit an applied one.
 
 ## Migration order

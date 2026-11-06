@@ -20,6 +20,29 @@ const definitions = {
 } as const;
 type Provider = keyof typeof definitions;
 
+/** Resolve only hosted official board URLs, without making an HTTP request. */
+export function identifyBoard(input: string): AtsBoard | null {
+  for (const provider of Object.keys(definitions) as Provider[]) {
+    const board = boardFromUrl(input, provider);
+    if (board) return board;
+  }
+  return null;
+}
+
+/** A successful empty board must remain distinguishable from a failed request. */
+export async function readOfficialBoard(input: string, ctx?: AtsContext) {
+  const board = identifyBoard(input);
+  if (!board) return { status: "unsupported" as const };
+  try {
+    const roles = await load(board, ctx);
+    return roles === null
+      ? { status: "unavailable" as const, board }
+      : { status: "available" as const, board, roles };
+  } catch {
+    return { status: "unavailable" as const, board };
+  }
+}
+
 function boardFromUrl(input: string, provider: Provider): AtsBoard | null {
   try {
     const url = new URL(input.includes("://") ? input : `https://${input}`);
